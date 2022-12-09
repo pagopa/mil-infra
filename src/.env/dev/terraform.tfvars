@@ -1,15 +1,15 @@
 # general
 env_short      = "d"
 env            = "dev"
-prefix         = "dvopla"
-location       = "northeurope"
-location_short = "neu"
+prefix         = "mil"
+location       = "westeurope"
+location_short = "weu"
 
 tags = {
   CreatedBy   = "Terraform"
   Environment = "DEV"
-  Owner       = "DevOps"
-  Source      = "https://github.com/pagopa/devopslab-infra"
+  Owner       = "mil"
+  Source      = "https://github.com/pagopa/mil-infra"
   CostCenter  = "TS310 - PAGAMENTI & SERVIZI"
 }
 
