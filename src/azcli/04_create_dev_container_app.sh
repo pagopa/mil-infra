@@ -1,31 +1,12 @@
 ##!/bin/sh
 set -x
-. create_dev_init.sh
-
-az extension add --name containerapp --upgrade
-az provider register --namespace Microsoft.App
-az provider register --namespace Microsoft.OperationalInsights
-
-# Log Analytics Workspace.
-az monitor log-analytics workspace create \
-  --workspace-name $logAnalyticsWorkspaceName \
-  --resource-group $resourceGroup
-
-# Container Apps Environment.
-caeSubnetResourceId=$(az network vnet subnet show --name $caeSubnetName --resource-group $resourceGroup --vnet-name $vnetName --query 'id' --output tsv)
-logsWorkspaceId=$(az monitor log-analytics workspace show --workspace-name $logAnalyticsWorkspaceName --resource-group $resourceGroup --query 'customerId' --output tsv)
-az containerapp env create \
-  --name $caeName \
-  --resource-group $resourceGroup \
-  --location westeurope \
-  --infrastructure-subnet-resource-id $caeSubnetResourceId \
-  --logs-workspace-id $logsWorkspaceId
+. 00_create_dev_init.sh
 
 # Container App.
 mongoConnectionString1=$(az cosmosdb keys list --name $cosmosName --resource-group $resourceGroup --type connection-strings --query 'connectionStrings[0].connectionString' --output tsv)
 mongoConnectionString2=$(az cosmosdb keys list --name $cosmosName --resource-group $resourceGroup --type connection-strings --query 'connectionStrings[1].connectionString' --output tsv)
 az containerapp create \
-  --name mil-d-weu-init-ca \
+  --name $caName \
   --resource-group $resourceGroup \
   --environment $caeName \
   --ingress external \

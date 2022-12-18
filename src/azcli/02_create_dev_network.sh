@@ -1,6 +1,6 @@
 ##!/bin/sh
 set -x
-. create_dev_init.sh
+. 00_create_dev_init.sh
 
 # Virtual Network + App Gateway Subnet.
 az network vnet create \
