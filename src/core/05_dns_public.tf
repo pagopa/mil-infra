@@ -6,7 +6,7 @@ resource "azurerm_dns_zone" "mil" {
 }
 
 # This is executed for PROD ONLY and gives Public DNS Delegation to DEV.
-resource "azurerm_dns_ns_record" "dev_mil_ns" {
+resource "azurerm_dns_ns_record" "dev_mil" {
   count               = var.env_short == "p" ? 1 : 0
   name                = "dev"
   zone_name           = azurerm_dns_zone.mil.name
@@ -22,7 +22,7 @@ resource "azurerm_dns_ns_record" "dev_mil_ns" {
 }
 
 # This is executed for PROD ONLY and gives Public DNS Delegation to UAT.
-resource "azurerm_dns_ns_record" "uat_mil_ns" {
+resource "azurerm_dns_ns_record" "uat_mil" {
   count               = var.env_short == "p" ? 1 : 0
   name                = "uat"
   zone_name           = azurerm_dns_zone.mil.name

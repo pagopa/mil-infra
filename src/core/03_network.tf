@@ -1,12 +1,5 @@
-# Resource group for network stuff.
-resource "azurerm_resource_group" "network_rg" {
-  name     = "${local.project}-network-rg"
-  location = var.location
-  tags     = var.tags
-}
-
 # Virtual network.
-resource "azurerm_virtual_network" "mil_vnet" {
+resource "azurerm_virtual_network" "mil" {
   name                = "${local.project}-vnet"
   location            = azurerm_resource_group.network_rg.location
   resource_group_name = azurerm_resource_group.network_rg.name

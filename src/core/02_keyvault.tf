@@ -1,10 +1,3 @@
-# Resource group for security stuff.
-resource "azurerm_resource_group" "sec_rg" {
-  name     = "${local.project}-sec-rg"
-  location = var.location
-  tags     = var.tags
-}
-
 # Key vault.
 module "key_vault" {
   source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//key_vault?ref=v3.2.0"
