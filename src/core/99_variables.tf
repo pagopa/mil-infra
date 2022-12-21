@@ -1,5 +1,6 @@
-# general
-
+#
+# General variables definition.
+#
 variable "prefix" {
   type = string
   validation {
@@ -47,6 +48,9 @@ variable "tags" {
   }
 }
 
+#
+# Specific variables definition.
+#
 variable "dns_zone_mil_prefix" {
   type        = string
   description = "Product DNS zone name prefix."

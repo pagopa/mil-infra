@@ -1,16 +1,18 @@
-# Azure AD
+#
+# Azure AD.
+#
 data "azuread_group" "adgroup_admin" {
-  display_name = format("%s-adgroup-admin", local.project)
+  display_name = "${local.project}-adgroup-admin"
 }
 
 data "azuread_group" "adgroup_developers" {
-  display_name = format("%s-adgroup-developers", local.project)
+  display_name = "${local.project}-adgroup-developers"
 }
 
 data "azuread_group" "adgroup_externals" {
-  display_name = format("%s-adgroup-externals", local.project)
+  display_name = "${local.project}-adgroup-externals"
 }
 
 data "azuread_group" "adgroup_security" {
-  display_name = format("%s-adgroup-security", local.project)
+  display_name = "${local.project}-adgroup-security"
 }
