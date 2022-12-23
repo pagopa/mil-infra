@@ -67,3 +67,33 @@ variable "dns_default_ttl" {
   description = "Time-to-live (seconds)."
   default     = 3600
 }
+
+variable "integr_vnet_cidr" {
+  type        = string
+  description = "Integration Virtual Network CIDR."
+}
+
+variable "apim_snet_cidr" {
+  type        = string
+  description = "API Manager Subnet CIDR."
+}
+
+variable "intern_vnet_cidr" {
+  type        = string
+  description = "Internal Virtual Network CIDR."
+}
+
+variable "dmz_snet_cidr" {
+  type        = string
+  description = "DMZ Subnet CIDR."
+}
+
+variable "data_snet_cidr" {
+  type        = string
+  description = "Data Subnet CIDR."
+}
+
+variable "app_snet_cidr" {
+  type        = string
+  description = "Application Subnet CIDR."
+}
