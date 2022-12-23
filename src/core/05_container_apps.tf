@@ -38,7 +38,7 @@ resource "azapi_resource" "init_ca" {
   parent_id = azurerm_resource_group.app_rg.id
   type      = "Microsoft.App/containerapps@2022-03-01"
   tags      = var.tags
-  
+
   body = jsonencode({
     properties = {
       managedEnvironmentId = azapi_resource.cae.id
@@ -51,7 +51,7 @@ resource "azapi_resource" "init_ca" {
         secrets = [
           {
             name  = "mongo-connection-string-1"
-            value = azurerm_cosmosdb_account.mil.connection_strings[0] 
+            value = azurerm_cosmosdb_account.mil.connection_strings[0]
           },
           {
             name  = "mongo-connection-string-2"

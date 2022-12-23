@@ -28,6 +28,7 @@
 | Name | Type |
 |------|------|
 | [azapi_resource.cae](https://registry.terraform.io/providers/azure/azapi/1.1.0/docs/resources/resource) | resource |
+| [azapi_resource.init_ca](https://registry.terraform.io/providers/azure/azapi/1.1.0/docs/resources/resource) | resource |
 | [azurerm_cosmosdb_account.mil](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cosmosdb_account) | resource |
 | [azurerm_cosmosdb_mongo_collection.services](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cosmosdb_mongo_collection) | resource |
 | [azurerm_cosmosdb_mongo_database.mil](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cosmosdb_mongo_database) | resource |
