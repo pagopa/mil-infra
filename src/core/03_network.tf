@@ -1,32 +1,49 @@
-# Virtual network.
-resource "azurerm_virtual_network" "mil" {
-  name                = "${local.project}-vnet"
+# Main virtual network.
+resource "azurerm_virtual_network" "intern" {
+  name                = "${local.project}-intern-vnet"
   location            = azurerm_resource_group.network_rg.location
   resource_group_name = azurerm_resource_group.network_rg.name
-  address_space       = ["10.1.0.0/16"]
+  address_space       = [var.intern_vnet_cidr]
   tags                = var.tags
+}
 
-  # Subnet for App Gateway.
-  subnet {
-    name           = "${local.project}-dmz-snet"
-    address_prefix = "10.1.0.0/20"
-  }
+# Subnet for Application Gateway.
+resource "azurerm_subnet" "dmz" {
+  name                 = "${local.project}-dmz-snet"
+  resource_group_name  = azurerm_virtual_network.intern.resource_group_name
+  virtual_network_name = azurerm_virtual_network.intern.name
+  address_prefixes     = [var.dmz_snet_cidr]
+}
 
-  # Subnet for API Manager.
-  subnet {
-    name           = "${local.project}-integration-snet"
-    address_prefix = "10.1.16.0/20"
-  }
+# Subnet for Container Apps.
+resource "azurerm_subnet" "app" {
+  name                 = "${local.project}-app-snet"
+  resource_group_name  = azurerm_virtual_network.intern.resource_group_name
+  virtual_network_name = azurerm_virtual_network.intern.name
+  address_prefixes     = [var.app_snet_cidr]
+}
 
-  # Subnet for Container Apps.
-  subnet {
-    name           = "${local.project}-app-snet"
-    address_prefix = "10.1.32.0/20"
-  }
+# Subnet for data-related stuff.
+resource "azurerm_subnet" "data" {
+  name                 = "${local.project}-data-snet"
+  resource_group_name  = azurerm_virtual_network.intern.resource_group_name
+  virtual_network_name = azurerm_virtual_network.intern.name
+  address_prefixes     = [var.data_snet_cidr]
+}
 
-  # Subnet for data-related stuff.
-  subnet {
-    name           = "${local.project}-data-snet"
-    address_prefix = "10.1.48.0/20"
-  }
+# Virtual network for integration dedicated to API Manager.
+resource "azurerm_virtual_network" "integr" {
+  name                = "${local.project}-integr-vnet"
+  location            = azurerm_resource_group.network_rg.location
+  resource_group_name = azurerm_resource_group.network_rg.name
+  address_space       = [var.integr_vnet_cidr]
+  tags                = var.tags
+}
+
+# Subnet for API Manager.
+resource "azurerm_subnet" "apim" {
+  name                 = "${local.project}-apim-snet"
+  resource_group_name  = azurerm_virtual_network.integr.resource_group_name
+  virtual_network_name = azurerm_virtual_network.integr.name
+  address_prefixes     = [var.apim_snet_cidr]
 }
