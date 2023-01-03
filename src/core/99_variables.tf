@@ -97,3 +97,72 @@ variable "app_snet_cidr" {
   type        = string
   description = "Application Subnet CIDR."
 }
+
+#
+# mil-functions specific.
+#
+variable "mil_functions_image" {
+  type        = string
+  description = "Image of mil-functions microservice."
+  default     = "ghcr.io/pagopa/mil-functions:latest"
+}
+
+variable "mil_functions_quarkus_log_level" {
+  type        = string
+  description = "Log level for Quarkus platform."
+  default     = "ERROR"
+}
+
+variable "mil_functions_app_log_level" {
+  type        = string
+  description = "Log level for application."
+  default     = "DEBUG"
+}
+
+variable "mil_functions_mongo_connect_timeout" {
+  type        = string
+  description = "Mongo connect timeout."
+  default     = "5s"
+}
+
+variable "mil_functions_mongo_read_timeout" {
+  type        = string
+  description = "Mongo read timeout."
+  default     = "10s"
+}
+
+variable "mil_functions_mongo_server_selection_timeout" {
+  type        = string
+  description = "Mongo server selection timeout."
+  default     = "5s"
+}
+
+variable "mil_functions_cpu" {
+  type        = number
+  description = "CPUs assigned to the container."
+  default     = 0.5
+}
+
+variable "mil_functions_ephemeral_storage" {
+  type        = string
+  description = "Ephemeral storage assigned to the container."
+  default     = "1.0Gi"
+}
+
+variable "mil_functions_memory" {
+  type        = string
+  description = "Memory assigned to the container."
+  default     = "1.0Gi"
+}
+
+variable "mil_functions_max_replicas" {
+  type        = number
+  description = "Max number of replicas."
+  default     = 5
+}
+
+variable "mil_functions_min_replicas" {
+  type        = number
+  description = "Min number of replicas."
+  default     = 0
+}

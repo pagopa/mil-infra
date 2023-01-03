@@ -5,15 +5,13 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) | 1.1.0 |
 | <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) | <= 2.31.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | <= 3.36.0 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | <= 3.37.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azapi"></a> [azapi](#provider\_azapi) | 1.1.0 |
 | <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 2.31.0 |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.36.0 |
 
@@ -21,14 +19,13 @@
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_cae"></a> [cae](#module\_cae) | git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment | v3.4.5 |
 | <a name="module_key_vault"></a> [key\_vault](#module\_key\_vault) | git::https://github.com/pagopa/terraform-azurerm-v3.git//key_vault | v3.2.0 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [azapi_resource.cae](https://registry.terraform.io/providers/azure/azapi/1.1.0/docs/resources/resource) | resource |
-| [azapi_resource.init_ca](https://registry.terraform.io/providers/azure/azapi/1.1.0/docs/resources/resource) | resource |
 | [azurerm_cosmosdb_account.mil](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cosmosdb_account) | resource |
 | [azurerm_cosmosdb_mongo_collection.services](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cosmosdb_mongo_collection) | resource |
 | [azurerm_cosmosdb_mongo_database.mil](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cosmosdb_mongo_database) | resource |
@@ -43,6 +40,7 @@
 | [azurerm_resource_group.integration_rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
 | [azurerm_resource_group.network_rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
 | [azurerm_resource_group.sec_rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
+| [azurerm_resource_group_template_deployment.init_ca](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group_template_deployment) | resource |
 | [azurerm_subnet.apim](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) | resource |
 | [azurerm_subnet.app](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) | resource |
 | [azurerm_subnet.data](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) | resource |
@@ -73,10 +71,23 @@
 | <a name="input_intern_vnet_cidr"></a> [intern\_vnet\_cidr](#input\_intern\_vnet\_cidr) | Internal Virtual Network CIDR. | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | n/a | `string` | `"westeurope"` | no |
 | <a name="input_location_short"></a> [location\_short](#input\_location\_short) | Location short like eg: neu, weu.. | `string` | n/a | yes |
+| <a name="input_mil_functions_app_log_level"></a> [mil\_functions\_app\_log\_level](#input\_mil\_functions\_app\_log\_level) | Log level for application. | `string` | `"DEBUG"` | no |
+| <a name="input_mil_functions_cpu"></a> [mil\_functions\_cpu](#input\_mil\_functions\_cpu) | CPUs assigned to the container. | `number` | `0.5` | no |
+| <a name="input_mil_functions_ephemeral_storage"></a> [mil\_functions\_ephemeral\_storage](#input\_mil\_functions\_ephemeral\_storage) | Ephemeral storage assigned to the container. | `string` | `"1.0Gi"` | no |
+| <a name="input_mil_functions_image"></a> [mil\_functions\_image](#input\_mil\_functions\_image) | Image of mil-functions microservice. | `string` | `"ghcr.io/pagopa/mil-functions:latest"` | no |
+| <a name="input_mil_functions_max_replicas"></a> [mil\_functions\_max\_replicas](#input\_mil\_functions\_max\_replicas) | Max number of replicas. | `number` | `5` | no |
+| <a name="input_mil_functions_memory"></a> [mil\_functions\_memory](#input\_mil\_functions\_memory) | Memory assigned to the container. | `string` | `"1.0Gi"` | no |
+| <a name="input_mil_functions_min_replicas"></a> [mil\_functions\_min\_replicas](#input\_mil\_functions\_min\_replicas) | Min number of replicas. | `number` | `0` | no |
+| <a name="input_mil_functions_mongo_connect_timeout"></a> [mil\_functions\_mongo\_connect\_timeout](#input\_mil\_functions\_mongo\_connect\_timeout) | Mongo connect timeout. | `string` | `"5s"` | no |
+| <a name="input_mil_functions_mongo_read_timeout"></a> [mil\_functions\_mongo\_read\_timeout](#input\_mil\_functions\_mongo\_read\_timeout) | Mongo read timeout. | `string` | `"10s"` | no |
+| <a name="input_mil_functions_mongo_server_selection_timeout"></a> [mil\_functions\_mongo\_server\_selection\_timeout](#input\_mil\_functions\_mongo\_server\_selection\_timeout) | Mongo server selection timeout. | `string` | `"5s"` | no |
+| <a name="input_mil_functions_quarkus_log_level"></a> [mil\_functions\_quarkus\_log\_level](#input\_mil\_functions\_quarkus\_log\_level) | Log level for Quarkus platform. | `string` | `"ERROR"` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | General variables definition. | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | n/a | `map(any)` | <pre>{<br>  "CreatedBy": "Terraform"<br>}</pre> | no |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_init_ca_application_url"></a> [init\_ca\_application\_url](#output\_init\_ca\_application\_url) | n/a |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

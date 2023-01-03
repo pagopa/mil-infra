@@ -1,34 +1,11 @@
 # This file is maintained automatically by "terraform init".
 # Manual edits may be lost in future updates.
 
-provider "registry.terraform.io/azure/azapi" {
-  version     = "1.1.0"
-  constraints = "1.1.0"
-  hashes = [
-    "h1:fYMhMs54Sc+AwCu9kOOeE4Zfvi01Mr8Vt02TXPCeslU=",
-    "zh:2a25df6325a49f9e821f0b02c7da86167fc19a3bac647cd1edf231300f29d077",
-    "zh:2b443a836a39724663fe455d4deee408ff3a2d9a8b86f8408aa7db2e8aa743f8",
-    "zh:364ed09ddfc50d9bed8d930f7de489cb654a9908feb139413a097823a50075fd",
-    "zh:523bc005f56ae785867d230d55c29f59db4b599dbc6c38b4d03ea55a79458916",
-    "zh:60ded375fdb305b60bcb4d9e596dbb222cab166bad1b4958199b05a72aaeacfd",
-    "zh:61e69c58642fead6814e511c872b7c0a6478ec6af4ab758b4512607d910ac078",
-    "zh:823b2154ae2262dabcbd11aac992e3cc29eae0f7baa96bee1e3e2fe1ece8730b",
-    "zh:870ea9cc24807ef5142e4cad0281dac7173f7b6bf818a79762b6c690d12d4c4b",
-    "zh:9094ae76ed66cb328a4f35bd18b9140fb6fc6859c2e46431ec73c018bcb58d96",
-    "zh:d89149cfd01cb70012459536b4d36490b58e43312440562e5910bd5160537858",
-    "zh:dba7ec06171ca062fc423ba5b4776a5600444e45e57f4d1cb043bdc3eee538b7",
-    "zh:ff5bd6883d9ac8334e043434246357a55107411e9a962856c1d17e47ee15ac37",
-  ]
-}
-
 provider "registry.terraform.io/hashicorp/azuread" {
   version     = "2.31.0"
   constraints = "<= 2.31.0"
   hashes = [
     "h1:0D8+cQBlCyA50NiiTJwNDK9QjKfZsjuHgXTFRlhIZyg=",
-    "h1:BJrmwBctF1fOk2U2O7YX1OyDPHcBoPn78PRsZRkY6xs=",
-    "h1:M5ELmP8Qi/vGanQ5nYaD3AStPUh8xOof1QgqaUM6V1M=",
-    "h1:kP4Zt6MO9CiQq57Lk1S4SWs11UVdwMSah8liskireLE=",
     "zh:02a64db03707cc6970ab28a1da00d7fa011cc54e8a7806209f31bd8aad1794e1",
     "zh:077ffce8135a57544ec3c227bbe0ee5f6ca649223bd1dc0bbbd31d3fdf616830",
     "zh:0a369de6132edb0f4a69f2aa472b23f9bb5c430a3d539146d1c18d4cc7b12c7f",
@@ -46,11 +23,8 @@ provider "registry.terraform.io/hashicorp/azuread" {
 
 provider "registry.terraform.io/hashicorp/azurerm" {
   version     = "3.36.0"
-  constraints = "<= 3.36.0"
+  constraints = "<= 3.36.0, <= 3.37.0"
   hashes = [
-    "h1:5QKOFigw44W3w/HfV8o+k8+UyhAXf+4E7MPh14C3Gbg=",
-    "h1:FUwQUSs5nWDpP5isF3SiTPe+K927/L07yXumr6gQ1GQ=",
-    "h1:W7oq9M6gplv2g8nHFR3lkwBmVaUxWj289eWNwwe0wek=",
     "h1:iVUkJ0kqVTdiU4RLU8TjX1QgOK1tc+Bi+rn0qGqsMvg=",
     "zh:1f33ba9f4e4d7aac33ba414a978e3aa76fee355eb5e213adca52fd3b3e04a709",
     "zh:1f812d28672f8693dd8f13aa4d94a13724d5985c62e0e9f2154bc8f1e34a8b99",
