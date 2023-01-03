@@ -89,5 +89,5 @@
 
 | Name | Description |
 |------|-------------|
-| <a name="output_init_ca_application_url"></a> [init\_ca\_application\_url](#output\_init\_ca\_application\_url) | n/a |
+| <a name="output_init_ca_ingress_fqdn"></a> [init\_ca\_ingress\_fqdn](#output\_init\_ca\_ingress\_fqdn) | n/a |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
