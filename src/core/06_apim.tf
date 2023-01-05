@@ -6,6 +6,12 @@
 #  tags                = var.tags
 #}
 
+# KV
+data "azurerm_key_vault_secret" "apim_publisher_email" {
+  name         = "apim-publisher-email"
+  key_vault_id = module.key_vault.id
+}
+
 # API Manager.
 module "apim" {
   source               = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management?ref=v3.4.5"
@@ -16,10 +22,10 @@ module "apim" {
   sku_name             = var.apim_sku
   virtual_network_type = "External"
   sign_up_enabled      = false
-  lock_enable          = var.apim_lock_enable
+  lock_enable          = false
   publisher_name       = var.apim_publisher_name
-  publisher_email      = var.apim_publisher_email
-  redis_cache_id       = var.apim_redis_cache_id
+  publisher_email      = data.azurerm_key_vault_secret.apim_publisher_email.value
+  redis_cache_id       = null
   tags                 = var.tags
 }
 
