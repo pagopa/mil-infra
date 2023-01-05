@@ -2,11 +2,10 @@ name: Static Analysis
 
 on:
   push:
-  workflow_dispatch:
 
 jobs:
   static_analysis:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       # from https://github.com/actions/checkout/commits/main
@@ -15,6 +14,7 @@ jobs:
       - name: init_terraform_folders
         env:
           FOLDERS: >
+            .identity
             src/core
         run: |
           pids=()
@@ -22,7 +22,6 @@ jobs:
           TAG=$(cat .terraform-version)
           for f in $FOLDERS; do
             pushd "$(pwd)/${f}"
-              #sed -i -e 's/  backend "azurerm" {}//g' 99_main.tf # use local backend
               rm -rf 99_main.tf
               mv 99_main.tf.ci 99_main.tf
               docker run -v $(pwd):/tmp -w /tmp hashicorp/terraform:$TAG init &
