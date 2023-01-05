@@ -4,6 +4,7 @@
 [![Release](https://github.com/pagopa/mil-infra/actions/workflows/release.yml/badge.svg)](https://github.com/pagopa/mil-infra/actions/workflows/release.yml)
 
 [![Continuous Delivery on dev core](https://github.com/pagopa/mil-infra/actions/workflows/dev_cd_core.yml/badge.svg)](https://github.com/pagopa/mil-infra/actions/workflows/dev_cd_core.yml)
+
 [![Continuous Delivery on prod core](https://github.com/pagopa/mil-infra/actions/workflows/prod_cd_core.yml/badge.svg)](https://github.com/pagopa/mil-infra/actions/workflows/prod_cd_core.yml)
 
 mil project infrastructure
