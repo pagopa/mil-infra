@@ -48,5 +48,5 @@ mil_functions_min_replicas                   = 0
 #
 # APIM
 #
-apim_sku         = "Developer_1"
-apim_lock_enable = false
+apim_sku = "Developer_1"
+
