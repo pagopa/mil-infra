@@ -166,3 +166,33 @@ variable "mil_functions_min_replicas" {
   description = "Min number of replicas."
   default     = 0
 }
+
+# API Manager specific.
+variable "apim_sku" {
+  type        = string
+  description = "String made up of two components separated by an underscore: the 1st component is the name (Consumption, Developer, Basic, Standard, Premium); the 2nd component is the capacity (it must be an integer greater than 0)."
+}
+
+variable "apim_lock_enable" {
+  type        = bool
+  description = "Block accidental deletions."
+  default     = false
+}
+
+variable "apim_publisher_name" {
+  type        = string
+  description = "The name of the publisher."
+  default     = "PagoPA S.p.A."
+}
+
+variable "apim_publisher_email" {
+  type        = string
+  description = "The e-mail of the publisher."
+  default     = "dummy@pagopa.it"
+}
+
+variable "apim_redis_cache_id" {
+  type        = string
+  description = "The resource ID of the Cache for Redis."
+  default     = null
+}
