@@ -1,11 +1,3 @@
-# Log Analytics Workspace.
-resource "azurerm_log_analytics_workspace" "cae_log" {
-  name                = "${local.project}-cae-log"
-  resource_group_name = azurerm_resource_group.app_rg.name
-  location            = azurerm_resource_group.app_rg.location
-  tags                = var.tags
-}
-
 # Container Apps Environment.
 module "cae" {
   source                    = "git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment?ref=v3.4.5"
@@ -15,8 +7,8 @@ module "cae" {
   vnet_internal             = false
   subnet_id                 = azurerm_subnet.app.id
   log_destination           = "log-analytics"
-  log_analytics_customer_id = azurerm_log_analytics_workspace.cae_log.workspace_id
-  log_analytics_shared_key  = azurerm_log_analytics_workspace.cae_log.primary_shared_key
+  log_analytics_customer_id = azurerm_log_analytics_workspace.log_analytics_workspace.workspace_id
+  log_analytics_shared_key  = azurerm_log_analytics_workspace.log_analytics_workspace.primary_shared_key
   zone_redundant            = false
   tags                      = var.tags
 }

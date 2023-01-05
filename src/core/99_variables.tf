@@ -98,6 +98,27 @@ variable "app_snet_cidr" {
   description = "Application Subnet CIDR."
 }
 
+variable "github_runner_cidr" {
+  type        = string
+  description = "GitHub runner Subnet CIDR."
+}
+
+### Monitor
+
+variable "log_analytics_workspace" {
+  type = object({
+    sku               = string
+    retention_in_days = number
+    daily_quota_gb    = number
+  })
+  description = "Log Analytics Workspace variables"
+  default = {
+    sku               = "PerGB2018"
+    retention_in_days = 30
+    daily_quota_gb    = 1
+  }
+}
+
 #
 # mil-functions specific.
 #
