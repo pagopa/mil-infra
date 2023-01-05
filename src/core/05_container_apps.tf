@@ -54,6 +54,6 @@ resource "azurerm_resource_group_template_deployment" "init_ca" {
   )
 }
 
-output "init_ca_ingress_fqdn" {
-  value = jsondecode(azurerm_resource_group_template_deployment.init_ca.output_content).ingress_fqdn.value
-}
+#output "init_ca_ingress_fqdn" {
+#  value = jsondecode(azurerm_resource_group_template_deployment.init_ca.output_content).ingress_fqdn.value
+#}
