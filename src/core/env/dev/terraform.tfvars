@@ -44,3 +44,9 @@ mil_functions_ephemeral_storage              = "1.0Gi"
 mil_functions_memory                         = "1.0Gi"
 mil_functions_max_replicas                   = 5
 mil_functions_min_replicas                   = 0
+
+#
+# APIM
+#
+apim_sku         = "Developer_1"
+apim_lock_enable = false
