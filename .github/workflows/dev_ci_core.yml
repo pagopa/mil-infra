@@ -9,6 +9,7 @@ on:
       - reopened
     paths:
       - 'src/core/**'
+      - '.github/workflows/dev**'
 
 permissions:
   id-token: write
@@ -29,7 +30,7 @@ jobs:
       - name: Create GitHub Runner
         id: create_github_runner
         # from https://github.com/pagopa/github-self-hosted-runner-azure-create-action/commits/main
-        uses: pagopa/github-self-hosted-runner-azure-create-action@0e35565845fbe88938c939c1fd62baf2e9e84bc50
+        uses: pagopa/github-self-hosted-runner-azure-create-action@e35565845fbe88938c939c1fd62baf2e9e84bc50
         with:
           client_id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant_id: ${{ secrets.AZURE_TENANT_ID }}
