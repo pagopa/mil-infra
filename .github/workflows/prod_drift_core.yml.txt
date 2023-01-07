@@ -1,14 +1,9 @@
-name: Continuous Delivery on dev core
+name: Drift Detection on prod core
 
 on:
   workflow_dispatch:
-  # Trigger the workflow on push on the main branch
-  push:
-    branches:
-      - main
-    paths:
-      - 'src/core/**'
-      - '.github/workflows/dev**'
+  schedule:
+    - cron: '08 00 * * *'
 
 permissions:
   id-token: write
@@ -16,13 +11,13 @@ permissions:
 
 env:
   DIR: "src/core"
-  AZURE_ENVIRONMENT: dev
+  AZURE_ENVIRONMENT: prod
 
 jobs:
   create_runner:
     name: Create Runner
     runs-on: ubuntu-22.04
-    environment: dev-runner
+    environment: prod-runner
     outputs:
       runner_name: ${{ steps.create_github_runner.outputs.runner_name }}
     steps:
@@ -38,10 +33,10 @@ jobs:
           resource_group_name: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
           pat_token: ${{ secrets.BOT_TOKEN }}
 
-  terraform_preapply_job:
-    name: Terraform Pre Apply
+  terraform_driftdetection_job:
+    name: Terraform Drift Detection
     runs-on: [self-hosted, "${{ needs.create_runner.outputs.runner_name }}"]
-    environment: dev-ci
+    environment: prod-ci
     needs: create_runner
     steps:
       - name: Checkout
@@ -57,9 +52,9 @@ jobs:
         # https://github.com/pagopa/terraform-install-action/commits/main
         uses: pagopa/terraform-install-action@1f76f593176e58c423b88d72273a612ba7ba430b
 
-      - name: Terraform pre apply
-        # from https://github.com/pagopa/terraform-preapply-azure-action/commits/main
-        uses: pagopa/terraform-preapply-azure-action@d1a2bd9c895b0aff9ddc42b72a638a541e1358a6
+      - name: Terraform drift detection
+        # from https://github.com/pagopa/terraform-driftdetection-azure-action/commits/main
+        uses: pagopa/terraform-driftdetection-azure-action@728140548f9b23ff0efd61cc0ccb500b8ba5c7b0
         with:
           client_id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant_id: ${{ secrets.AZURE_TENANT_ID }}
@@ -67,27 +62,12 @@ jobs:
           dir: ${{ env.DIR }}
           azure_environment: ${{ env.AZURE_ENVIRONMENT }}
 
-  terraform_apply_job:
-    name: Terraform Apply
-    runs-on: [self-hosted, "${{ needs.create_runner.outputs.runner_name }}"]
-    environment: dev-cd
-    needs: [create_runner, terraform_preapply_job]
-    steps:
-      - name: Terraform apply
-        # from https://github.com/pagopa/terraform-apply-azure-action/commits/main
-        uses: pagopa/terraform-apply-azure-action@c185709afa46af74bfc45908ebd2ac94c3b96254
-        with:
-          client_id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          dir: ${{ env.DIR }}
-
   cleanup_runner:
     name: Cleanup Runner
     if: always()
     runs-on: ubuntu-22.04
-    environment: dev-runner
-    needs: [create_runner, terraform_preapply_job, terraform_apply_job]
+    environment: prod-runner
+    needs: [create_runner, terraform_driftdetection_job]
     steps:
       - name: Cleanup GitHub Runner
         id: cleanup_github_runner
