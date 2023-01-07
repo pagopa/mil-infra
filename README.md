@@ -9,54 +9,13 @@
 [![Continuous Delivery on prod core](https://github.com/pagopa/mil-infra/actions/workflows/prod_cd_core.yml/badge.svg)](https://github.com/pagopa/mil-infra/actions/workflows/prod_cd_core.yml)
 [![Drift Detection on prod core](https://github.com/pagopa/mil-infra/actions/workflows/prod_drift_core.yml/badge.svg)](https://github.com/pagopa/mil-infra/actions/workflows/prod_drift_core.yml)
 
-mil project infrastructure
-
-## How to use this template
-
-### Change the template name
-
-In this template we use `devopslab` or `dvopla` to define ours project, but you need to change all the information, to be complaint with your project
-
-Inside:
-
-* src\
-  * .env\
-    * terraform.tfvars
-
-Change this informations
-
-```ts
-# general
-env_short      = "d"
-env            = "dev"
-prefix         = "dvopla"
-location       = "northeurope"
-location_short = "neu"
-
-tags = {
-  CreatedBy   = "Terraform"
-  Environment = "DEV"
-  Owner       = "DevOps"
-  Source      = "https://github.com/pagopa/devopslab-infra"
-  CostCenter  = "TS310 - PAGAMENTI & SERVIZI"
-}
-```
-
-And change all the occurency of `devopslab` of his prefix with yours prefix.
-
-In the folders core, pillar and k8s
-
-Change the occurrence `devopslab` with the name of your project or the name that is better for you.
+MIL project infrastructure
 
 ### Terraform folders name convention
 
 Inside the folder src we have this folders, that contains the terraform files. Here you can find the meaning of the folders
 
-* pillar: contains all the basic infrastructure that must be created before to support other layers, and cannot be destroyed every time.
-  * for example we can find the dns, vnet or monitoring
 * core: here you can find all the business infrastructure objects, use data to load the objects created in pillar.
-* k8s: here you can find the setup of your cluster k8s/aks
-  * for example ingress, secrets, rbac or service accounts
 
 ## Requirements
 
@@ -121,12 +80,4 @@ Check your code before commit.
 
 ```sh
 pre-commit run -a
-```
-
-Install the pre-commit hook globally
-
-```sh
-DIR=~/.git-template
-git config --global init.templateDir ${DIR}
-pre-commit init-templatedir -t pre-commit ${DIR}
 ```
