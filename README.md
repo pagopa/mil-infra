@@ -7,6 +7,7 @@
 [![Drift Detection on dev core](https://github.com/pagopa/mil-infra/actions/workflows/dev_drift_core.yml/badge.svg)](https://github.com/pagopa/mil-infra/actions/workflows/dev_drift_core.yml)
 
 [![Continuous Delivery on prod core](https://github.com/pagopa/mil-infra/actions/workflows/prod_cd_core.yml/badge.svg)](https://github.com/pagopa/mil-infra/actions/workflows/prod_cd_core.yml)
+[![Drift Detection on prod core](https://github.com/pagopa/mil-infra/actions/workflows/prod_drift_core.yml/badge.svg)](https://github.com/pagopa/mil-infra/actions/workflows/prod_drift_core.yml)
 
 mil project infrastructure
 
