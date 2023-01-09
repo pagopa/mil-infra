@@ -11,6 +11,8 @@
 
 MIL project infrastructure
 
+![This is an image](./docs/architecture.png)
+
 ### Terraform folders name convention
 
 Inside the folder src we have this folders, that contains the terraform files. Here you can find the meaning of the folders
