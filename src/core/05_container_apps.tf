@@ -1,9 +1,9 @@
 # Container Apps Environment.
 module "cae" {
-  source                    = "git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment?ref=v3.4.5"
+  source                    = "git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment?ref=v3.5.1"
   name                      = "${local.project}-cae"
-  resource_group_name       = azurerm_resource_group.app_rg.name
-  location                  = azurerm_resource_group.app_rg.location
+  resource_group_name       = azurerm_resource_group.app.name
+  location                  = azurerm_resource_group.app.location
   vnet_internal             = false
   subnet_id                 = azurerm_subnet.app.id
   log_destination           = "log-analytics"
@@ -20,14 +20,14 @@ locals {
 
 resource "azurerm_resource_group_template_deployment" "init_ca" {
   name                = local.name
-  resource_group_name = azurerm_resource_group.app_rg.name
+  resource_group_name = azurerm_resource_group.app.name
   deployment_mode     = "Incremental"
   tags                = var.tags
 
   template_content = templatefile("templates/init-ca.json",
     {
       name                                         = local.name,
-      location                                     = azurerm_resource_group.app_rg.location,
+      location                                     = azurerm_resource_group.app.location,
       mongo_connection_string_1                    = azurerm_cosmosdb_account.mil.connection_strings[0],
       mongo_connection_string_2                    = azurerm_cosmosdb_account.mil.connection_strings[1],
       managed_environment_id                       = module.cae.id,

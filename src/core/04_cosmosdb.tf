@@ -1,8 +1,8 @@
 # Account
 resource "azurerm_cosmosdb_account" "mil" {
   name                = "${local.project}-cosmos"
-  resource_group_name = azurerm_resource_group.data_rg.name
-  location            = azurerm_resource_group.data_rg.location
+  resource_group_name = azurerm_resource_group.data.name
+  location            = azurerm_resource_group.data.location
   kind                = "MongoDB"
   offer_type          = "Standard"
   tags                = var.tags

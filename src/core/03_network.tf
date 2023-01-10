@@ -1,18 +1,18 @@
 # Main virtual network.
 resource "azurerm_virtual_network" "intern" {
   name                = "${local.project}-intern-vnet"
-  location            = azurerm_resource_group.network_rg.location
-  resource_group_name = azurerm_resource_group.network_rg.name
+  location            = azurerm_resource_group.network.location
+  resource_group_name = azurerm_resource_group.network.name
   address_space       = [var.intern_vnet_cidr]
   tags                = var.tags
 }
 
 # Subnet for Application Gateway.
-resource "azurerm_subnet" "dmz" {
-  name                 = "${local.project}-dmz-snet"
+resource "azurerm_subnet" "appgw" {
+  name                 = "${local.project}-agw-snet"
   resource_group_name  = azurerm_virtual_network.intern.resource_group_name
   virtual_network_name = azurerm_virtual_network.intern.name
-  address_prefixes     = [var.dmz_snet_cidr]
+  address_prefixes     = [var.appgw_snet_cidr]
 }
 
 # Subnet for Container Apps.
@@ -34,8 +34,8 @@ resource "azurerm_subnet" "data" {
 # Virtual network for integration dedicated to API Manager.
 resource "azurerm_virtual_network" "integr" {
   name                = "${local.project}-integr-vnet"
-  location            = azurerm_resource_group.network_rg.location
-  resource_group_name = azurerm_resource_group.network_rg.name
+  location            = azurerm_resource_group.network.location
+  resource_group_name = azurerm_resource_group.network.name
   address_space       = [var.integr_vnet_cidr]
   tags                = var.tags
 }
