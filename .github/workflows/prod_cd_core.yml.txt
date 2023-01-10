@@ -1,6 +1,7 @@
 name: Continuous Delivery on prod core
 
 on:
+  workflow_dispatch:
   # Trigger the workflow on push on the main branch
   push:
     branches:
@@ -28,7 +29,7 @@ jobs:
       - name: Create GitHub Runner
         id: create_github_runner
         # from https://github.com/pagopa/github-self-hosted-runner-azure-create-action/commits/main
-        uses: pagopa/github-self-hosted-runner-azure-create-action@0c926438b36e9dd4a2480ce1010235f4653c6a55
+        uses: pagopa/github-self-hosted-runner-azure-create-action@b4590e069e753daee6bc9809d484523cc7026035
         with:
           client_id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant_id: ${{ secrets.AZURE_TENANT_ID }}
@@ -58,7 +59,7 @@ jobs:
 
       - name: Terraform pre apply
         # from https://github.com/pagopa/terraform-preapply-azure-action/commits/main
-        uses: pagopa/terraform-preapply-azure-action@fbb7f3d86c4f13d543f9bb41bd33723efdece787
+        uses: pagopa/terraform-preapply-azure-action@d1a2bd9c895b0aff9ddc42b72a638a541e1358a6
         with:
           client_id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant_id: ${{ secrets.AZURE_TENANT_ID }}
@@ -74,7 +75,7 @@ jobs:
     steps:
       - name: Terraform apply
         # from https://github.com/pagopa/terraform-apply-azure-action/commits/main
-        uses: pagopa/terraform-apply-azure-action@31282cf06d40dbe7aed5379acb81bab95c149c69
+        uses: pagopa/terraform-apply-azure-action@c185709afa46af74bfc45908ebd2ac94c3b96254
         with:
           client_id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant_id: ${{ secrets.AZURE_TENANT_ID }}

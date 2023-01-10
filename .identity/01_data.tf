@@ -1,3 +1,7 @@
+resource "azuread_directory_role" "directory_readers" {
+  display_name = "Directory Readers"
+}
+
 data "azurerm_storage_account" "tfstate_app" {
   name                = "tfapp${lower(replace(data.azurerm_subscription.current.display_name, "-", ""))}"
   resource_group_name = "terraform-state-rg"
