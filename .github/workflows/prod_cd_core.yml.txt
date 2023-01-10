@@ -75,7 +75,7 @@ jobs:
     steps:
       - name: Terraform apply
         # from https://github.com/pagopa/terraform-apply-azure-action/commits/main
-        uses: pagopa/terraform-apply-azure-action@c185709afa46af74bfc45908ebd2ac94c3b96254
+        uses: pagopa/terraform-apply-azure-action@5d84f089c3a0dd451ee2898280c2cd80362d113c
         with:
           client_id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant_id: ${{ secrets.AZURE_TENANT_ID }}
