@@ -1,7 +1,7 @@
 # DNS zone.
 resource "azurerm_dns_zone" "mil" {
   name                = "${var.dns_zone_mil_prefix}.${var.dns_external_domain}"
-  resource_group_name = azurerm_resource_group.network_rg.name
+  resource_group_name = azurerm_resource_group.network.name
   tags                = var.tags
 }
 
@@ -10,7 +10,7 @@ resource "azurerm_dns_ns_record" "dev_mil" {
   count               = var.env_short == "p" ? 1 : 0
   name                = "dev"
   zone_name           = azurerm_dns_zone.mil.name
-  resource_group_name = azurerm_resource_group.network_rg.name
+  resource_group_name = azurerm_resource_group.network.name
   ttl                 = var.dns_default_ttl
   tags                = var.tags
   records = [
@@ -26,7 +26,7 @@ resource "azurerm_dns_ns_record" "uat_mil" {
   count               = var.env_short == "p" ? 1 : 0
   name                = "uat"
   zone_name           = azurerm_dns_zone.mil.name
-  resource_group_name = azurerm_resource_group.network_rg.name
+  resource_group_name = azurerm_resource_group.network.name
   ttl                 = var.dns_default_ttl
   tags                = var.tags
   records = [
@@ -42,7 +42,7 @@ resource "azurerm_dns_ns_record" "uat_mil" {
 resource "azurerm_dns_caa_record" "mil" {
   name                = "@"
   zone_name           = azurerm_dns_zone.mil.name
-  resource_group_name = azurerm_resource_group.network_rg.name
+  resource_group_name = azurerm_resource_group.network.name
   ttl                 = var.dns_default_ttl
   tags                = var.tags
 
@@ -66,4 +66,16 @@ resource "azurerm_dns_caa_record" "mil" {
     tag   = "iodef"
     value = "mailto:security+caa@pagopa.it"
   }
+}
+
+# application gateway records
+# api.*.userregistry.pagopa.it
+resource "azurerm_dns_a_record" "api" {
+  name                = "api"
+  zone_name           = azurerm_dns_zone.mil.name
+  resource_group_name = azurerm_resource_group.network.name
+  ttl                 = var.dns_default_ttl
+  records             = [azurerm_public_ip.appgw.ip_address]
+
+  tags = var.tags
 }

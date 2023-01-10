@@ -83,9 +83,9 @@ variable "intern_vnet_cidr" {
   description = "Internal Virtual Network CIDR."
 }
 
-variable "dmz_snet_cidr" {
+variable "appgw_snet_cidr" {
   type        = string
-  description = "DMZ Subnet CIDR."
+  description = "App GW Subnet CIDR."
 }
 
 variable "data_snet_cidr" {
@@ -103,8 +103,9 @@ variable "github_runner_cidr" {
   description = "GitHub runner Subnet CIDR."
 }
 
-### Monitor
-
+#
+# Monitor
+#
 variable "log_analytics_workspace" {
   type = object({
     sku               = string
@@ -198,10 +199,4 @@ variable "apim_publisher_name" {
   type        = string
   description = "The name of the publisher."
   default     = "PagoPA S.p.A."
-}
-
-variable "apim_publisher_email" {
-  type        = string
-  description = "The e-mail of the publisher."
-  default     = "dummy@pagopa.it"
 }
