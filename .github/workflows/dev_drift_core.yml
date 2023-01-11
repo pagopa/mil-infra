@@ -54,7 +54,7 @@ jobs:
 
       - name: Terraform drift detection
         # from https://github.com/pagopa/terraform-driftdetection-azure-action/commits/main
-        uses: pagopa/terraform-driftdetection-azure-action@728140548f9b23ff0efd61cc0ccb500b8ba5c7b0
+        uses: pagopa/terraform-driftdetection-azure-action@71bd771b3a071c78b36e5e0ecbd666ac39b1113c
         with:
           client_id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant_id: ${{ secrets.AZURE_TENANT_ID }}

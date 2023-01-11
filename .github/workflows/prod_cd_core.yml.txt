@@ -59,7 +59,7 @@ jobs:
 
       - name: Terraform pre apply
         # from https://github.com/pagopa/terraform-preapply-azure-action/commits/main
-        uses: pagopa/terraform-preapply-azure-action@d1a2bd9c895b0aff9ddc42b72a638a541e1358a6
+        uses: pagopa/terraform-preapply-azure-action@2b2413f53494fc0296dde8292aeec51c36c31a5c
         with:
           client_id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant_id: ${{ secrets.AZURE_TENANT_ID }}
