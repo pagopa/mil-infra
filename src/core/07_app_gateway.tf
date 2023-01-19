@@ -12,6 +12,12 @@ resource "azurerm_role_assignment" "appgw_id_api-dev-mil" {
   principal_id         = azurerm_user_assigned_identity.appgw.principal_id
 }
 
+# resource "azurerm_role_assignment" "appgw_id_api-dev-mil_secret" {
+#   scope                = "${module.key_vault.id}/secrets/api-dev-mil"
+#   role_definition_name = "Key Vault Reader"
+#   principal_id         = azurerm_user_assigned_identity.appgw.principal_id
+# }
+
 data "azurerm_key_vault_certificate" "api-dev-mil" {
   name         = "api-dev-mil"
   key_vault_id = module.key_vault.id
