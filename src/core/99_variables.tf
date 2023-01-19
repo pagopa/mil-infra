@@ -121,6 +121,20 @@ variable "log_analytics_workspace" {
 }
 
 #
+# App Gateway
+#
+variable "app_gateway" {
+  type = object({
+    min_capacity = number
+    max_capacity = number
+    waf_enabled  = bool
+    sku_name     = string
+    sku_tier     = string
+  })
+  description = "Application Gateway configuration"
+}
+
+#
 # mil-functions specific.
 #
 variable "mil_functions_image" {

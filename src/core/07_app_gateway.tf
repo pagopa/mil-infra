@@ -6,6 +6,17 @@ resource "azurerm_user_assigned_identity" "appgw" {
   tags                = var.tags
 }
 
+resource "azurerm_role_assignment" "appgw_id_api-dev-mil" {
+  scope                = "${module.key_vault.id}/certificates/api-dev-mil"
+  role_definition_name = "Key Vault Reader"
+  principal_id         = azurerm_user_assigned_identity.appgw.principal_id
+}
+
+data "azurerm_key_vault_certificate" "api-dev-mil" {
+  name         = "api-dev-mil"
+  key_vault_id = module.key_vault.id
+}
+
 # Public IP
 resource "azurerm_public_ip" "appgw" {
   name                = "${local.project}-agw-pip"
@@ -19,21 +30,25 @@ resource "azurerm_public_ip" "appgw" {
 
 # Application Gateway
 module "app_gw" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//app_gateway?ref=v4.1.0"
+  depends_on = [
+    azurerm_role_assignment.appgw_id_api-dev-mil
+  ]
+
+  source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//app_gateway?ref=v4.1.1"
+
   resource_group_name = azurerm_resource_group.network.name
   location            = azurerm_resource_group.network.location
   name                = "${local.project}-agw"
 
-  # SKU
-  sku_name = "Standard_v2"
-  sku_tier = "Standard_v2"
+  sku_name = var.app_gateway.sku_name
+  sku_tier = var.app_gateway.sku_tier
 
-  #
+  waf_enabled = var.app_gateway.waf_enabled
+
   zones = [1, 2, 3]
 
-  # TODO: DEVONO ESSERE DELLE VARIABILI
-  app_gateway_min_capacity = 1
-  app_gateway_max_capacity = 2
+  app_gateway_min_capacity = var.app_gateway.min_capacity
+  app_gateway_max_capacity = var.app_gateway.max_capacity
 
   # Networking
   subnet_id    = azurerm_subnet.appgw.id
@@ -62,8 +77,8 @@ module "app_gw" {
       port               = 443
       firewall_policy_id = null
       certificate = {
-        id   = "https://mil-d-kv.vault.azure.net/secrets/api-dev-mil/1222fdad21f346cfb39e2514a4b68add"
         name = "api-dev-mil"
+        id   = data.azurerm_key_vault_certificate.api-dev-mil.versionless_secret_id
       }
       ssl_profile_name = null
     }
@@ -75,6 +90,7 @@ module "app_gw" {
       listener              = "api"
       backend               = "apim"
       rewrite_rule_set_name = null
+      priority              = 1
     }
   }
 
