@@ -14,3 +14,15 @@ tags = {
 }
 
 dns_zone_mil_prefix = "mil"
+
+#
+# App gateway
+#
+
+app_gateway = {
+  min_capacity = 0
+  max_capacity = 2
+  waf_enabled  = true
+  sku_name     = "WAF_v2"
+  sku_tier     = "WAF_v2"
+}

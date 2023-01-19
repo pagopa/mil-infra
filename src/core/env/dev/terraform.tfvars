@@ -52,3 +52,14 @@ mil_functions_min_replicas                   = 0
 #
 apim_sku = "Developer_1"
 
+#
+# App gateway
+#
+
+app_gateway = {
+  min_capacity = 0
+  max_capacity = 2
+  waf_enabled  = false
+  sku_name     = "Standard_v2"
+  sku_tier     = "Standard_v2"
+}

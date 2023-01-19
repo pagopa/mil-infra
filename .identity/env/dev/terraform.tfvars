@@ -11,7 +11,7 @@ environment_ci_roles = {
     "Storage Queue Data Reader",
     "Storage Table Data Reader",
     "PagoPA Export Deployments Template",
-    "Key Vault Secrets User",
+    "Key Vault Reader",
     "DocumentDB Account Contributor",
     "API Management Service Contributor",
   ]
@@ -30,9 +30,7 @@ environment_cd_roles = {
     "Storage File Data SMB Share Contributor",
     "Storage Queue Data Contributor",
     "Storage Table Data Contributor",
-    "Key Vault Certificates Officer",
-    "Key Vault Crypto Officer",
-    "Key Vault Secrets Officer",
+    "Key Vault Contributor",
   ]
 }
 
