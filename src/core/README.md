@@ -19,13 +19,13 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_apim"></a> [apim](#module\_apim) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management | v3.13.1 |
-| <a name="module_app_gw"></a> [app\_gw](#module\_app\_gw) | git::https://github.com/pagopa/terraform-azurerm-v3.git//app_gateway | v3.13.1 |
-| <a name="module_cae"></a> [cae](#module\_cae) | git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment | v3.13.1 |
-| <a name="module_functions_api"></a> [functions\_api](#module\_functions\_api) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v3.13.1 |
-| <a name="module_github_runner"></a> [github\_runner](#module\_github\_runner) | git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment | v3.13.1 |
-| <a name="module_key_vault"></a> [key\_vault](#module\_key\_vault) | git::https://github.com/pagopa/terraform-azurerm-v3.git//key_vault | v3.13.1 |
-| <a name="module_mil_product"></a> [mil\_product](#module\_mil\_product) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product | v3.13.1 |
+| <a name="module_apim"></a> [apim](#module\_apim) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management | v4.1.0 |
+| <a name="module_app_gw"></a> [app\_gw](#module\_app\_gw) | git::https://github.com/pagopa/terraform-azurerm-v3.git//app_gateway | v4.1.0 |
+| <a name="module_cae"></a> [cae](#module\_cae) | git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment | v4.1.0 |
+| <a name="module_functions_api"></a> [functions\_api](#module\_functions\_api) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v4.1.0 |
+| <a name="module_github_runner"></a> [github\_runner](#module\_github\_runner) | git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment | v4.1.0 |
+| <a name="module_key_vault"></a> [key\_vault](#module\_key\_vault) | git::https://github.com/pagopa/terraform-azurerm-v3.git//key_vault | v4.1.0 |
+| <a name="module_mil_product"></a> [mil\_product](#module\_mil\_product) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product | v4.1.0 |
 
 ## Resources
 

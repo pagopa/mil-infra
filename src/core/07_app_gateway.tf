@@ -19,7 +19,7 @@ resource "azurerm_public_ip" "appgw" {
 
 # Application Gateway
 module "app_gw" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//app_gateway?ref=v3.13.1"
+  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//app_gateway?ref=v4.1.0"
   resource_group_name = azurerm_resource_group.network.name
   location            = azurerm_resource_group.network.location
   name                = "${local.project}-agw"
