@@ -35,7 +35,7 @@ github_runner_cidr = "10.231.250.0/23" # 010.231.250.000 - 010.231.250.255
 #
 # mil-functions
 #
-mil_functions_image                          = "ghcr.io/pagopa/mil-functions:1.0.8"
+mil_functions_image                          = "ghcr.io/pagopa/mil-functions:1.0.38"
 mil_functions_quarkus_log_level              = "ERROR"
 mil_functions_app_log_level                  = "DEBUG"
 mil_functions_mongo_connect_timeout          = "5s"
