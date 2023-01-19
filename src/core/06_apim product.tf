@@ -4,7 +4,7 @@ locals {
 }
 
 module "mil_product" {
-  source                = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product?ref=v3.4.5"
+  source                = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product?ref=v3.13.1"
   product_id            = local.product_id
   display_name          = "Multi-channel Integration Layer"
   description           = "Multi-channel Integration Layer for SW Client Project"
@@ -21,7 +21,7 @@ locals {
 }
 
 module "functions_api" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v3.5.1"
+  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v3.13.1"
   name                = "${local.project}-services"
   api_management_name = module.apim.name
   resource_group_name = module.apim.resource_group_name

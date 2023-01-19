@@ -7,7 +7,6 @@ resource "azurerm_user_assigned_identity" "appgw" {
 }
 
 # Public IP
-# TODO: DOPO LA CREAZIONE, VERIFICARE CHE SIA MULTI-ZONE!!!
 resource "azurerm_public_ip" "appgw" {
   name                = "${local.project}-agw-pip"
   resource_group_name = azurerm_resource_group.network.name
