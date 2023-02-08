@@ -35,7 +35,7 @@ github_runner_cidr = "10.231.250.0/23" # 010.231.250.000 - 010.231.250.255
 #
 # mil-functions
 #
-mil_functions_image                          = "ghcr.io/pagopa/mil-functions:1.0.8"
+mil_functions_image                          = "ghcr.io/pagopa/mil-functions:latest"
 mil_functions_quarkus_log_level              = "ERROR"
 mil_functions_app_log_level                  = "DEBUG"
 mil_functions_mongo_connect_timeout          = "5s"
@@ -46,6 +46,34 @@ mil_functions_ephemeral_storage              = "1.0Gi"
 mil_functions_memory                         = "1.0Gi"
 mil_functions_max_replicas                   = 5
 mil_functions_min_replicas                   = 0
+
+#
+# mil-payment-notice
+#
+mil_payment_notice_quarkus_log_level                = "ERROR"
+mil_payment_notice_app_log_level                    = "DEBUG"
+mil_payment_notice_mongo_connect_timeout            = "5s"
+mil_payment_notice_mongo_read_timeout               = "10s"
+mil_payment_notice_mongo_server_selection_timeout   = "5s"
+mil_payment_notice_node_soap_service_url            = 
+mil_payment_notice_node_soap_client_connect_timeout = 
+mil_payment_notice_node_soap_client_read_timeout    = 
+mil_payment_notice_node_rest_service_url            = 
+mil_payment_notice_rest_client_connect_timeout      = 
+mil_payment_notice_rest_client_read_timeout         = 
+mil_payment_notice_close_payment_max_retry          = 
+mil_payment_notice_closepayment_retry_after         = 
+mil_payment_notice_activatepayment_expiration_time  = 
+mil_payment_notice_image                            = "ghcr.io/pagopa/mil-payment-notice:latest"
+mil_payment_notice_cpu                              = 0.5
+mil_payment_notice_ephemeral_storage                = "1.0Gi"
+mil_payment_notice_memory                           = "1.0Gi"
+mil_payment_notice_max_replicas                     = 5
+mil_payment_notice_min_replicas                     = 0
+
+#
+# mil-fee-calculator
+#
 
 #
 # APIM
