@@ -6,8 +6,24 @@ resource "azurerm_user_assigned_identity" "appgw" {
   tags                = var.tags
 }
 
+resource "azurerm_role_assignment" "appgw_id_api-dev-mil" {
+  scope                = "${module.key_vault.id}/certificates/api-dev-mil"
+  role_definition_name = "Key Vault Reader"
+  principal_id         = azurerm_user_assigned_identity.appgw.principal_id
+}
+
+# resource "azurerm_role_assignment" "appgw_id_api-dev-mil_secret" {
+#   scope                = "${module.key_vault.id}/secrets/api-dev-mil"
+#   role_definition_name = "Key Vault Reader"
+#   principal_id         = azurerm_user_assigned_identity.appgw.principal_id
+# }
+
+data "azurerm_key_vault_certificate" "api-dev-mil" {
+  name         = "api-dev-mil"
+  key_vault_id = module.key_vault.id
+}
+
 # Public IP
-# TODO: DOPO LA CREAZIONE, VERIFICARE CHE SIA MULTI-ZONE!!!
 resource "azurerm_public_ip" "appgw" {
   name                = "${local.project}-agw-pip"
   resource_group_name = azurerm_resource_group.network.name
@@ -19,70 +35,75 @@ resource "azurerm_public_ip" "appgw" {
 }
 
 # Application Gateway
-# module "app_gw" {
-#   source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//app_gateway?ref=v3.5.1"
-#   resource_group_name = azurerm_resource_group.network.name
-#   location            = azurerm_resource_group.network.location
-#   name                = "${local.project}-agw"
+module "app_gw" {
+  depends_on = [
+    azurerm_role_assignment.appgw_id_api-dev-mil
+  ]
 
-#   # SKU
-#   sku_name = "Standard_v2"
-#   sku_tier = "Standard_v2"
+  source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//app_gateway?ref=v4.1.12"
 
-#   #
-#   zones = [1, 2, 3]
+  resource_group_name = azurerm_resource_group.network.name
+  location            = azurerm_resource_group.network.location
+  name                = "${local.project}-agw"
 
-#   # TODO: DEVONO ESSERE DELLE VARIABILI
-#   app_gateway_min_capacity = 1
-#   app_gateway_max_capacity = 2
+  sku_name = var.app_gateway.sku_name
+  sku_tier = var.app_gateway.sku_tier
 
-#   # Networking
-#   subnet_id    = azurerm_subnet.appgw.id
-#   public_ip_id = azurerm_public_ip.appgw.id
+  waf_enabled = var.app_gateway.waf_enabled
 
-#   # Backends
-#   backends = {
-#     apim = {
-#       protocol                    = "Https"
-#       host                        = module.apim.gateway_hostname
-#       port                        = 443
-#       ip_addresses                = null # with null value use fqdns
-#       fqdns                       = [module.apim.gateway_hostname]
-#       probe                       = "/status-0123456789abcdef"
-#       probe_name                  = "probe-apim"
-#       request_timeout             = 30
-#       pick_host_name_from_backend = false
-#     }
-#   }
+  zones = [1, 2, 3]
 
-#   # Listeners
-#   listeners = {
-#     api = {
-#       protocol           = "Https"
-#       host               = "api.${var.dns_zone_mil_prefix}.${var.dns_external_domain}"
-#       port               = 443
-#       firewall_policy_id = null
-#       certificate = {
-#         id   = "https://mil-d-kv.vault.azure.net/secrets/api-dev-mil/1222fdad21f346cfb39e2514a4b68add"
-#         name = "api-dev-mil"
-#       }
-#       ssl_profile_name = null
-#     }
-#   }
+  app_gateway_min_capacity = var.app_gateway.min_capacity
+  app_gateway_max_capacity = var.app_gateway.max_capacity
 
-#   # Maps listener-to-backend
-#   routes = {
-#     api = {
-#       listener              = "api"
-#       backend               = "apim"
-#       rewrite_rule_set_name = null
-#     }
-#   }
+  # Networking
+  subnet_id    = azurerm_subnet.appgw.id
+  public_ip_id = azurerm_public_ip.appgw.id
 
-#   #rewrite_rule_sets = []
+  # Backends
+  backends = {
+    apim = {
+      protocol                    = "Https"
+      host                        = module.apim.gateway_hostname
+      port                        = 443
+      ip_addresses                = null # with null value use fqdns
+      fqdns                       = [module.apim.gateway_hostname]
+      probe                       = "/status-0123456789abcdef"
+      probe_name                  = "probe-apim"
+      request_timeout             = 30
+      pick_host_name_from_backend = false
+    }
+  }
 
-#   trusted_client_certificates = []
-#   identity_ids                = [azurerm_user_assigned_identity.appgw.id]
+  # Listeners
+  listeners = {
+    api = {
+      protocol           = "Https"
+      host               = "api.${var.dns_zone_mil_prefix}.${var.dns_external_domain}"
+      port               = 443
+      firewall_policy_id = null
+      certificate = {
+        name = "api-dev-mil"
+        id   = data.azurerm_key_vault_certificate.api-dev-mil.versionless_secret_id
+      }
+      ssl_profile_name = null
+    }
+  }
 
-#   tags = var.tags
-# }
+  # Maps listener-to-backend
+  routes = {
+    api = {
+      listener              = "api"
+      backend               = "apim"
+      rewrite_rule_set_name = null
+      priority              = 1
+    }
+  }
+
+  #rewrite_rule_sets = []
+
+  trusted_client_certificates = []
+  identity_ids                = [azurerm_user_assigned_identity.appgw.id]
+
+  tags = var.tags
+}
