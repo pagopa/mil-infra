@@ -4,7 +4,7 @@ locals {
 }
 
 module "functions_api" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v3.5.1"
+  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v4.1.12"
   name                = "${local.project}-services"
   api_management_name = module.apim.name
   resource_group_name = module.apim.resource_group_name
