@@ -78,7 +78,7 @@
                                 },
                                 {
                                     "name": "node.soap-client.apim-subscription-key",
-                                    "secretRef": "${node_soap_subscription_key}"
+                                    "secretRef": "node-soap-subscription-key"
                                 },
                                 {
                                     "name": "node.rest-service.url",
@@ -86,7 +86,7 @@
                                 },
                                 {
                                     "name": "node-rest-client-subscription-key",
-                                    "secretRef": "${node_rest_subscription_key}"
+                                    "secretRef": "node-rest-subscription-key"
                                 },
                                 {
                                     "name": "paymentnotice.rest-client.connect-timeout",

@@ -11,15 +11,15 @@ data "azurerm_key_vault_secret" "node_rest_subscription_key" {
 
 
 locals {
-  name = "${local.project}-payment-notice-ca"
+  payment_notice_ca_name = "${local.project}-payment-notice-ca"
 }
 
 resource "azurerm_resource_group_template_deployment" "mil_payment_notice" {
-  name                = local.name
+  name                = local.payment_notice_ca_name
   resource_group_name = azurerm_resource_group.app.name
   deployment_mode     = "Incremental"
   tags                = var.tags
-  
+
   lifecycle {
     ignore_changes = [
       template_content
@@ -28,14 +28,14 @@ resource "azurerm_resource_group_template_deployment" "mil_payment_notice" {
 
   template_content = templatefile("templates/mil-payment-notice.json",
     {
-      name                             = local.name,
+      name                             = local.payment_notice_ca_name,
       location                         = azurerm_resource_group.app.location,
       mongo_connection_string_1        = azurerm_cosmosdb_account.mil.connection_strings[0],
       mongo_connection_string_2        = azurerm_cosmosdb_account.mil.connection_strings[1],
       redis_connection_string          = module.redis_cache.primary_connection_string,
       managed_environment_id           = module.cae.id,
-      node_soap_subscription_key       = var.node_soap_subscription_key,
-      node_rest_subscription_key       = var.node_rest_subscription_key,
+      node_soap_subscription_key       = data.azurerm_key_vault_secret.node_soap_subscription_key.value,
+      node_rest_subscription_key       = data.azurerm_key_vault_secret.node_rest_subscription_key.value,
       quarkus_log_level                = var.mil_payment_notice_quarkus_log_level,
       app_log_level                    = var.mil_payment_notice_app_log_level,
       mongo_connect_timeout            = var.mil_payment_notice_mongo_connect_timeout,
@@ -59,7 +59,3 @@ resource "azurerm_resource_group_template_deployment" "mil_payment_notice" {
     }
   )
 }
-
-#output "mil_functions_ingress_fqdn" {
-#  value = jsondecode(azurerm_resource_group_template_deployment.mil_functions.output_content).ingress_fqdn.value
-#}
