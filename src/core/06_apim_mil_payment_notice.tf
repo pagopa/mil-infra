@@ -17,7 +17,7 @@ module "payment_notice_api" {
   # The Path for this API Management API, which is a relative URL which uniquely identifies this API and all of its resource paths within the API Management Service.
   path = "mil-payment-notice"
 
-  display_name          = "services"
+  display_name          = "payment notice"
   content_format        = "openapi-link"
   content_value         = "https://raw.githubusercontent.com/pagopa/mil-apis/main/openapi-mono/payment-notice.yaml"
   product_ids           = [module.mil_product.product_id]

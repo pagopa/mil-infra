@@ -20,11 +20,11 @@ resource "azurerm_resource_group_template_deployment" "mil_payment_notice" {
   deployment_mode     = "Incremental"
   tags                = var.tags
 
-  lifecycle {
-    ignore_changes = [
-      template_content
-    ]
-  }
+  #lifecycle {
+  #  ignore_changes = [
+  #    template_content
+  #  ]
+  #}
 
   template_content = templatefile("templates/mil-payment-notice.json",
     {
@@ -58,4 +58,8 @@ resource "azurerm_resource_group_template_deployment" "mil_payment_notice" {
       min_replicas                     = var.mil_payment_notice_min_replicas
     }
   )
+}
+
+output "mil_payment_notice_ingress_fqdn" {
+  value = jsondecode(azurerm_resource_group_template_deployment.mil_payment_notice.output_content).ingress_fqdn.value
 }

@@ -9,11 +9,11 @@ resource "azurerm_resource_group_template_deployment" "mil_functions" {
   deployment_mode     = "Incremental"
   tags                = var.tags
 
-  lifecycle {
-    ignore_changes = [
-      template_content
-    ]
-  }
+  #lifecycle {
+  #  ignore_changes = [
+  #    template_content
+  #  ]
+  #}
 
   template_content = templatefile("templates/mil-functions.json",
     {
@@ -37,6 +37,6 @@ resource "azurerm_resource_group_template_deployment" "mil_functions" {
   )
 }
 
-#output "mil_functions_ingress_fqdn" {
-#  value = jsondecode(azurerm_resource_group_template_deployment.mil_functions.output_content).ingress_fqdn.value
-#}
+output "mil_functions_ingress_fqdn" {
+  value = jsondecode(azurerm_resource_group_template_deployment.mil_functions.output_content).ingress_fqdn.value
+}
