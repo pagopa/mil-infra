@@ -121,6 +121,20 @@ variable "log_analytics_workspace" {
 }
 
 #
+# App Gateway
+#
+variable "app_gateway" {
+  type = object({
+    min_capacity = number
+    max_capacity = number
+    waf_enabled  = bool
+    sku_name     = string
+    sku_tier     = string
+  })
+  description = "Application Gateway configuration"
+}
+
+#
 # mil-functions specific.
 #
 variable "mil_functions_image" {
@@ -187,6 +201,109 @@ variable "mil_functions_min_replicas" {
   type        = number
   description = "Min number of replicas."
   default     = 0
+}
+
+#
+# mil-payment-notice specific.
+#
+variable "mil_payment_notice_quarkus_log_level" {
+  type    = string
+  default = "ERROR"
+}
+
+variable "mil_payment_notice_app_log_level" {
+  type    = string
+  default = "DEBUG"
+}
+
+variable "mil_payment_notice_mongo_connect_timeout" {
+  type    = string
+  default = "5s"
+}
+
+variable "mil_payment_notice_mongo_read_timeout" {
+  type    = string
+  default = "10s"
+}
+
+variable "mil_payment_notice_mongo_server_selection_timeout" {
+  type    = string
+  default = "5s"
+}
+
+variable "mil_payment_notice_node_soap_service_url" {
+  type    = string
+  default = "https://api.uat.platform.pagopa.it/nodo-auth/node-for-psp/v1"
+}
+
+variable "mil_payment_notice_node_soap_client_connect_timeout" {
+  type    = number
+  default = 2000
+}
+
+variable "mil_payment_notice_node_soap_client_read_timeout" {
+  type = number
+  default = 2000
+}
+
+variable "mil_payment_notice_node_rest_service_url" {
+  type    = string
+  default = "https://api.uat.platform.pagopa.it/nodo-auth/nodo-per-pm/v2/closepayment"
+}
+
+variable "mil_payment_notice_rest_client_connect_timeout" {
+  type    = number
+  default = 2000
+}
+
+variable "mil_payment_notice_rest_client_read_timeout" {
+  type    = number
+  default = 2000
+}
+
+variable "mil_payment_notice_close_payment_max_retry" {
+  type    = number
+  default = 3
+}
+
+variable "mil_payment_notice_closepayment_retry_after" {
+  type    = number
+  default = 30
+}
+
+variable "mil_payment_notice_activatepayment_expiration_time" {
+  type    = number
+  default = 30000
+}
+
+variable "mil_payment_notice_image" {
+  type    = string
+  default = "ghcr.io/pagopa/mil-payment-notice:latest"
+}
+
+variable "mil_payment_notice_cpu" {
+  type    = number
+  default = 0.5
+}
+
+variable "mil_payment_notice_ephemeral_storage" {
+  type    = string
+  default = "1.0Gi"
+}
+
+variable "mil_payment_notice_memory" {
+  type    = string
+  default = "1.0Gi"
+}
+
+variable "mil_payment_notice_max_replicas" {
+  type    = number
+  default = 5
+}
+
+variable "mil_payment_notice_min_replicas" {
+  type    = number
+  default = 0
 }
 
 # API Manager specific.

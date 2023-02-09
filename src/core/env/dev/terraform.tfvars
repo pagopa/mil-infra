@@ -55,15 +55,15 @@ mil_payment_notice_app_log_level                    = "DEBUG"
 mil_payment_notice_mongo_connect_timeout            = "5s"
 mil_payment_notice_mongo_read_timeout               = "10s"
 mil_payment_notice_mongo_server_selection_timeout   = "5s"
-mil_payment_notice_node_soap_service_url            = 
-mil_payment_notice_node_soap_client_connect_timeout = 
-mil_payment_notice_node_soap_client_read_timeout    = 
-mil_payment_notice_node_rest_service_url            = 
-mil_payment_notice_rest_client_connect_timeout      = 
-mil_payment_notice_rest_client_read_timeout         = 
-mil_payment_notice_close_payment_max_retry          = 
-mil_payment_notice_closepayment_retry_after         = 
-mil_payment_notice_activatepayment_expiration_time  = 
+mil_payment_notice_node_soap_service_url            = "https://api.uat.platform.pagopa.it/nodo-auth/node-for-psp/v1"
+mil_payment_notice_node_soap_client_connect_timeout = 2000
+mil_payment_notice_node_soap_client_read_timeout    = 2000
+mil_payment_notice_node_rest_service_url            = "https://api.uat.platform.pagopa.it/nodo-auth/nodo-per-pm/v2/closepayment"
+mil_payment_notice_rest_client_connect_timeout      = 2000
+mil_payment_notice_rest_client_read_timeout         = 2000
+mil_payment_notice_close_payment_max_retry          = 3
+mil_payment_notice_closepayment_retry_after         = 30
+mil_payment_notice_activatepayment_expiration_time  = 30000
 mil_payment_notice_image                            = "ghcr.io/pagopa/mil-payment-notice:latest"
 mil_payment_notice_cpu                              = 0.5
 mil_payment_notice_ephemeral_storage                = "1.0Gi"
@@ -80,3 +80,13 @@ mil_payment_notice_min_replicas                     = 0
 #
 apim_sku = "Developer_1"
 
+#
+# App gateway
+#
+app_gateway = {
+  min_capacity = 0
+  max_capacity = 2
+  waf_enabled  = false
+  sku_name     = "Standard_v2"
+  sku_tier     = "Standard_v2"
+}
