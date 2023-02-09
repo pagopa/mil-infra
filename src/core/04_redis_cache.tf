@@ -9,13 +9,13 @@ module "redis_cache" {
   family                = "C"
   sku_name              = "Basic"
   enable_authentication = true
-  
+
   private_endpoint = {
-    enabled  = false
-    virtual_network_id = ""
-    subnet_id = ""
+    enabled              = false
+    virtual_network_id   = ""
+    subnet_id            = ""
     private_dns_zone_ids = []
   }
-  
-  tags                  = var.tags
+
+  tags = var.tags
 }

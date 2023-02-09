@@ -242,7 +242,7 @@ variable "mil_payment_notice_node_soap_client_connect_timeout" {
 }
 
 variable "mil_payment_notice_node_soap_client_read_timeout" {
-  type = number
+  type    = number
   default = 2000
 }
 
