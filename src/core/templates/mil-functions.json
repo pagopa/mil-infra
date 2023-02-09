@@ -34,23 +34,23 @@
                             "env": [
                                 {
                                     "name": "quarkus-log-level",
-                                    "value": "${mil_functions_quarkus_log_level}"
+                                    "value": "${quarkus_log_level}"
                                 },
                                 {
                                     "name": "app-log-level",
-                                    "value": "${mil_functions_app_log_level}"
+                                    "value": "${app_log_level}"
                                 },
                                 {
                                     "name": "mongo-connect-timeout",
-                                    "value": "${mil_functions_mongo_connect_timeout}"
+                                    "value": "${mongo_connect_timeout}"
                                 },
                                 {
                                     "name": "mongo-read-timeout",
-                                    "value": "${mil_functions_mongo_read_timeout}"
+                                    "value": "${mongo_read_timeout}"
                                 },
                                 {
                                     "name": "mongo-server-selection-timeout",
-                                    "value": "${mil_functions_mongo_server_selection_timeout}"
+                                    "value": "${mongo_server_selection_timeout}"
                                 },
                                 {
                                     "name": "mongo-connection-string-1",
@@ -61,18 +61,18 @@
                                     "secretRef": "mongo-connection-string-secret-2"
                                 }
                             ],
-                            "image": "${mil_functions_image}",
+                            "image": "${image}",
                             "name": "mil-functions",
                             "resources": {
-                                "cpu": ${mil_functions_cpu},
-                                "ephemeralStorage": "${mil_functions_ephemeral_storage}",
-                                "memory": "${mil_functions_memory}"
+                                "cpu": ${cpu},
+                                "ephemeralStorage": "${ephemeral_storage}",
+                                "memory": "${memory}"
                             }
                         }
                     ],
                     "scale": {
-                        "maxReplicas": ${mil_functions_max_replicas},
-                        "minReplicas": ${mil_functions_min_replicas}
+                        "maxReplicas": ${max_replicas},
+                        "minReplicas": ${min_replicas}
                     }
                 }
             }
