@@ -41,3 +41,22 @@ resource "azurerm_cosmosdb_mongo_collection" "services" {
     unique = true
   }
 }
+
+# Collection for pspconf
+resource "azurerm_cosmosdb_mongo_collection" "pspconf" {
+  account_name        = azurerm_cosmosdb_mongo_database.mil.account_name
+  database_name       = azurerm_cosmosdb_mongo_database.mil.name
+  name                = "pspconf"
+  resource_group_name = azurerm_cosmosdb_mongo_database.mil.resource_group_name
+
+  index {
+    keys   = ["_id"]
+    unique = true
+  }
+
+  index {
+    keys   = ["acquirerId"]
+    unique = true
+  }
+}
+
