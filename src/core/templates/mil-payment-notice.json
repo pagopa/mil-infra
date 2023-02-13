@@ -27,7 +27,7 @@
                         },
                         {
                             "name": "redis-connection-string",
-                            "value": "${redis_connection_string}"
+                            "value": "rediss://:${redis_primary_access_key}@${redis_hostname}:${redis_ssl_port}"
                         },
                         {
                             "name": "node-soap-subscription-key",
