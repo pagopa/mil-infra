@@ -1,0 +1,107 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.App/containerApps",
+            "apiVersion": "2022-06-01-preview",
+            "name": "${name}",
+            "location": "${location}",
+            "properties": {
+                "configuration": {
+                    "ingress": {
+                        "external": true,
+                        "targetPort": 8080,
+                        "transport": "Http"
+                    },
+                    "secrets": [
+                        {
+                            "name": "mongo-connection-string-secret-1",
+                            "value": "${mongo_connection_string_1}"
+                        },
+                        {
+                            "name": "mongo-connection-string-secret-2",
+                            "value": "${mongo_connection_string_2}"
+                        },
+                        {
+                            "name": "gec-subscription-key",
+                            "value": "${gec_subscription_key}"
+                        }
+                    ]
+                },
+                "managedEnvironmentId": "${managed_environment_id}",
+                "template": {
+                    "containers": [
+                        {
+                            "env": [
+                                {
+                                    "name": "quarkus-log-level",
+                                    "value": "${quarkus_log_level}"
+                                },
+                                {
+                                    "name": "app-log-level",
+                                    "value": "${app_log_level}"
+                                },
+                                {
+                                    "name": "mongo-connect-timeout",
+                                    "value": "${mongo_connect_timeout}"
+                                },
+                                {
+                                    "name": "mongo-read-timeout",
+                                    "value": "${mongo_read_timeout}"
+                                },
+                                {
+                                    "name": "mongo-server-selection-timeout",
+                                    "value": "${mongo_server_selection_timeout}"
+                                },
+                                {
+                                    "name": "gec.url",
+                                    "value": "${gec_url}"
+                                },
+                                {
+                                    "name": "gec.subscription-key",
+                                    "secretRef": "gec-subscription-key"
+                                },
+                                {
+                                    "name": "gec.connect-timeout",
+                                    "value": "${gec_connect_timeout}"
+                                },
+                                {
+                                    "name": "gec.read-timeout",
+                                    "value": "${gec_read_timeout}"
+                                },
+                                {
+                                    "name": "mongo-connection-string-1",
+                                    "secretRef": "mongo-connection-string-secret-1"
+                                },
+                                {
+                                    "name": "mongo-connection-string-2",
+                                    "secretRef": "mongo-connection-string-secret-2"
+                                }
+                            ],
+                            "image": "${image}",
+                            "name": "mil-fee-calculator",
+                            "resources": {
+                                "cpu": ${cpu},
+                                "ephemeralStorage": "${ephemeral_storage}",
+                                "memory": "${memory}"
+                            }
+                        }
+                    ],
+                    "scale": {
+                        "maxReplicas": ${max_replicas},
+                        "minReplicas": ${min_replicas}
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "ingress_fqdn": {
+            "type": "String",
+            "value": "[reference(resourceId('Microsoft.App/containerApps','${name}')).configuration.ingress.fqdn]"
+        } 
+    }
+}
