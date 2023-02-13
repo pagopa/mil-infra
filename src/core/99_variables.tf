@@ -306,6 +306,79 @@ variable "mil_payment_notice_min_replicas" {
   default = 0
 }
 
+#
+# mil-fee-calculator specific.
+#
+variable "mil_fee_calculator_image" {
+  type    = string
+  default = "ghcr.io/pagopa/mil-fee-calculator:latest"
+}
+
+variable "mil_fee_calculator_quarkus_log_level" {
+  type    = string
+  default = "ERROR"
+}
+
+variable "mil_fee_calculator_app_log_level" {
+  type    = string
+  default = "DEBUG"
+}
+
+variable "mil_fee_calculator_mongo_connect_timeout" {
+  type    = string
+  default = "5s"
+}
+
+variable "mil_fee_calculator_mongo_read_timeout" {
+  type    = string
+  default = "10s"
+}
+
+variable "mil_fee_calculator_mongo_server_selection_timeout" {
+  type    = string
+  default = "5s"
+}
+
+variable "mil_fee_calculator_gec_url" {
+  type    = string
+  default = "https://api.uat.platform.pagopa.it/afm/node/calculator-service/v1/fees"
+}
+
+variable "mil_fee_calculator_gec_connect_timeout" {
+  type    = number
+  default = 2000
+}
+
+variable "mil_fee_calculator_gec_read_timeout" {
+  type    = number
+  default = 2000
+}
+
+variable "mil_fee_calculator_cpu" {
+  type    = number
+  default = 0.5
+}
+
+variable "mil_fee_calculator_ephemeral_storage" {
+  type    = string
+  default = "1.0Gi"
+}
+
+variable "mil_fee_calculator_memory" {
+  type    = string
+  default = "1.0Gi"
+}
+
+variable "mil_fee_calculator_max_replicas" {
+  type    = number
+  default = 5
+}
+
+variable "mil_fee_calculator_min_replicas" {
+  type    = number
+  default = 0
+}
+
 # API Manager specific.
 variable "apim_sku" {
   type        = string
