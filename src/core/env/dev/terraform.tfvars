@@ -74,6 +74,20 @@ mil_payment_notice_min_replicas                     = 0
 #
 # mil-fee-calculator
 #
+mil_fee_calculator_image                          = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest"
+mil_fee_calculator_quarkus_log_level              = "ERROR"
+mil_fee_calculator_app_log_level                  = "DEBUG"
+mil_fee_calculator_mongo_connect_timeout          = "5s"
+mil_fee_calculator_mongo_read_timeout             = "10s"
+mil_fee_calculator_mongo_server_selection_timeout = "5s"
+mil_fee_calculator_gec_url                        = "https://api.uat.platform.pagopa.it/afm/node/calculator-service/v1/fees"
+mil_fee_calculator_gec_connect_timeout            = 2000
+mil_fee_calculator_gec_read_timeout               = 2000
+mil_fee_calculator_cpu                            = 0.5
+mil_fee_calculator_ephemeral_storage              = "1.0Gi"
+mil_fee_calculator_memory                         = "1.0Gi"
+mil_fee_calculator_max_replicas                   = 5
+mil_fee_calculator_min_replicas                   = 0
 
 #
 # APIM
