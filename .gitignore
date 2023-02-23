@@ -41,3 +41,4 @@ __azurite_*
 /.project
 
 .vscode
+src/core/.terraform.lock.hcl
