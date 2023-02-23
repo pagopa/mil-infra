@@ -14,14 +14,15 @@ resource "azurerm_resource_group_template_deployment" "mil_fee_calculator" {
   deployment_mode     = "Incremental"
   tags                = var.tags
 
-  lifecycle {
-    ignore_changes = [
-      template_content
-    ]
-  }
+  #lifecycle {
+  #  ignore_changes = [
+  #    template_content
+  #  ]
+  #}
 
   template_content = templatefile("templates/mil-fee-calculator.json",
     {
+      content_version                = "1.0.0.0",
       name                           = local.fee_calculator_ca_name,
       location                       = azurerm_resource_group.app.location,
       mongo_connection_string_1      = azurerm_cosmosdb_account.mil.connection_strings[0],
@@ -46,6 +47,6 @@ resource "azurerm_resource_group_template_deployment" "mil_fee_calculator" {
   )
 }
 
-output "mil_fee_calculator_ingress_fqdn" {
-  value = jsondecode(azurerm_resource_group_template_deployment.mil_fee_calculator.output_content).ingress_fqdn.value
-}
+#output "mil_fee_calculator_ingress_fqdn" {
+#  value = jsondecode(azurerm_resource_group_template_deployment.mil_fee_calculator.output_content).ingress_fqdn.value
+#}

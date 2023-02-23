@@ -4,7 +4,7 @@ locals {
 }
 
 module "fee_calculator_api" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v4.1.12"
+  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v5.1.0"
   name                = "${local.project}-fee-calculator"
   api_management_name = module.apim.name
   resource_group_name = module.apim.resource_group_name
@@ -17,7 +17,7 @@ module "fee_calculator_api" {
   # The Path for this API Management API, which is a relative URL which uniquely identifies this API and all of its resource paths within the API Management Service.
   path = "mil-fee-calculator"
 
-  display_name          = "fee-calculator"
+  display_name          = "fee calculator"
   content_format        = "openapi-link"
   content_value         = "https://raw.githubusercontent.com/pagopa/mil-apis/main/openapi-mono/fee.yaml"
   product_ids           = [module.mil_product.product_id]
