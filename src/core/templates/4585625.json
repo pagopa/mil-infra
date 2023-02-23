@@ -1,0 +1,14 @@
+{
+    "pspConfigForVerifyAndActivate": {
+        "psp": "AGID_01",
+        "broker": "97735020584",
+        "channel": "97735020584_07",
+        "password": "PLACEHOLDER"
+    },
+    "pspConfigForGetFeeAndClosePayment": {
+        "psp": "AGID_01",
+        "broker": "97735020584",
+        "channel": "97735020584_07",
+        "password": "PLACEHOLDER"
+    }
+}
