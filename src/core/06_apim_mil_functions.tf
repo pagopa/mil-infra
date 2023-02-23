@@ -1,10 +1,11 @@
 # API for mil-functions.
 locals {
   mil_functions_ingress_fqdn = jsondecode(azurerm_resource_group_template_deployment.mil_functions.output_content).ingress_fqdn.value
+  #mil_functions_ingress_fqdn = azurerm_container_app.mil_functions.ingress[0].fqdn
 }
 
 module "functions_api" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v4.1.12"
+  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v5.1.0"
   name                = "${local.project}-services"
   api_management_name = module.apim.name
   resource_group_name = module.apim.resource_group_name

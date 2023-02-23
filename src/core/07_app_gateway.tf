@@ -40,7 +40,7 @@ module "app_gw" {
     azurerm_role_assignment.appgw_id_api-dev-mil
   ]
 
-  source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//app_gateway?ref=v4.1.12"
+  source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//app_gateway?ref=v5.1.0"
 
   resource_group_name = azurerm_resource_group.network.name
   location            = azurerm_resource_group.network.location
