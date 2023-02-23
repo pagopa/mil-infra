@@ -6,17 +6,12 @@ locals {
 resource "azurerm_resource_group_template_deployment" "mil_functions" {
   name                = local.mil_functions_ca_name
   resource_group_name = azurerm_resource_group.app.name
-  deployment_mode     = "Incremental"
+  deployment_mode     = "Incremental" # or Complete
   tags                = var.tags
-
-  #lifecycle {
-  #  ignore_changes = [
-  #    template_content
-  #  ]
-  #}
 
   template_content = templatefile("templates/mil-functions.json",
     {
+      content_version                = "1.0.0.1",
       name                           = local.mil_functions_ca_name,
       location                       = azurerm_resource_group.app.location,
       mongo_connection_string_1      = azurerm_cosmosdb_account.mil.connection_strings[0],
@@ -37,6 +32,6 @@ resource "azurerm_resource_group_template_deployment" "mil_functions" {
   )
 }
 
-output "mil_functions_ingress_fqdn" {
-  value = jsondecode(azurerm_resource_group_template_deployment.mil_functions.output_content).ingress_fqdn.value
-}
+#output "mil_functions_ingress_fqdn" {
+#  value = jsondecode(azurerm_resource_group_template_deployment.mil_functions.output_content).ingress_fqdn.value
+#}

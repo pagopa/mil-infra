@@ -28,6 +28,7 @@ resource "azurerm_resource_group_template_deployment" "mil_payment_notice" {
 
   template_content = templatefile("templates/mil-payment-notice.json",
     {
+      content_version                  = "1.0.0.1",
       name                             = local.payment_notice_ca_name,
       location                         = azurerm_resource_group.app.location,
       mongo_connection_string_1        = azurerm_cosmosdb_account.mil.connection_strings[0],
@@ -62,6 +63,6 @@ resource "azurerm_resource_group_template_deployment" "mil_payment_notice" {
   )
 }
 
-output "mil_payment_notice_ingress_fqdn" {
-  value = jsondecode(azurerm_resource_group_template_deployment.mil_payment_notice.output_content).ingress_fqdn.value
-}
+#output "mil_payment_notice_ingress_fqdn" {
+#  value = jsondecode(azurerm_resource_group_template_deployment.mil_payment_notice.output_content).ingress_fqdn.value
+#}
