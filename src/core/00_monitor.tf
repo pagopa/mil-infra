@@ -5,6 +5,9 @@ resource "azurerm_resource_group" "monitor" {
   tags = var.tags
 }
 
+#
+# Workspace
+#
 resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
   name                = "${local.project}-law"
   location            = azurerm_resource_group.monitor.location
@@ -16,6 +19,20 @@ resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
   tags = var.tags
 }
 
+#
+# Application insight
+#
+resource "azurerm_application_insights" "mil" {
+  name                = "${local.project}-appi"
+  location            = azurerm_resource_group.monitor.location
+  resource_group_name = azurerm_resource_group.monitor.name
+  workspace_id        = azurerm_log_analytics_workspace.log_analytics_workspace.id
+  application_type    = "other"
+}
+
+#
+# Query pack
+#
 resource "azurerm_log_analytics_query_pack" "query_pack" {
   name                = "${local.project}-pack"
   location            = azurerm_resource_group.monitor.location
@@ -39,4 +56,10 @@ resource "azurerm_log_analytics_query_pack_query" "mil_fee_calculator_container_
   query_pack_id = azurerm_log_analytics_query_pack.query_pack.id
   body          = "ContainerAppConsoleLogs_CL | where ContainerName_s == 'mil-fee-calculator' | project time_s, Stream_s, Log_s | take 100"
   display_name  = "mil-fee-calculator - container app console logs"
+}
+
+resource "azurerm_log_analytics_query_pack_query" "failed_requestes" {
+  query_pack_id = azurerm_log_analytics_query_pack.query_pack.id
+  body          = "requests | where success == false | project timestamp, name, resultCode | take 100"
+  display_name  = "failed requestes"
 }
