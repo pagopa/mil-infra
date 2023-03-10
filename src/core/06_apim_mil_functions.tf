@@ -24,3 +24,61 @@ module "functions_api" {
   product_ids           = [module.mil_product.product_id]
   subscription_required = false
 }
+
+resource "azurerm_api_management_api_diagnostic" "functions_api" {
+  identifier               = "applicationinsights"
+  resource_group_name      = module.apim.resource_group_name
+  api_management_name      = module.apim.name
+  api_name                 = module.functions_api.name
+  api_management_logger_id = module.apim.logger_id
+
+  sampling_percentage       = 100.0
+  always_log_errors         = true
+  log_client_ip             = true
+  verbosity                 = "verbose"
+  http_correlation_protocol = "W3C"
+
+  frontend_request {
+    body_bytes = 8192
+    headers_to_log = [
+      "RequestId",
+      "Version",
+      "AcquirerId",
+      "MerchantId",
+      "Channel",
+      "TerminalId",
+      "SessionId"
+    ]
+  }
+
+  frontend_response {
+    body_bytes = 8192
+    headers_to_log = [
+      "Location",
+      "Retry-After",
+      "Max-Retries"
+    ]
+  }
+
+  backend_request {
+    body_bytes = 8192
+    headers_to_log = [
+      "RequestId",
+      "Version",
+      "AcquirerId",
+      "MerchantId",
+      "Channel",
+      "TerminalId",
+      "SessionId"
+    ]
+  }
+
+  backend_response {
+    body_bytes = 8192
+    headers_to_log = [
+      "Location",
+      "Retry-After",
+      "Max-Retries"
+    ]
+  }
+}

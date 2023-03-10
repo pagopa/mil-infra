@@ -1,8 +1,4 @@
 # API for mil-fee-calculator.
-locals {
-  mil_fee_calculator_ingress_fqdn = jsondecode(azurerm_resource_group_template_deployment.mil_fee_calculator.output_content).ingress_fqdn.value
-}
-
 module "fee_calculator_api" {
   source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v5.1.0"
   name                = "${local.project}-fee-calculator"
@@ -22,4 +18,62 @@ module "fee_calculator_api" {
   content_value         = "https://raw.githubusercontent.com/pagopa/mil-apis/main/openapi-mono/fee.yaml"
   product_ids           = [module.mil_product.product_id]
   subscription_required = false
+}
+
+resource "azurerm_api_management_api_diagnostic" "fee_calculator_api" {
+  identifier               = "applicationinsights"
+  resource_group_name      = module.apim.resource_group_name
+  api_management_name      = module.apim.name
+  api_name                 = module.fee_calculator_api.name
+  api_management_logger_id = module.apim.logger_id
+
+  sampling_percentage       = 100.0
+  always_log_errors         = true
+  log_client_ip             = true
+  verbosity                 = "verbose"
+  http_correlation_protocol = "W3C"
+
+  frontend_request {
+    body_bytes = 8192
+    headers_to_log = [
+      "RequestId",
+      "Version",
+      "AcquirerId",
+      "MerchantId",
+      "Channel",
+      "TerminalId",
+      "SessionId"
+    ]
+  }
+
+  frontend_response {
+    body_bytes = 8192
+    headers_to_log = [
+      "Location",
+      "Retry-After",
+      "Max-Retries"
+    ]
+  }
+
+  backend_request {
+    body_bytes = 8192
+    headers_to_log = [
+      "RequestId",
+      "Version",
+      "AcquirerId",
+      "MerchantId",
+      "Channel",
+      "TerminalId",
+      "SessionId"
+    ]
+  }
+
+  backend_response {
+    body_bytes = 8192
+    headers_to_log = [
+      "Location",
+      "Retry-After",
+      "Max-Retries"
+    ]
+  }
 }
