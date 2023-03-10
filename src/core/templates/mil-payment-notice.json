@@ -36,6 +36,10 @@
                         {
                             "name": "node-rest-subscription-key",
                             "value": "${node_rest_subscription_key}"
+                        },
+                        {
+                        	"name": "mil-acquirer-conf-subscription-key",
+                        	"value": "${mil_acquirer_conf_subscription_key}"
                         }
                     ]
                 },
@@ -119,6 +123,18 @@
                                 {
                                     "name": "redis-connection-string",
                                     "secretRef": "redis-connection-string"
+                                },
+                                {
+                                	"name": "mil.rest-service.url",
+                                	"value": "${mil_acquirer_conf_url}"
+                                },
+                                {
+                                	"name": "mil-rest-client-subscription-key",
+                                	"secretRef": "mil-acquirer-conf-subscription-key"
+                                },
+                                {
+                                	"name": "mil-acquirer-conf-version",
+                                	"value": "${mil_acquirer_conf_ver}"
                                 }
                             ],
                             "image": "${image}",
