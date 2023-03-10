@@ -233,7 +233,7 @@ variable "mil_payment_notice_mongo_server_selection_timeout" {
 
 variable "mil_payment_notice_node_soap_service_url" {
   type    = string
-  default = "https://api.uat.platform.pagopa.it/nodo-auth/node-for-psp/v1"
+  default = null
 }
 
 variable "mil_payment_notice_node_soap_client_connect_timeout" {
@@ -248,7 +248,7 @@ variable "mil_payment_notice_node_soap_client_read_timeout" {
 
 variable "mil_payment_notice_node_rest_service_url" {
   type    = string
-  default = "https://api.uat.platform.pagopa.it/nodo-auth/nodo-per-pm/v2/closepayment"
+  default = null
 }
 
 variable "mil_payment_notice_rest_client_connect_timeout" {
@@ -341,7 +341,7 @@ variable "mil_fee_calculator_mongo_server_selection_timeout" {
 
 variable "mil_fee_calculator_gec_url" {
   type    = string
-  default = "https://api.uat.platform.pagopa.it/afm/node/calculator-service/v1/fees"
+  default = null
 }
 
 variable "mil_fee_calculator_gec_connect_timeout" {
@@ -377,6 +377,19 @@ variable "mil_fee_calculator_max_replicas" {
 variable "mil_fee_calculator_min_replicas" {
   type    = number
   default = 0
+}
+
+#
+# mil-payment-notice and mil-fee-calculator specific.
+#
+variable "mil_acquirer_conf_url" {
+  type    = string
+  default = null
+}
+
+variable "mil_acquirer_conf_ver" {
+  type    = string
+  default = "1.0.0"
 }
 
 # API Manager specific.

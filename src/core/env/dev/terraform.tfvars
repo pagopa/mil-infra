@@ -90,6 +90,12 @@ mil_fee_calculator_max_replicas                   = 5
 mil_fee_calculator_min_replicas                   = 0
 
 #
+# mil-payment-notice and mil-fee-calculator
+#
+mil_acquirer_conf_url = "https://mil-d-apim.azure-api.net"
+mil_acquirer_conf_ver = "1.0.0"
+
+#
 # APIM
 #
 apim_sku = "Developer_1"
