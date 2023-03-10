@@ -19,14 +19,24 @@ module "apim" {
   publisher_email      = data.azurerm_key_vault_secret.apim_publisher_email.value
   redis_cache_id       = null
   application_insights = {
-    enabled             = false
-    instrumentation_key = null
+    enabled             = true
+    instrumentation_key = azurerm_application_insights.mil.instrumentation_key
   }
   tags = var.tags
 }
 
+# Subscription for tracing. For DEV only.
+resource "azurerm_api_management_subscription" "tracing" {
+  count               = var.env_short == "d" ? 1 : 0
+  api_management_name = module.apim.name
+  resource_group_name = module.apim.resource_group_name
+  display_name        = "Tracing"
+  state               = "active"
+  allow_tracing       = true
+}
+
 resource "azurerm_role_assignment" "apim_id__to__conf_storage_account" {
   scope                = azurerm_storage_account.conf.id
-  role_definition_name = "Storage Blob Data Reader"
+  role_definition_name = "Contributor"
   principal_id         = module.apim.principal_id
 }
