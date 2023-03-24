@@ -56,9 +56,12 @@ mil_payment_notice_mongo_connect_timeout            = "5s"
 mil_payment_notice_mongo_read_timeout               = "10s"
 mil_payment_notice_mongo_server_selection_timeout   = "5s"
 mil_payment_notice_node_soap_service_url            = "https://api.uat.platform.pagopa.it/nodo-auth/node-for-psp/v1"
+#mil_payment_notice_node_soap_service_url            = "https://api.uat.platform.pagopa.it/nodo/node-for-psp/v1"
 mil_payment_notice_node_soap_client_connect_timeout = 2000
 mil_payment_notice_node_soap_client_read_timeout    = 2000
 mil_payment_notice_node_rest_service_url            = "https://api.uat.platform.pagopa.it/nodo-auth/nodo-per-pm/v2/closepayment"
+#mil_payment_notice_node_rest_service_url            = "https://api.uat.platform.pagopa.it/nodo/node-for-psp/v2/closepayment"
+#                                                       https://api.uat.platform.pagopa.it/nodo/nodo-per-pm/v2/closepayment
 mil_payment_notice_rest_client_connect_timeout      = 2000
 mil_payment_notice_rest_client_read_timeout         = 2000
 mil_payment_notice_close_payment_max_retry          = 3

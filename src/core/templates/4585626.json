@@ -1,0 +1,14 @@
+{
+    "pspConfigForVerifyAndActivate": {
+        "psp": "BCITITMM",
+        "broker": "00799960158",
+        "channel": "00799960158_10",
+        "password": "password"
+    },
+    "pspConfigForGetFeeAndClosePayment": {
+        "psp": "BCITITMM",
+        "broker": "00799960158",
+        "channel": "00799960158_10",
+        "password": "password"
+    }
+}
