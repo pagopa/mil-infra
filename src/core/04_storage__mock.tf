@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "mock" {
-  count                    = var.env_short == "d" ? 1 : 0
+  #count                    = var.env_short == "d" ? 1 : 0
   name                     = "mocknodo"
   resource_group_name      = azurerm_resource_group.data.name
   location                 = azurerm_resource_group.data.location
@@ -19,17 +19,18 @@ resource "azurerm_storage_account" "mock" {
 }
 
 resource "azurerm_storage_container" "mock" {
-  count                 = var.env_short == "d" ? 1 : 0
+  #count                 = var.env_short == "d" ? 1 : 0
   name                  = "mocknodo"
   storage_account_name  = azurerm_storage_account.mock.name
   container_access_type = "blob"
 }
 
-resource "azurerm_storage_blob" "acquirer_4585626" {
-  name                   = "4585626.json"
-  storage_account_name   = azurerm_storage_account.conf.name
-  storage_container_name = azurerm_storage_container.acquirer_conf.name
+resource "azurerm_storage_blob" "response_1" {
+  #count                  = var.env_short == "d" ? 1 : 0
+  name                   = "4585626.json" # File name on storage container
+  storage_account_name   = azurerm_storage_account.mock.name
+  storage_container_name = azurerm_storage_container.mock.name
   type                   = "Block"
-  source                 = "templates/4585625.json"
+  source                 = "templates/4585625.json" # Local file name
 }
 

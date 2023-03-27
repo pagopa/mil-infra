@@ -1,0 +1,24 @@
+<validate-jwt
+    header-name="Authorization"
+    failed-validation-httpcode="401"
+    failed-validation-error-message="access token validation failed"
+    require-expiration-time="true"
+    require-scheme="Bearer"
+    require-signed-tokens="true"
+    clock-skew="5"
+    output-token-variable-name="accessToken">
+  <openid-config url="https://mil-d-apim.azure-api.net/mil-idp/.well-known/openid-configuration" />
+  <audiences>
+    <audience>https://mil-d-apim.azure-api.net</audience>
+  </audiences>
+  <issuers>
+    <issuer>https://mil-d-apim.azure-api.net/mil-idp</issuer>
+  </issuers>
+  <required-claims>
+    <claim name="name of the claim as it appears in the token" match="all | any" separator="separator character in a multi-valued claim">
+      <value>claim value as it is expected to appear in the token</value>
+      <!-- if there is more than one allowed value, then add additional value elements -->
+    </claim>
+    <!-- if there are multiple possible allowed claim, then add additional claim elements -->
+  </required-claims>
+</validate-jwt>

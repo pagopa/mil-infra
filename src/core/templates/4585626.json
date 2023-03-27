@@ -1,14 +1,14 @@
 {
     "pspConfigForVerifyAndActivate": {
-        "psp": "BCITITMM",
-        "broker": "00799960158",
-        "channel": "00799960158_10",
-        "password": "password"
+        "psp": "AGID_01",
+        "broker": "97735020584",
+        "channel": "97735020584_08",
+        "password": "PLACEHOLDER"
     },
     "pspConfigForGetFeeAndClosePayment": {
-        "psp": "BCITITMM",
-        "broker": "00799960158",
-        "channel": "00799960158_10",
-        "password": "password"
+        "psp": "AGID_01",
+        "broker": "97735020584",
+        "channel": "97735020584_08",
+        "password": "PLACEHOLDER"
     }
 }
