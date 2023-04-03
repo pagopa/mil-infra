@@ -1,0 +1,190 @@
+<!--
+    IMPORTANT:
+    - Policy elements can appear only within the <inbound>, <outbound>, <backend> section elements.
+    - To apply a policy to the incoming request (before it is forwarded to the backend service), place a corresponding policy element within the <inbound> section element.
+    - To apply a policy to the outgoing response (before it is sent back to the caller), place a corresponding policy element within the <outbound> section element.
+    - To add a policy, place the cursor at the desired insertion point and select a policy from the sidebar.
+    - To remove a policy, delete the corresponding policy statement from the policy document.
+    - Position the <base> element within a section element to inherit all policies from the corresponding section element in the enclosing scope.
+    - Remove the <base> element to prevent inheriting policies from the corresponding section element in the enclosing scope.
+    - Policies are applied in the order of their appearance, from the top down.
+    - Comments within policy elements are not supported and may disappear. Place your comments between policy elements or at a higher level scope.
+-->
+<policies>
+    <inbound>
+        <base />
+        <!-- Retrieve the paymentToken passed in the request body -->
+        <set-variable name="paymentTokens" value="@( 
+													JArray.Parse(context.Request.Body.As<JObject>(preserveContent: true).GetValue("paymentTokens").ToString())[0]
+													)" />
+        <set-variable name="paymentToken" value="@((string)((JValue)context.Variables["paymentTokens"]).Value)" />
+        <!-- fiscal codes matching the payment Tokens           00000000201,					00000000202,						00000000203,						00000000204,					00000000205,					00000000206,						00000000207,					00000000208,					00000000209-->
+        <set-variable name="paymentTokensAcceptable" value="@("37b0bb69ce774bc2bfeb485e107ae335,4e2581e0ca454011830fe8f7fbd03a85,866f69d6f1c144c1a3f10f104e85063b,e8d7fcd1c4bb4f2b98c9a950f377c4b5,0cb51416e0a943b78a92a44e4a87de38,579a9090774841bdbc6a4fa3d531fd20,e99f832bda734a20a31d2140e016c146,58ffca79700d4e56bd2291a269fbb30f,160f6ee5e55b4845b458f4f0032f3285")" />
+        <choose>
+            <!-- checks if the payment token passed in the body is a stub or not -->
+            <when condition="@( context.Variables.ContainsKey("paymentTokens") &&  ((string)context.Variables["paymentTokensAcceptable"]).Contains((string)context.Variables["paymentToken"]))">
+                <!-- stub, so the node will not called -->
+                <set-variable name="callNode" value="0" />
+                <!-- Retrieve the transaction id  to put in chache and used to send to the POST that will save the transactionId and the body -->
+                <set-variable name="transactionaId" value="@( 
+													context.Request.Body.As<JObject>(preserveContent: true).GetValue("transactionId").ToString()
+													)" />
+                <!-- check if the API must return a json with outcome OK or KO 
+					 if it must return a json it sets the filePrefix variable, null otherwise-->
+                <choose>
+                    <when condition="@(context.Variables.ContainsKey("paymentTokens") && ((string)context.Variables["paymentToken"] == "37b0bb69ce774bc2bfeb485e107ae335") || ((string)context.Variables["paymentToken"] == "4e2581e0ca454011830fe8f7fbd03a85"))">
+                        <set-variable name="filePrefix" value="outcome_" />
+                        <!-- if is a stub, Look in cache if the stub is already read from storage the response body is set only if the response must be a json-->
+                        <cache-lookup-value key="@( (string)context.Variables["filePrefix"] + (string)context.Variables["paymentToken"] )" variable-name="responseBody" caching-type="internal" />
+                    </when>
+                </choose>
+                <!-- check if the filePrefix is populated and response body is in the cache -->
+                <choose>
+                    <when condition="@( context.Variables.ContainsKey("filePrefix") && !context.Variables.ContainsKey("responseBody") )">
+                        <!-- The responseBody isn't in the cache, Look for the configuration in the storage account -->
+                        <send-request mode="new" response-variable-name="storageAccountResponse" timeout="5" ignore-error="true">
+                            <set-url>@( new Uri(new Uri("https://mocknodo.blob.core.windows.net/mocknodo/0000000020x/"), (string)context.Variables["filePrefix"] + (string)context.Variables["paymentToken"] + ".json").AbsoluteUri )</set-url>
+                            <set-method>GET</set-method>
+                        </send-request>
+                        <choose>
+                            <when condition="@( ((IResponse)context.Variables["storageAccountResponse"]).StatusCode == 200 )">
+                                <!-- Configuration found in the storage account -->
+                                <set-variable name="responseBody" value="@( ((IResponse)context.Variables["storageAccountResponse"]).Body.As<string>() )" />
+                                <!-- Store it in the cache -->
+                                <cache-store-value key="@( (string)context.Variables["filePrefix"] + (string)context.Variables["paymentToken"] )" value="@( (string)context.Variables["responseBody"] )" duration="3600" caching-type="internal" />
+                            </when>
+                        </choose>
+                    </when>
+                </choose>
+            </when>
+            <otherwise>
+                <!-- rhe node will be called-->
+                <set-variable name="callNode" value="1" />
+            </otherwise>
+        </choose>
+    </inbound>
+    <backend>
+        <choose>
+            <!-- Check if the node must be called -->
+            <when condition="@((string) context.Variables["callNode"] == "0")" />
+            <otherwise>
+                <!-- forward request to the node -->
+                <!--  remove Ocp-Apim-Subscription-Key header  -->
+                <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
+                <forward-request />
+            </otherwise>
+        </choose>
+    </backend>
+    <outbound>
+        <base />
+        <choose>
+            <!--  if the stubs are managed -->
+            <when condition="@((string) context.Variables["callNode"] == "0")">
+                <!--  check if the json is already in cache -->
+                <cache-lookup-value key="payment" variable-name="jsonBodyRequest" caching-type="internal" />
+                <choose>
+                    <when condition="@(!context.Variables.ContainsKey("jsonBodyRequest") )">
+                        <!--  if not retrieve it from storage  -->
+                        <send-request mode="new" response-variable-name="storageAccountResponse" timeout="5" ignore-error="true">
+                            <set-url>@( new Uri("https://mocknodo.blob.core.windows.net/mocknodo/0000000020x/payments.json").AbsoluteUri )</set-url>
+                            <set-method>GET</set-method>
+                        </send-request>
+                        <choose>
+                            <when condition="@( ((IResponse)context.Variables["storageAccountResponse"]).StatusCode == 200 )">
+                                <!-- Configuration found in the storage account -->
+                                <set-variable name="jsonBodyRequest" value="@( ((IResponse)context.Variables["storageAccountResponse"]).Body.As<string>() )" />
+                                <!-- Store it in the cache -->
+                                <cache-store-value key="payment" value="@( (string)context.Variables["jsonBodyRequest"] )" duration="3600" caching-type="internal" />
+                            </when>
+                        </choose>
+                    </when>
+                </choose>
+                <!--  send request to /payment/{transactionId} API -->
+                <send-one-way-request mode="new">
+                    <set-url>@( new Uri(new Uri("https://mil-d-apim.azure-api.net/mil-payment-notice/payments/"), (string)context.Variables["transactionaId"]).AbsoluteUri )</set-url>
+                    <set-method>POST</set-method>
+                    <set-body>@( (((string)context.Variables["jsonBodyRequest"]).Replace("<pt>",(string)context.Variables["paymentToken"])) )</set-body>
+                </send-one-way-request>
+                <!-- set response status associated to the paymentToken -->
+                <choose>
+                    <!-- Unparsable response -->
+                    <when condition="@(((string)context.Variables["paymentToken"] == "866f69d6f1c144c1a3f10f104e85063b"))">
+                        <return-response>
+                            <set-status code="422" reason="Unparsable" />
+                            <set-body>@( "Unprocess content")</set-body>
+                        </return-response>
+                    </when>
+                    <!-- Timeout -->
+                    <when condition="@(((string)context.Variables["paymentToken"] == "e8d7fcd1c4bb4f2b98c9a950f377c4b5"))">
+                        <!-- wait 10 secs -->
+                        <retry condition="@(true)" count="1" interval="5" />
+                        <return-response>
+                            <set-status code="408" reason="Timeout" />
+                        </return-response>
+                    </when>
+                    <!-- Request Timeout -->
+                    <when condition="@(((string)context.Variables["paymentToken"] == "0cb51416e0a943b78a92a44e4a87de38"))">
+                        <return-response>
+                            <set-status code="408" reason="Request Timeout" />
+                        </return-response>
+                    </when>
+                    <!-- Bad Request -->
+                    <when condition="@(((string)context.Variables["paymentToken"] == "579a9090774841bdbc6a4fa3d531fd20"))">
+                        <return-response>
+                            <set-status code="400" reason="Bad Request" />
+                        </return-response>
+                    </when>
+                    <!-- Not Found -->
+                    <when condition="@(((string)context.Variables["paymentToken"] == "e99f832bda734a20a31d2140e016c146"))">
+                        <return-response>
+                            <set-status code="404" reason="Not Found" />
+                        </return-response>
+                    </when>
+                    <!-- Unprocessable Content -->
+                    <when condition="@(((string)context.Variables["paymentToken"] == "58ffca79700d4e56bd2291a269fbb30f"))">
+                        <return-response>
+                            <set-status code="422" reason="Unprocessable Content" />
+                        </return-response>
+                    </when>
+                    <!-- Internal Server Error -->
+                    <when condition="@(((string)context.Variables["paymentToken"] == "160f6ee5e55b4845b458f4f0032f3285"))">
+                        <return-response>
+                            <set-status code="500" reason="Internal Server Error" />
+                        </return-response>
+                    </when>
+                    <otherwise>
+                        <choose>
+                            <when condition="@( context.Variables.ContainsKey("responseBody") )">
+                                <!-- Configuration found -->
+                                <return-response>
+                                    <set-status code="200" reason="Found" />
+                                    <set-header name="Content-Type" exists-action="override">
+                                        <value>application/json</value>
+                                    </set-header>
+                                    <set-body>@( (string)context.Variables["responseBody"] )</set-body>
+                                </return-response>
+                            </when>
+                        </choose>
+                    </otherwise>
+                </choose>
+            </when>
+            <otherwise>
+                <choose>
+                    <when condition="@( context.Variables.ContainsKey("responseBody") )">
+                        <!-- Configuration found -->
+                        <return-response>
+                            <set-status code="200" reason="Found" />
+                            <set-header name="Content-Type" exists-action="override">
+                                <value>application/json</value>
+                            </set-header>
+                            <set-body>@( (string)context.Variables["responseBody"] )</set-body>
+                        </return-response>
+                    </when>
+                </choose>
+            </otherwise>
+        </choose>
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

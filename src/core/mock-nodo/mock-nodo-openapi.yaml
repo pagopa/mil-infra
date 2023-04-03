@@ -1,0 +1,64 @@
+openapi: 3.0.1
+info:
+  title: MockNodo
+  description: ''
+  version: '1.0'
+servers:
+  - url: https://mil-d-apim.azure-api.net/mockNodo
+paths:
+  /:
+    post:
+      summary: mockSoap
+      operationId: mockSoap
+      parameters:
+        - name: Content-Type
+          in: header
+          required: true
+          schema:
+            enum:
+              - application/xml
+              - text/xml
+            type: String
+        - name: SOAPAction
+          in: header
+          required: true
+          schema:
+            enum:
+              - verifyPaymentNotice
+              - activatePaymentNoticeV2
+            type: String
+        - name: Cache-Control
+          in: header
+          schema:
+            enum:
+              - no-cache
+            type: String
+        - name: Headers
+          in: header
+          schema:
+            enum:
+              - '{SOAPAction="verifyPaymentNotice", Ocp-Apim-Subscription-Key=eeb0fe2b89df4d02ac4b0fe950319610, Accept=*/*}'
+            type: String
+      responses:
+        '200':
+          description: 
+  /closepayment:
+    post:
+      summary: mockRest
+      operationId: mockRest
+      responses:
+        '200':
+          description: 
+components:
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: [ ]
+  - apiKeyQuery: [ ]

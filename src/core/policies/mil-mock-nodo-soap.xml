@@ -1,0 +1,99 @@
+<!--
+    IMPORTANT:
+    - Policy elements can appear only within the <inbound>, <outbound>, <backend> section elements.
+    - To apply a policy to the incoming request (before it is forwarded to the backend service), place a corresponding policy element within the <inbound> section element.
+    - To apply a policy to the outgoing response (before it is sent back to the caller), place a corresponding policy element within the <outbound> section element.
+    - To add a policy, place the cursor at the desired insertion point and select a policy from the sidebar.
+    - To remove a policy, delete the corresponding policy statement from the policy document.
+    - Position the <base> element within a section element to inherit all policies from the corresponding section element in the enclosing scope.
+    - Remove the <base> element to prevent inheriting policies from the corresponding section element in the enclosing scope.
+    - Policies are applied in the order of their appearance, from the top down.
+    - Comments within policy elements are not supported and may disappear. Place your comments between policy elements or at a higher level scope.
+-->
+<policies>
+    <inbound>
+        <base />
+        <set-variable name="soapAction" value="@(context.Request.Headers.GetValueOrDefault("SOAPAction",""))" />
+        <choose>
+            <when condition="@(((string)context.Variables["soapAction"]).Contains("verifyPaymentNotice"))">
+                <set-variable name="filePrefix" value="verifyPaymentNotice_" />
+            </when>
+            <otherwise>
+                <set-variable name="filePrefix" value="activatePaymentNotice_" />
+            </otherwise>
+        </choose>
+        <!-- Retrieve the fiscalCode passed in the request body -->
+        <set-variable name="fiscalCodeRequest" value="@(
+                                                        context.Request.Body.As<XElement>(preserveContent: true)
+                                                            .Descendants()
+                                                            .FirstOrDefault(x => x.Name.LocalName == "fiscalCode")?.Value
+                                                        )" />
+        <!--  set the fiscalCodes001 as static string containing all fiscal code as stubs -->
+        <set-variable name="fiscalCodes" value="@("	00000000001,00000000002,00000000003,00000000004,00000000005,00000000006,00000000007,00000000008,00000000009,00000000101,00000000102,00000000103,00000000104,00000000105,00000000106,00000000107,00000000108,00000000109,00000000201,00000000202,00000000203,00000000204,00000000205,00000000206,00000000207,00000000208,00000000209")" />
+        <choose>
+            <!-- checks if the fiscal code in the body is a stub or not -->
+            <when condition="@( context.Variables.ContainsKey("fiscalCodeRequest") &&  ((string)context.Variables["fiscalCodes"]).Contains((String)context.Variables["fiscalCodeRequest"]))">
+                <!-- if is a stub, Look in cache if the stub is already read from storage -->
+                <cache-lookup-value key="@( (string)context.Variables["filePrefix"] + (string)context.Variables["fiscalCodeRequest"] )" variable-name="responseBody" caching-type="internal" />
+                <!-- check if the response body is in the cache -->
+                <choose>
+                    <when condition="@( !context.Variables.ContainsKey("responseBody") )">
+                        <choose>
+                            <when condition="@( ((String)context.Variables["fiscalCodeRequest"]).Contains("0000000020"))">
+                                <set-variable name="path" value="https://mocknodo.blob.core.windows.net/mocknodo/0000000020x/" />
+                            </when>
+                            <otherwise>
+                                <set-variable name="path" value="https://mocknodo.blob.core.windows.net/mocknodo/" />
+                            </otherwise>
+                        </choose>
+                        <!-- The responseBody isn't in the cache, Look for the configuration in the storage account -->
+                        <send-request mode="new" response-variable-name="storageAccountResponse" timeout="5" ignore-error="true">
+                            <set-url>@( new Uri(new Uri((string)context.Variables["path"]), (string)context.Variables["filePrefix"] + (string)context.Variables["fiscalCodeRequest"] + ".xml").AbsoluteUri )</set-url>
+                            <set-method>GET</set-method>
+                            <!--<authentication-managed-identity resource="https://storage.azure.com/" />-->
+                        </send-request>
+                        <choose>
+                            <when condition="@( ((IResponse)context.Variables["storageAccountResponse"]).StatusCode == 200 )">
+                                <!-- Configuration found in the storage account -->
+                                <set-variable name="responseBody" value="@( ((IResponse)context.Variables["storageAccountResponse"]).Body.As<string>() )" />
+                                <!-- Store it in the cache -->
+                                <cache-store-value key="@( (string)context.Variables["filePrefix"] + (string)context.Variables["fiscalCodeRequest"] )" value="@( (string)context.Variables["responseBody"] )" duration="3600" caching-type="internal" />
+                            </when>
+                        </choose>
+                    </when>
+                </choose>
+            </when>
+        </choose>
+        <set-backend-service base-url="https://api.uat.platform.pagopa.it/nodo/node-for-psp/v1" />
+    </inbound>
+    <backend>
+        <choose>
+            <!-- Check if the response body has been retrieved from storage and the responseBoy is present in the variable-->
+            <when condition="@( context.Variables.ContainsKey("responseBody") == null)" />
+            <otherwise>
+                <!-- if the -->
+                <!--  remove Ocp-Apim-Subscription-Key header  -->
+                <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
+                <forward-request />
+            </otherwise>
+        </choose>
+    </backend>
+    <outbound>
+        <base />
+        <choose>
+            <when condition="@( context.Variables.ContainsKey("responseBody") )">
+                <!-- Configuration found -->
+                <return-response>
+                    <set-status code="200" reason="Found" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/xml</value>
+                    </set-header>
+                    <set-body>@( (string)context.Variables["responseBody"] )</set-body>
+                </return-response>
+            </when>
+        </choose>
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
