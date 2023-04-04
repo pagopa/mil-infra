@@ -13,7 +13,7 @@ module "mock_nodo_api" {
   # The Path for this API Management API, which is a relative URL which uniquely identifies this API and all of its resource paths within the API Management Service.
   path = "mockNodo"
 
-  display_name          = "MockNodo"
+  display_name = "MockNodo"
   #content_format        = "openapi-link"
   #content_value         = "https://raw.githubusercontent.com/pagopa/mil-apis/main/openapi-mono/acquirer-conf.yaml"
   content_format        = "openapi"
@@ -24,13 +24,13 @@ module "mock_nodo_api" {
   api_operation_policies = [
     {
       operation_id = "mockSoap"
-      xml_content = templatefile("policies/mil-mock-nodo-soap.xml",{})
+      xml_content  = templatefile("policies/mil-mock-nodo-soap.xml", {})
     },
     {
       operation_id = "mockRest"
-      xml_content = templatefile("policies/mil-mock-nodo-rest.xml",{})
+      xml_content  = templatefile("policies/mil-mock-nodo-rest.xml", {})
     }
   ]
 
-  
+
 }

@@ -29,11 +29,14 @@
 | <a name="module_fee_calculator_api__external__oauth"></a> [fee\_calculator\_api\_\_external\_\_oauth](#module\_fee\_calculator\_api\_\_external\_\_oauth) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v5.1.0 |
 | <a name="module_functions_api"></a> [functions\_api](#module\_functions\_api) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v5.1.0 |
 | <a name="module_github_runner"></a> [github\_runner](#module\_github\_runner) | git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment | v5.1.0 |
+| <a name="module_idp_api"></a> [idp\_api](#module\_idp\_api) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v5.1.0 |
 | <a name="module_key_vault"></a> [key\_vault](#module\_key\_vault) | git::https://github.com/pagopa/terraform-azurerm-v3.git//key_vault | v5.1.0 |
 | <a name="module_mil_product"></a> [mil\_product](#module\_mil\_product) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product | v5.1.0 |
 | <a name="module_mil_product__external__api_key"></a> [mil\_product\_\_external\_\_api\_key](#module\_mil\_product\_\_external\_\_api\_key) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product | v5.1.0 |
 | <a name="module_mil_product__external__oauth"></a> [mil\_product\_\_external\_\_oauth](#module\_mil\_product\_\_external\_\_oauth) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product | v5.1.0 |
 | <a name="module_mil_product__internal"></a> [mil\_product\_\_internal](#module\_mil\_product\_\_internal) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product | v5.1.0 |
+| <a name="module_mock_nodo"></a> [mock\_nodo](#module\_mock\_nodo) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product | v5.1.0 |
+| <a name="module_mock_nodo_api"></a> [mock\_nodo\_api](#module\_mock\_nodo\_api) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v5.1.0 |
 | <a name="module_payment_notice_api"></a> [payment\_notice\_api](#module\_payment\_notice\_api) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v5.1.0 |
 | <a name="module_payment_notice_api__external__api_key"></a> [payment\_notice\_api\_\_external\_\_api\_key](#module\_payment\_notice\_api\_\_external\_\_api\_key) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v5.1.0 |
 | <a name="module_payment_notice_api__external__oauth"></a> [payment\_notice\_api\_\_external\_\_oauth](#module\_payment\_notice\_api\_\_external\_\_oauth) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v5.1.0 |
@@ -49,6 +52,7 @@
 | [azurerm_api_management_api_diagnostic.fee_calculator_api__external__api_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.fee_calculator_api__external__oauth](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.functions_api](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/api_management_api_diagnostic) | resource |
+| [azurerm_api_management_api_diagnostic.idp_api](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.payment_notice_api](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.payment_notice_api__external__api_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.payment_notice_api__external__oauth](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/api_management_api_diagnostic) | resource |
@@ -82,13 +86,19 @@
 | [azurerm_resource_group.sec](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
 | [azurerm_resource_group_template_deployment.mil_fee_calculator](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group_template_deployment) | resource |
 | [azurerm_resource_group_template_deployment.mil_functions](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group_template_deployment) | resource |
+| [azurerm_resource_group_template_deployment.mil_idp](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group_template_deployment) | resource |
 | [azurerm_resource_group_template_deployment.mil_payment_notice](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group_template_deployment) | resource |
 | [azurerm_role_assignment.apim_id__to__conf_storage_account](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.appgw_id_api-dev-mil](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_storage_account.conf](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) | resource |
+| [azurerm_storage_account.mock](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) | resource |
 | [azurerm_storage_blob.acquirer_4585625](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob) | resource |
 | [azurerm_storage_blob.acquirer_4585626](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob) | resource |
+| [azurerm_storage_blob.stub_verify_ko_activate_ko](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob) | resource |
+| [azurerm_storage_blob.stub_verify_ok_activate_ko](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob) | resource |
+| [azurerm_storage_blob.stub_verify_ok_activate_ok](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob) | resource |
 | [azurerm_storage_container.acquirer_conf](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_container) | resource |
+| [azurerm_storage_container.mock](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_container) | resource |
 | [azurerm_subnet.apim](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) | resource |
 | [azurerm_subnet.app](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) | resource |
 | [azurerm_subnet.appgw](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) | resource |
@@ -105,6 +115,7 @@
 | [azurerm_key_vault_certificate.api-dev-mil](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_certificate) | data source |
 | [azurerm_key_vault_secret.apim_publisher_email](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
 | [azurerm_key_vault_secret.gec_subscription_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
+| [azurerm_key_vault_secret.idp_key_pair](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
 | [azurerm_key_vault_secret.mil_acquirer_conf_subscription_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
 | [azurerm_key_vault_secret.node_rest_subscription_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
 | [azurerm_key_vault_secret.node_soap_subscription_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
@@ -159,9 +170,25 @@
 | <a name="input_mil_functions_mongo_read_timeout"></a> [mil\_functions\_mongo\_read\_timeout](#input\_mil\_functions\_mongo\_read\_timeout) | Mongo read timeout. | `string` | `"10s"` | no |
 | <a name="input_mil_functions_mongo_server_selection_timeout"></a> [mil\_functions\_mongo\_server\_selection\_timeout](#input\_mil\_functions\_mongo\_server\_selection\_timeout) | Mongo server selection timeout. | `string` | `"5s"` | no |
 | <a name="input_mil_functions_quarkus_log_level"></a> [mil\_functions\_quarkus\_log\_level](#input\_mil\_functions\_quarkus\_log\_level) | Log level for Quarkus platform. | `string` | `"ERROR"` | no |
+| <a name="input_mil_idp_access_audience"></a> [mil\_idp\_access\_audience](#input\_mil\_idp\_access\_audience) | n/a | `string` | `"https://mil-d-apim.azure-api.net/mil-payment-notice,https://mil-d-apim.azure-api.net/mil-fee-calculator"` | no |
+| <a name="input_mil_idp_access_duration"></a> [mil\_idp\_access\_duration](#input\_mil\_idp\_access\_duration) | n/a | `number` | `300` | no |
+| <a name="input_mil_idp_app_log_level"></a> [mil\_idp\_app\_log\_level](#input\_mil\_idp\_app\_log\_level) | n/a | `string` | `"DEBUG"` | no |
+| <a name="input_mil_idp_cpu"></a> [mil\_idp\_cpu](#input\_mil\_idp\_cpu) | n/a | `number` | `0.5` | no |
+| <a name="input_mil_idp_cryptoperiod"></a> [mil\_idp\_cryptoperiod](#input\_mil\_idp\_cryptoperiod) | n/a | `number` | `86400000` | no |
+| <a name="input_mil_idp_ephemeral_storage"></a> [mil\_idp\_ephemeral\_storage](#input\_mil\_idp\_ephemeral\_storage) | n/a | `string` | `"1.0Gi"` | no |
+| <a name="input_mil_idp_image"></a> [mil\_idp\_image](#input\_mil\_idp\_image) | n/a | `string` | `"ghcr.io/pagopa/mil-idp:latest"` | no |
+| <a name="input_mil_idp_issuer"></a> [mil\_idp\_issuer](#input\_mil\_idp\_issuer) | n/a | `string` | `"https://mil-d-apim.azure-api.net/mil-idp"` | no |
+| <a name="input_mil_idp_keysize"></a> [mil\_idp\_keysize](#input\_mil\_idp\_keysize) | n/a | `number` | `4096` | no |
+| <a name="input_mil_idp_max_replicas"></a> [mil\_idp\_max\_replicas](#input\_mil\_idp\_max\_replicas) | n/a | `number` | `5` | no |
+| <a name="input_mil_idp_memory"></a> [mil\_idp\_memory](#input\_mil\_idp\_memory) | n/a | `string` | `"1.0Gi"` | no |
+| <a name="input_mil_idp_min_replicas"></a> [mil\_idp\_min\_replicas](#input\_mil\_idp\_min\_replicas) | n/a | `number` | `0` | no |
+| <a name="input_mil_idp_quarkus_log_level"></a> [mil\_idp\_quarkus\_log\_level](#input\_mil\_idp\_quarkus\_log\_level) | mil-idp | `string` | `"ERROR"` | no |
+| <a name="input_mil_idp_refresh_audience"></a> [mil\_idp\_refresh\_audience](#input\_mil\_idp\_refresh\_audience) | n/a | `string` | `"https://mil-d-apim.azure-api.net/mil-idp"` | no |
+| <a name="input_mil_idp_refresh_duration"></a> [mil\_idp\_refresh\_duration](#input\_mil\_idp\_refresh\_duration) | n/a | `number` | `3600` | no |
 | <a name="input_mil_payment_notice_activatepayment_expiration_time"></a> [mil\_payment\_notice\_activatepayment\_expiration\_time](#input\_mil\_payment\_notice\_activatepayment\_expiration\_time) | n/a | `number` | `30000` | no |
 | <a name="input_mil_payment_notice_app_log_level"></a> [mil\_payment\_notice\_app\_log\_level](#input\_mil\_payment\_notice\_app\_log\_level) | n/a | `string` | `"DEBUG"` | no |
 | <a name="input_mil_payment_notice_close_payment_max_retry"></a> [mil\_payment\_notice\_close\_payment\_max\_retry](#input\_mil\_payment\_notice\_close\_payment\_max\_retry) | n/a | `number` | `3` | no |
+| <a name="input_mil_payment_notice_closepayment_location_base_url"></a> [mil\_payment\_notice\_closepayment\_location\_base\_url](#input\_mil\_payment\_notice\_closepayment\_location\_base\_url) | n/a | `string` | `null` | no |
 | <a name="input_mil_payment_notice_closepayment_retry_after"></a> [mil\_payment\_notice\_closepayment\_retry\_after](#input\_mil\_payment\_notice\_closepayment\_retry\_after) | n/a | `number` | `30` | no |
 | <a name="input_mil_payment_notice_cpu"></a> [mil\_payment\_notice\_cpu](#input\_mil\_payment\_notice\_cpu) | n/a | `number` | `0.5` | no |
 | <a name="input_mil_payment_notice_ephemeral_storage"></a> [mil\_payment\_notice\_ephemeral\_storage](#input\_mil\_payment\_notice\_ephemeral\_storage) | n/a | `string` | `"1.0Gi"` | no |

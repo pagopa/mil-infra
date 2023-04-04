@@ -50,29 +50,32 @@ mil_functions_min_replicas                   = 0
 #
 # mil-payment-notice
 #
-mil_payment_notice_quarkus_log_level                = "ERROR"
-mil_payment_notice_app_log_level                    = "DEBUG"
-mil_payment_notice_mongo_connect_timeout            = "5s"
-mil_payment_notice_mongo_read_timeout               = "10s"
-mil_payment_notice_mongo_server_selection_timeout   = "5s"
-mil_payment_notice_node_soap_service_url            = "https://api.uat.platform.pagopa.it/nodo-auth/node-for-psp/v1"
+mil_payment_notice_quarkus_log_level              = "ERROR"
+mil_payment_notice_app_log_level                  = "DEBUG"
+mil_payment_notice_mongo_connect_timeout          = "5s"
+mil_payment_notice_mongo_read_timeout             = "10s"
+mil_payment_notice_mongo_server_selection_timeout = "5s"
+mil_payment_notice_node_soap_service_url          = "https://mil-d-apim.azure-api.net/mockNodo"
+#mil_payment_notice_node_soap_service_url            = "https://api.uat.platform.pagopa.it/nodo-auth/node-for-psp/v1"
 #mil_payment_notice_node_soap_service_url            = "https://api.uat.platform.pagopa.it/nodo/node-for-psp/v1"
 mil_payment_notice_node_soap_client_connect_timeout = 2000
 mil_payment_notice_node_soap_client_read_timeout    = 2000
-mil_payment_notice_node_rest_service_url            = "https://api.uat.platform.pagopa.it/nodo-auth/nodo-per-pm/v2/closepayment"
+mil_payment_notice_node_rest_service_url            = "https://mil-d-apim.azure-api.net/mockNodo"
+#mil_payment_notice_node_rest_service_url            = "https://api.uat.platform.pagopa.it/nodo-auth/nodo-per-pm/v2/closepayment"
 #mil_payment_notice_node_rest_service_url            = "https://api.uat.platform.pagopa.it/nodo/node-for-psp/v2/closepayment"
 #                                                       https://api.uat.platform.pagopa.it/nodo/nodo-per-pm/v2/closepayment
-mil_payment_notice_rest_client_connect_timeout      = 2000
-mil_payment_notice_rest_client_read_timeout         = 2000
-mil_payment_notice_close_payment_max_retry          = 3
-mil_payment_notice_closepayment_retry_after         = 30
-mil_payment_notice_activatepayment_expiration_time  = 30000
-mil_payment_notice_image                            = "ghcr.io/pagopa/mil-payment-notice:latest"
-mil_payment_notice_cpu                              = 0.5
-mil_payment_notice_ephemeral_storage                = "1.0Gi"
-mil_payment_notice_memory                           = "1.0Gi"
-mil_payment_notice_max_replicas                     = 5
-mil_payment_notice_min_replicas                     = 0
+mil_payment_notice_rest_client_connect_timeout     = 2000
+mil_payment_notice_rest_client_read_timeout        = 2000
+mil_payment_notice_close_payment_max_retry         = 3
+mil_payment_notice_closepayment_retry_after        = 30
+mil_payment_notice_activatepayment_expiration_time = 30000
+mil_payment_notice_image                           = "ghcr.io/pagopa/mil-payment-notice:latest"
+mil_payment_notice_cpu                             = 0.5
+mil_payment_notice_ephemeral_storage               = "1.0Gi"
+mil_payment_notice_memory                          = "1.0Gi"
+mil_payment_notice_max_replicas                    = 5
+mil_payment_notice_min_replicas                    = 0
+mil_payment_notice_closepayment_location_base_url  = "https://mil-d-apim.azure-api.net/mil-payment-notice"
 
 #
 # mil-fee-calculator
@@ -97,6 +100,25 @@ mil_fee_calculator_min_replicas                   = 0
 #
 mil_acquirer_conf_url = "https://mil-d-apim.azure-api.net"
 mil_acquirer_conf_ver = "1.0.0"
+
+#
+# mil-idp
+#
+mil_idp_quarkus_log_level = "ERROR"
+mil_idp_app_log_level     = "DEBUG"
+mil_idp_cryptoperiod      = 86400000
+mil_idp_keysize           = 4096
+mil_idp_issuer            = "https://mil-d-apim.azure-api.net/mil-idp"
+mil_idp_access_audience   = "https://mil-d-apim.azure-api.net/mil-payment-notice,https://mil-d-apim.azure-api.net/mil-fee-calculator"
+mil_idp_access_duration   = 300
+mil_idp_refresh_audience  = "https://mil-d-apim.azure-api.net/mil-idp"
+mil_idp_refresh_duration  = 3600
+mil_idp_image             = "ghcr.io/pagopa/mil-idp:latest"
+mil_idp_cpu               = 0.5
+mil_idp_ephemeral_storage = "1.0Gi"
+mil_idp_memory            = "1.0Gi"
+mil_idp_max_replicas      = 5
+mil_idp_min_replicas      = 0
 
 #
 # APIM

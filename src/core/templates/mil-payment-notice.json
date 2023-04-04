@@ -135,6 +135,10 @@
                                 {
                                 	"name": "mil-acquirer-conf-version",
                                 	"value": "${mil_acquirer_conf_ver}"
+                                },
+                                {
+                                	"name": "paymentnotice.closepayment.location.base-url",
+                                	"value": "${paymentnotice_closepayment_location_base_url}"
                                 }
                             ],
                             "image": "${image}",

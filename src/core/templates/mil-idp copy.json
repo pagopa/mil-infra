@@ -1,0 +1,103 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "${content_version}",
+    "parameters": {},
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.App/containerApps",
+            "apiVersion": "2022-06-01-preview",
+            "name": "${name}",
+            "location": "${location}",
+            "properties": {
+                "configuration": {
+                    "ingress": {
+                        "external": true,
+                        "targetPort": 8080,
+                        "transport": "Http"
+                    },
+                    "secrets": [
+                        {
+                            "name": "redis-connection-string",
+                            "value": "rediss://:${redis_primary_access_key}@${redis_hostname}:${redis_ssl_port}"
+                        },
+                        {
+                            "name": "key-pair",
+                            "value": "${key_pair}"
+                        }
+                    ]
+                },
+                "managedEnvironmentId": "${managed_environment_id}",
+                "template": {
+                    "containers": [
+                        {
+                            "env": [
+                                {
+                                    "name": "idp.quarkus-log-level",
+                                    "value": "${quarkus_log_level}"
+                                },
+                                {
+                                    "name": "idp.app-log-level",
+                                    "value": "${app_log_level}"
+                                },
+                                {
+                                    "name": "idp.cryptoperiod",
+                                    "value": "${cryptoperiod}"
+                                },
+                                {
+                                    "name": "idp.keysize",
+                                    "value": "${keysize}"
+                                },
+                                {
+                                    "name": "idp.issuer",
+                                    "value": "${issuer}"
+                                },
+                                {
+                                    "name": "idp.access.audience",
+                                    "value": "${access_audience}"
+                                },
+                                {
+                                    "name": "idp.access.duration",
+                                    "value": "${access_duration}"
+                                },
+                                {
+                                    "name": "idp.refresh.audience",
+                                    "value": "${refresh_audience}"
+                                },
+                                {
+                                    "name": "idp.refresh.duration",
+                                    "value": "${refresh_duration}"
+                                },
+                                {
+                                    "name": "idp.redis-connection-string",
+                                    "secretRef": "redis-connection-string"
+                                },
+                                {
+                                    "name": "idp.key-pair",
+                                    "secretRef": "key-pair"
+                                }
+                            ],
+                            "image": "${image}",
+                            "name": "mil-idp",
+                            "resources": {
+                                "cpu": ${cpu},
+                                "ephemeralStorage": "${ephemeral_storage}",
+                                "memory": "${memory}"
+                            }
+                        }
+                    ],
+                    "scale": {
+                        "maxReplicas": ${max_replicas},
+                        "minReplicas": ${min_replicas}
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "ingress_fqdn": {
+            "type": "String",
+            "value": "[reference(resourceId('Microsoft.App/containerApps','${name}')).configuration.ingress.fqdn]"
+        } 
+    }
+}

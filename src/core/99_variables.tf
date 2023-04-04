@@ -306,6 +306,11 @@ variable "mil_payment_notice_min_replicas" {
   default = 0
 }
 
+variable "mil_payment_notice_closepayment_location_base_url" {
+  type    = string
+  default = null
+}
+
 #
 # mil-fee-calculator specific.
 #
@@ -390,6 +395,84 @@ variable "mil_acquirer_conf_url" {
 variable "mil_acquirer_conf_ver" {
   type    = string
   default = "1.0.0"
+}
+
+#
+# mil-idp
+#
+variable "mil_idp_quarkus_log_level" {
+  type    = string
+  default = "ERROR"
+}
+
+variable "mil_idp_app_log_level" {
+  type    = string
+  default = "DEBUG"
+}
+
+variable "mil_idp_cryptoperiod" {
+  type    = number
+  default = 86400000
+}
+
+variable "mil_idp_keysize" {
+  type    = number
+  default = 4096
+}
+
+variable "mil_idp_issuer" {
+  type    = string
+  default = "https://mil-d-apim.azure-api.net/mil-idp"
+}
+
+variable "mil_idp_access_audience" {
+  type    = string
+  default = "https://mil-d-apim.azure-api.net/mil-payment-notice,https://mil-d-apim.azure-api.net/mil-fee-calculator"
+}
+
+variable "mil_idp_access_duration" {
+  type    = number
+  default = 300
+}
+
+variable "mil_idp_refresh_audience" {
+  type    = string
+  default = "https://mil-d-apim.azure-api.net/mil-idp"
+}
+
+variable "mil_idp_refresh_duration" {
+  type    = number
+  default = 3600
+}
+
+variable "mil_idp_image" {
+  type    = string
+  default = "ghcr.io/pagopa/mil-idp:latest"
+}
+
+variable "mil_idp_cpu" {
+  type    = number
+  default = 0.5
+}
+
+variable "mil_idp_ephemeral_storage" {
+  type    = string
+  default = "1.0Gi"
+}
+
+variable "mil_idp_memory" {
+  type    = string
+  default = "1.0Gi"
+}
+
+variable "mil_idp_max_replicas" {
+  type    = number
+  default = 5
+}
+
+variable "mil_idp_min_replicas" {
+  type    = number
+  default = 0
 }
 
 # API Manager specific.
