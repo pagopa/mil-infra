@@ -1,9 +1,4 @@
 # Container App for mil-idp
-data "azurerm_key_vault_secret" "idp_key_pair" {
-  name         = "idp-key-pair-2"
-  key_vault_id = module.key_vault.id
-}
-
 locals {
   idp_ca_name = "${local.project}-idp-ca"
 }
@@ -33,7 +28,6 @@ resource "azurerm_resource_group_template_deployment" "mil_idp" {
       access_duration   = var.mil_idp_access_duration,
       refresh_audience  = var.mil_idp_refresh_audience,
       refresh_duration  = var.mil_idp_refresh_duration,
-      key_pair          = data.azurerm_key_vault_secret.idp_key_pair.value,
 
       image             = var.mil_idp_image,
       cpu               = var.mil_idp_cpu,

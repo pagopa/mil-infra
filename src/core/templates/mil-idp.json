@@ -19,11 +19,7 @@
                     "secrets": [
                         {
                             "name": "redis-connection-string",
-                            "value": "rediss://:${redis_primary_access_key}@${redis_hostname}:${redis_ssl_port}"
-                        },
-                        {
-                            "name": "key-pair",
-                            "value": "${key_pair}"
+                            "value": "rediss://:${redis_primary_access_key}@${redis_hostname}:${redis_ssl_port}/9"
                         }
                     ]
                 },
@@ -71,10 +67,6 @@
                                 {
                                     "name": "idp.redis-connection-string",
                                     "secretRef": "redis-connection-string"
-                                },
-                                {
-                                    "name": "idp.key-pair",
-                                    "secretRef": "key-pair"
                                 }
                             ],
                             "image": "${image}",
