@@ -6,8 +6,8 @@
 			<totalAmount>100.00</totalAmount>
 			<paymentDescription>TARI 2021</paymentDescription>
 			<fiscalCodePA>00000000202</fiscalCodePA>
-			<companyName>company PA</companyName>
-			<officeName>office PA</officeName>
+			<companyName>companyName</companyName>
+			<officeName>officeName</officeName>
 			<paymentToken>4e2581e0ca454011830fe8f7fbd03a85</paymentToken>
 			<transferList>
 				<transfer>
