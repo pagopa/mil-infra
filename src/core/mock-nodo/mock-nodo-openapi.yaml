@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: MockNodo
-  description: ''
+  description: Handling the configuration for mock Soap and Rest responses
   version: '1.0'
 servers:
   - url: https://mil-d-apim.azure-api.net/mockNodo
@@ -9,6 +9,7 @@ paths:
   /:
     post:
       summary: mockSoap
+      description: mockSoap
       operationId: mockSoap
       parameters:
         - name: Content-Type
@@ -41,24 +42,20 @@ paths:
             type: String
       responses:
         '200':
-          description: 
+          description: ''
   /closepayment:
     post:
       summary: mockRest
+      description: mockRest
       operationId: mockRest
       responses:
         '200':
+          description: ''
+  /fees:
+    post:
+      summary: mockGec
+      operationId: mockgec
+      responses:
+        '200':
           description: 
-components:
-  securitySchemes:
-    apiKeyHeader:
-      type: apiKey
-      name: Ocp-Apim-Subscription-Key
-      in: header
-    apiKeyQuery:
-      type: apiKey
-      name: subscription-key
-      in: query
-security:
-  - apiKeyHeader: [ ]
-  - apiKeyQuery: [ ]
+components: { }
