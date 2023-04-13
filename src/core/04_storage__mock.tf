@@ -82,7 +82,7 @@ resource "azurerm_storage_blob" "stub_verify_ok_activate_ok" {
 #### stubs GEC ####
 resource "azurerm_storage_blob" "stub_gec" {
 
-  for_each = var.env_short == "d" ? toset(["gec.json"]) : toset([])
+  for_each               = var.env_short == "d" ? toset(["gec.json"]) : toset([])
   name                   = join("", ["GEC/", each.key]) # File name on storage container
   storage_account_name   = azurerm_storage_account.mock[0].name
   storage_container_name = azurerm_storage_container.mock[0].name

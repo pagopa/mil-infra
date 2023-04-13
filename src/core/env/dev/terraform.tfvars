@@ -61,9 +61,9 @@ mil_payment_notice_node_soap_service_url          = "https://mil-d-apim.azure-ap
 mil_payment_notice_node_soap_client_connect_timeout = 2000
 mil_payment_notice_node_soap_client_read_timeout    = 2000
 mil_payment_notice_node_rest_service_url            = "https://mil-d-apim.azure-api.net/mockNodo"
-#mil_payment_notice_node_rest_service_url            = "https://api.uat.platform.pagopa.it/nodo-auth/nodo-per-pm/v2/closepayment"
-#mil_payment_notice_node_rest_service_url            = "https://api.uat.platform.pagopa.it/nodo/node-for-psp/v2/closepayment"
-#                                                       https://api.uat.platform.pagopa.it/nodo/nodo-per-pm/v2/closepayment
+#mil_payment_notice_node_rest_service_url            = "https://api.uat.platform.pagopa.it/nodo-auth/nodo-per-pm/v2"
+#mil_payment_notice_node_rest_service_url            = "https://api.uat.platform.pagopa.it/nodo/node-for-psp/v2"
+#mil_payment_notice_node_rest_service_url            = "https://api.uat.platform.pagopa.it/nodo/nodo-per-pm/v2"
 mil_payment_notice_rest_client_connect_timeout     = 2000
 mil_payment_notice_rest_client_read_timeout        = 2000
 mil_payment_notice_close_payment_max_retry         = 3
@@ -83,23 +83,23 @@ mil_payment_notice_closepayment_location_base_url  = "https://mil-d-apim.azure-a
 mil_fee_calculator_image                          = "ghcr.io/pagopa/mil-fee-calculator:latest"
 mil_fee_calculator_quarkus_log_level              = "ERROR"
 mil_fee_calculator_app_log_level                  = "DEBUG"
-mil_fee_calculator_mongo_connect_timeout          = "5s"
-mil_fee_calculator_mongo_read_timeout             = "10s"
-mil_fee_calculator_mongo_server_selection_timeout = "5s"
-mil_fee_calculator_gec_url                        = "https://api.uat.platform.pagopa.it/afm/node/calculator-service/v1/fees"
-mil_fee_calculator_gec_connect_timeout            = 2000
-mil_fee_calculator_gec_read_timeout               = 2000
-mil_fee_calculator_cpu                            = 0.5
-mil_fee_calculator_ephemeral_storage              = "1.0Gi"
-mil_fee_calculator_memory                         = "1.0Gi"
-mil_fee_calculator_max_replicas                   = 5
-mil_fee_calculator_min_replicas                   = 0
+#mil_fee_calculator_gec_url                        = "https://api.uat.platform.pagopa.it/afm/node/calculator-service/v1"
+mil_fee_calculator_gec_url             = "https://mil-d-apim.azure-api.net/mockNodo"
+mil_fee_calculator_gec_connect_timeout = 2000
+mil_fee_calculator_gec_read_timeout    = 2000
+mil_fee_calculator_cpu                 = 0.5
+mil_fee_calculator_ephemeral_storage   = "1.0Gi"
+mil_fee_calculator_memory              = "1.0Gi"
+mil_fee_calculator_max_replicas        = 5
+mil_fee_calculator_min_replicas        = 0
 
 #
 # mil-payment-notice and mil-fee-calculator
 #
-mil_acquirer_conf_url = "https://mil-d-apim.azure-api.net"
-mil_acquirer_conf_ver = "1.0.0"
+mil_acquirer_conf_url             = "https://mil-d-apim.azure-api.net"
+mil_acquirer_conf_ver             = "1.0.0"
+mil_acquirer_conf_connect_timeout = 2000
+mil_acquirer_conf_read_timeout    = 2000
 
 #
 # mil-idp

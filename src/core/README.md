@@ -94,6 +94,7 @@
 | [azurerm_storage_account.mock](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) | resource |
 | [azurerm_storage_blob.acquirer_4585625](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob) | resource |
 | [azurerm_storage_blob.acquirer_4585626](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob) | resource |
+| [azurerm_storage_blob.stub_gec](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob) | resource |
 | [azurerm_storage_blob.stub_verify_ko_activate_ko](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob) | resource |
 | [azurerm_storage_blob.stub_verify_ok_activate_ko](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob) | resource |
 | [azurerm_storage_blob.stub_verify_ok_activate_ok](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob) | resource |
@@ -115,7 +116,6 @@
 | [azurerm_key_vault_certificate.api-dev-mil](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_certificate) | data source |
 | [azurerm_key_vault_secret.apim_publisher_email](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
 | [azurerm_key_vault_secret.gec_subscription_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
-| [azurerm_key_vault_secret.idp_key_pair](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
 | [azurerm_key_vault_secret.mil_acquirer_conf_subscription_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
 | [azurerm_key_vault_secret.node_rest_subscription_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
 | [azurerm_key_vault_secret.node_soap_subscription_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
@@ -143,6 +143,8 @@
 | <a name="input_location"></a> [location](#input\_location) | n/a | `string` | `"westeurope"` | no |
 | <a name="input_location_short"></a> [location\_short](#input\_location\_short) | Location short like eg: neu, weu.. | `string` | n/a | yes |
 | <a name="input_log_analytics_workspace"></a> [log\_analytics\_workspace](#input\_log\_analytics\_workspace) | Log Analytics Workspace variables | <pre>object({<br>    sku               = string<br>    retention_in_days = number<br>    daily_quota_gb    = number<br>  })</pre> | <pre>{<br>  "daily_quota_gb": 1,<br>  "retention_in_days": 30,<br>  "sku": "PerGB2018"<br>}</pre> | no |
+| <a name="input_mil_acquirer_conf_connect_timeout"></a> [mil\_acquirer\_conf\_connect\_timeout](#input\_mil\_acquirer\_conf\_connect\_timeout) | n/a | `number` | `2000` | no |
+| <a name="input_mil_acquirer_conf_read_timeout"></a> [mil\_acquirer\_conf\_read\_timeout](#input\_mil\_acquirer\_conf\_read\_timeout) | n/a | `number` | `2000` | no |
 | <a name="input_mil_acquirer_conf_url"></a> [mil\_acquirer\_conf\_url](#input\_mil\_acquirer\_conf\_url) | mil-payment-notice and mil-fee-calculator specific. | `string` | `null` | no |
 | <a name="input_mil_acquirer_conf_ver"></a> [mil\_acquirer\_conf\_ver](#input\_mil\_acquirer\_conf\_ver) | n/a | `string` | `"1.0.0"` | no |
 | <a name="input_mil_fee_calculator_app_log_level"></a> [mil\_fee\_calculator\_app\_log\_level](#input\_mil\_fee\_calculator\_app\_log\_level) | n/a | `string` | `"DEBUG"` | no |
@@ -155,9 +157,6 @@
 | <a name="input_mil_fee_calculator_max_replicas"></a> [mil\_fee\_calculator\_max\_replicas](#input\_mil\_fee\_calculator\_max\_replicas) | n/a | `number` | `5` | no |
 | <a name="input_mil_fee_calculator_memory"></a> [mil\_fee\_calculator\_memory](#input\_mil\_fee\_calculator\_memory) | n/a | `string` | `"1.0Gi"` | no |
 | <a name="input_mil_fee_calculator_min_replicas"></a> [mil\_fee\_calculator\_min\_replicas](#input\_mil\_fee\_calculator\_min\_replicas) | n/a | `number` | `0` | no |
-| <a name="input_mil_fee_calculator_mongo_connect_timeout"></a> [mil\_fee\_calculator\_mongo\_connect\_timeout](#input\_mil\_fee\_calculator\_mongo\_connect\_timeout) | n/a | `string` | `"5s"` | no |
-| <a name="input_mil_fee_calculator_mongo_read_timeout"></a> [mil\_fee\_calculator\_mongo\_read\_timeout](#input\_mil\_fee\_calculator\_mongo\_read\_timeout) | n/a | `string` | `"10s"` | no |
-| <a name="input_mil_fee_calculator_mongo_server_selection_timeout"></a> [mil\_fee\_calculator\_mongo\_server\_selection\_timeout](#input\_mil\_fee\_calculator\_mongo\_server\_selection\_timeout) | n/a | `string` | `"5s"` | no |
 | <a name="input_mil_fee_calculator_quarkus_log_level"></a> [mil\_fee\_calculator\_quarkus\_log\_level](#input\_mil\_fee\_calculator\_quarkus\_log\_level) | n/a | `string` | `"ERROR"` | no |
 | <a name="input_mil_functions_app_log_level"></a> [mil\_functions\_app\_log\_level](#input\_mil\_functions\_app\_log\_level) | Log level for application. | `string` | `"DEBUG"` | no |
 | <a name="input_mil_functions_cpu"></a> [mil\_functions\_cpu](#input\_mil\_functions\_cpu) | CPUs assigned to the container. | `number` | `0.5` | no |

@@ -329,21 +329,6 @@ variable "mil_fee_calculator_app_log_level" {
   default = "DEBUG"
 }
 
-variable "mil_fee_calculator_mongo_connect_timeout" {
-  type    = string
-  default = "5s"
-}
-
-variable "mil_fee_calculator_mongo_read_timeout" {
-  type    = string
-  default = "10s"
-}
-
-variable "mil_fee_calculator_mongo_server_selection_timeout" {
-  type    = string
-  default = "5s"
-}
-
 variable "mil_fee_calculator_gec_url" {
   type    = string
   default = null
@@ -395,6 +380,16 @@ variable "mil_acquirer_conf_url" {
 variable "mil_acquirer_conf_ver" {
   type    = string
   default = "1.0.0"
+}
+
+variable "mil_acquirer_conf_connect_timeout" {
+  type    = number
+  default = 2000
+}
+
+variable "mil_acquirer_conf_read_timeout" {
+  type    = number
+  default = 2000
 }
 
 #

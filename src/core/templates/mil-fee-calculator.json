@@ -18,14 +18,6 @@
                     },
                     "secrets": [
                         {
-                            "name": "mongo-connection-string-secret-1",
-                            "value": "${mongo_connection_string_1}"
-                        },
-                        {
-                            "name": "mongo-connection-string-secret-2",
-                            "value": "${mongo_connection_string_2}"
-                        },
-                        {
                             "name": "gec-subscription-key",
                             "value": "${gec_subscription_key}"
                         },
@@ -41,59 +33,47 @@
                         {
                             "env": [
                                 {
-                                    "name": "quarkus-log-level",
+                                    "name": "feecalculator.quarkus-log-level",
                                     "value": "${quarkus_log_level}"
                                 },
                                 {
-                                    "name": "app-log-level",
+                                    "name": "feecalculator.app-log-level",
                                     "value": "${app_log_level}"
                                 },
                                 {
-                                    "name": "mongo-connect-timeout",
-                                    "value": "${mongo_connect_timeout}"
-                                },
-                                {
-                                    "name": "mongo-read-timeout",
-                                    "value": "${mongo_read_timeout}"
-                                },
-                                {
-                                    "name": "mongo-server-selection-timeout",
-                                    "value": "${mongo_server_selection_timeout}"
-                                },
-                                {
-                                    "name": "gec.url",
+                                    "name": "rest-client-fees-url",
                                     "value": "${gec_url}"
                                 },
                                 {
-                                    "name": "gec.subscription-key",
+                                    "name": "ocp-apim-subscription",
                                     "secretRef": "gec-subscription-key"
                                 },
                                 {
-                                    "name": "gec.connect-timeout",
+                                    "name": "fees.service.connect-timeout",
                                     "value": "${gec_connect_timeout}"
                                 },
                                 {
-                                    "name": "gec.read-timeout",
+                                    "name": "fees.service.read-timeout",
                                     "value": "${gec_read_timeout}"
-                                },
-                                {
-                                    "name": "mongo-connection-string-1",
-                                    "secretRef": "mongo-connection-string-secret-1"
-                                },
-                                {
-                                    "name": "mongo-connection-string-2",
-                                    "secretRef": "mongo-connection-string-secret-2"
                                 },
                                 {
                                 	"name": "mil.rest-service.url",
                                 	"value": "${mil_acquirer_conf_url}"
                                 },
                                 {
-                                	"name": "mil-rest-client-subscription-key",
+                                	"name": "mil.rest-service.connect-timeout",
+                                	"value": "${mil_acquirer_conf_connect_timeout}"
+                                },
+                                {
+                                	"name": "mil.rest-service.read-timeout",
+                                	"value": "${mil_acquirer_conf_read_timeout}"
+                                },
+                                {
+                                	"name": "mil.rest-service.subscription-key",
                                 	"secretRef": "mil-acquirer-conf-subscription-key"
                                 },
                                 {
-                                	"name": "mil-acquirer-conf-version",
+                                	"name": "mil.acquirer-conf.version",
                                 	"value": "${mil_acquirer_conf_ver}"
                                 }
                             ],
