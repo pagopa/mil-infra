@@ -43,11 +43,11 @@ resource "azurerm_cosmosdb_mongo_collection" "services" {
   }
 }
 
-# Collection for pspconf
-resource "azurerm_cosmosdb_mongo_collection" "pspconf" {
+# Collection for payment notices
+resource "azurerm_cosmosdb_mongo_collection" "paymentTransactions" {
   account_name        = azurerm_cosmosdb_mongo_database.mil.account_name
   database_name       = azurerm_cosmosdb_mongo_database.mil.name
-  name                = "pspconf"
+  name                = "paymentTransactions"
   resource_group_name = azurerm_cosmosdb_mongo_database.mil.resource_group_name
 
   index {
@@ -56,10 +56,28 @@ resource "azurerm_cosmosdb_mongo_collection" "pspconf" {
   }
 
   index {
-    keys   = ["acquirerId"]
+    keys   = ["transactionId"]
     unique = true
   }
 }
+
+# Collection for pspconf
+#resource "azurerm_cosmosdb_mongo_collection" "pspconf" {
+#  account_name        = azurerm_cosmosdb_mongo_database.mil.account_name
+#  database_name       = azurerm_cosmosdb_mongo_database.mil.name
+#  name                = "pspconf"
+#  resource_group_name = azurerm_cosmosdb_mongo_database.mil.resource_group_name
+#
+#  index {
+#    keys   = ["_id"]
+#    unique = true
+#  }
+#
+#  index {
+#    keys   = ["acquirerId"]
+#    unique = true
+#  }
+#}
 
 #
 # PRIVATE ENDPOINT APP SUBNET -> COSMOS

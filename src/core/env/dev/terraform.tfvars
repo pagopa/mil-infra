@@ -80,9 +80,9 @@ mil_payment_notice_closepayment_location_base_url  = "https://mil-d-apim.azure-a
 #
 # mil-fee-calculator
 #
-mil_fee_calculator_image                          = "ghcr.io/pagopa/mil-fee-calculator:latest"
-mil_fee_calculator_quarkus_log_level              = "ERROR"
-mil_fee_calculator_app_log_level                  = "DEBUG"
+mil_fee_calculator_image             = "ghcr.io/pagopa/mil-fee-calculator:latest"
+mil_fee_calculator_quarkus_log_level = "ERROR"
+mil_fee_calculator_app_log_level     = "DEBUG"
 #mil_fee_calculator_gec_url                        = "https://api.uat.platform.pagopa.it/afm/node/calculator-service/v1"
 mil_fee_calculator_gec_url             = "https://mil-d-apim.azure-api.net/mockNodo"
 mil_fee_calculator_gec_connect_timeout = 2000
