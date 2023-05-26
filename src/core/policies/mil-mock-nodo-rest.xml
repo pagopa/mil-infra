@@ -17,6 +17,10 @@
         <set-variable name="paymentTokens" value="@( 
 													JArray.Parse(context.Request.Body.As<JObject>(preserveContent: true).GetValue("paymentTokens").ToString())[0]
 													)" />
+		<!-- outcome input value -->
+		<set-variable name="outcomeInputValue" value="@( 
+													context.Request.Body.As<JObject>(preserveContent: true).GetValue("outcome").ToString()
+													)" />
         <set-variable name="paymentToken" value="@((string)((JValue)context.Variables["paymentTokens"]).Value)" />
         <!-- fiscal codes matching the payment Tokens           00000000201,					00000000202,						00000000203,						00000000204,					00000000205,					00000000206,						00000000207,					00000000208,					00000000209-->
         <set-variable name="paymentTokensAcceptable" value="@("37b0bb69ce774bc2bfeb485e107ae335,4e2581e0ca454011830fe8f7fbd03a85,866f69d6f1c144c1a3f10f104e85063b,e8d7fcd1c4bb4f2b98c9a950f377c4b5,0cb51416e0a943b78a92a44e4a87de38,579a9090774841bdbc6a4fa3d531fd20,e99f832bda734a20a31d2140e016c146,58ffca79700d4e56bd2291a269fbb30f,160f6ee5e55b4845b458f4f0032f3285")" />
@@ -100,11 +104,17 @@
                     </when>
                 </choose>
                 <!--  send request to /payment/{transactionId} API -->
-                <send-one-way-request mode="new">
-                    <set-url>@( new Uri(new Uri("https://mil-d-apim.azure-api.net/mil-payment-notice/payments/"), (string)context.Variables["transactionaId"]).AbsoluteUri )</set-url>
-                    <set-method>POST</set-method>
-                    <set-body>@( (((string)context.Variables["jsonBodyRequest"]).Replace("<pt>",(string)context.Variables["paymentToken"])) )</set-body>
-                </send-one-way-request>
+				<choose>
+					<when condition="@((string) context.Variables["outcomeInputValue"] == "OK")">
+					
+						<send-one-way-request mode="new">
+							<set-url>@( new Uri(new Uri("https://mil-d-apim.azure-api.net/mil-payment-notice/payments/"), (string)context.Variables["transactionaId"]).AbsoluteUri )</set-url>
+							<set-method>POST</set-method>
+							<set-body>@( (((string)context.Variables["jsonBodyRequest"]).Replace("<pt>",(string)context.Variables["paymentToken"])) )</set-body>
+						</send-one-way-request>
+					
+					</when>
+				 </choose>
                 <!-- set response status associated to the paymentToken -->
                 <choose>
                     <!-- Unparsable response -->
