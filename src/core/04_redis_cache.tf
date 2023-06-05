@@ -1,4 +1,6 @@
-# Redis Cache.
+#
+# Redis Cache
+#
 module "redis_cache" {
   source                        = "git::https://github.com/pagopa/terraform-azurerm-v3.git//redis_cache?ref=v5.1.0"
   name                          = "${local.project}-redis"

@@ -1,4 +1,6 @@
-# Product.
+#
+# Product for Nodo mock
+#
 module "mock_nodo" {
   count                 = var.env_short == "d" ? 1 : 0
   source                = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product?ref=v5.1.0"

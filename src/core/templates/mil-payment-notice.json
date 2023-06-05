@@ -48,6 +48,10 @@
                     "containers": [
                         {
                             "env": [
+                            	{
+                            		"name": "TZ",
+                            		"value": "Europe/Rome"
+                            	},
                                 {
                                     "name": "paymentnotice.quarkus-log-level",
                                     "value": "${quarkus_log_level}"

@@ -1,4 +1,6 @@
-# Key vault.
+#
+# Key vault
+#
 module "key_vault" {
   source                    = "git::https://github.com/pagopa/terraform-azurerm-v3.git//key_vault?ref=v5.1.0"
   name                      = "${local.project}-kv"
@@ -9,4 +11,3 @@ module "key_vault" {
   enable_rbac_authorization = true
   tags                      = var.tags
 }
-

@@ -102,23 +102,23 @@ mil_acquirer_conf_connect_timeout = 2000
 mil_acquirer_conf_read_timeout    = 2000
 
 #
-# mil-idp
+# mil-auth
 #
-mil_idp_quarkus_log_level = "ERROR"
-mil_idp_app_log_level     = "DEBUG"
-mil_idp_cryptoperiod      = 86400000
-mil_idp_keysize           = 4096
-mil_idp_issuer            = "https://mil-d-apim.azure-api.net/mil-idp"
-mil_idp_access_audience   = "https://mil-d-apim.azure-api.net/mil-payment-notice,https://mil-d-apim.azure-api.net/mil-fee-calculator"
-mil_idp_access_duration   = 300
-mil_idp_refresh_audience  = "https://mil-d-apim.azure-api.net/mil-idp"
-mil_idp_refresh_duration  = 3600
-mil_idp_image             = "ghcr.io/pagopa/mil-idp:latest"
-mil_idp_cpu               = 0.5
-mil_idp_ephemeral_storage = "1.0Gi"
-mil_idp_memory            = "1.0Gi"
-mil_idp_max_replicas      = 5
-mil_idp_min_replicas      = 0
+mil_auth_quarkus_log_level  = "ERROR"
+mil_auth_app_log_level      = "DEBUG"
+mil_auth_cryptoperiod       = 86400000
+mil_auth_keysize            = 4096
+mil_auth_access_duration    = 300
+mil_auth_refresh_duration   = 3600
+mil_auth_json_logging       = false
+mil_auth_data_url           = "https://milconf.blob.core.windows.net"
+mil_auth_openapi_descriptor = "https://raw.githubusercontent.com/pagopa/mil-auth/1.4.5/src/main/resources/META-INF/openapi.yaml"
+mil_auth_image              = "ghcr.io/pagopa/mil-auth:1.4.5"
+mil_auth_cpu                = 0.5
+mil_auth_ephemeral_storage  = "1.0Gi"
+mil_auth_memory             = "1.0Gi"
+mil_auth_max_replicas       = 5
+mil_auth_min_replicas       = 0
 
 #
 # APIM

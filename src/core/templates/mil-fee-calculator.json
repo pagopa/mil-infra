@@ -32,6 +32,10 @@
                     "containers": [
                         {
                             "env": [
+                            	{
+                            		"name": "TZ",
+                            		"value": "Europe/Rome"
+                            	},
                                 {
                                     "name": "feecalculator.quarkus-log-level",
                                     "value": "${quarkus_log_level}"

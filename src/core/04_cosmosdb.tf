@@ -1,4 +1,6 @@
+#
 # Account
+#
 resource "azurerm_cosmosdb_account" "mil" {
   name                          = "${local.project}-cosmos"
   resource_group_name           = azurerm_resource_group.data.name
@@ -18,7 +20,9 @@ resource "azurerm_cosmosdb_account" "mil" {
   }
 }
 
+#
 # Database
+#
 resource "azurerm_cosmosdb_mongo_database" "mil" {
   account_name        = azurerm_cosmosdb_account.mil.name
   name                = "mil"
@@ -43,7 +47,9 @@ resource "azurerm_cosmosdb_mongo_collection" "services" {
   }
 }
 
+#
 # Collection for payment notices
+#
 resource "azurerm_cosmosdb_mongo_collection" "paymentTransactions" {
   account_name        = azurerm_cosmosdb_mongo_database.mil.account_name
   database_name       = azurerm_cosmosdb_mongo_database.mil.name
@@ -56,28 +62,16 @@ resource "azurerm_cosmosdb_mongo_collection" "paymentTransactions" {
   }
 
   index {
-    keys   = ["transactionId"]
-    unique = true
+    keys = [
+      "paymentTransaction.terminalId",
+      "paymentTransaction.merchantId",
+      "paymentTransaction.channel",
+      "paymentTransaction.acquirerId",
+      "paymentTransaction.insertTimestamp"
+    ]
+    unique = false
   }
 }
-
-# Collection for pspconf
-#resource "azurerm_cosmosdb_mongo_collection" "pspconf" {
-#  account_name        = azurerm_cosmosdb_mongo_database.mil.account_name
-#  database_name       = azurerm_cosmosdb_mongo_database.mil.name
-#  name                = "pspconf"
-#  resource_group_name = azurerm_cosmosdb_mongo_database.mil.resource_group_name
-#
-#  index {
-#    keys   = ["_id"]
-#    unique = true
-#  }
-#
-#  index {
-#    keys   = ["acquirerId"]
-#    unique = true
-#  }
-#}
 
 #
 # PRIVATE ENDPOINT APP SUBNET -> COSMOS

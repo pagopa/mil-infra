@@ -18,25 +18,21 @@ resource "azurerm_storage_account" "conf" {
 }
 
 resource "azurerm_storage_container" "acquirer_conf" {
-  name                  = "acquirer-conf"
+  name                  = "acquirers"
   storage_account_name  = azurerm_storage_account.conf.name
   container_access_type = "blob"
 }
 
-resource "azurerm_storage_blob" "acquirer_4585625" {
-  name                   = "4585625.json"
-  storage_account_name   = azurerm_storage_account.conf.name
-  storage_container_name = azurerm_storage_container.acquirer_conf.name
-  type                   = "Block"
-  source                 = "templates/4585625.json"
+resource "azurerm_storage_container" "client_conf" {
+  name                  = "clients"
+  storage_account_name  = azurerm_storage_account.conf.name
+  container_access_type = "blob"
 }
 
-resource "azurerm_storage_blob" "acquirer_4585626" {
-  name                   = "4585626.json"
-  storage_account_name   = azurerm_storage_account.conf.name
-  storage_container_name = azurerm_storage_container.acquirer_conf.name
-  type                   = "Block"
-  source                 = "templates/4585625.json"
+resource "azurerm_storage_container" "role_conf" {
+  name                  = "roles"
+  storage_account_name  = azurerm_storage_account.conf.name
+  container_access_type = "blob"
 }
 
 #

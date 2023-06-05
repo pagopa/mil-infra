@@ -393,79 +393,78 @@ variable "mil_acquirer_conf_read_timeout" {
 }
 
 #
-# mil-idp
+# mil-auth
 #
-variable "mil_idp_quarkus_log_level" {
+variable "mil_auth_quarkus_log_level" {
   type    = string
   default = "ERROR"
 }
 
-variable "mil_idp_app_log_level" {
+variable "mil_auth_app_log_level" {
   type    = string
   default = "DEBUG"
 }
 
-variable "mil_idp_cryptoperiod" {
+variable "mil_auth_cryptoperiod" {
   type    = number
   default = 86400000
 }
 
-variable "mil_idp_keysize" {
+variable "mil_auth_keysize" {
   type    = number
   default = 4096
 }
 
-variable "mil_idp_issuer" {
-  type    = string
-  default = "https://mil-d-apim.azure-api.net/mil-idp"
-}
-
-variable "mil_idp_access_audience" {
-  type    = string
-  default = "https://mil-d-apim.azure-api.net/mil-payment-notice,https://mil-d-apim.azure-api.net/mil-fee-calculator"
-}
-
-variable "mil_idp_access_duration" {
+variable "mil_auth_access_duration" {
   type    = number
   default = 300
 }
 
-variable "mil_idp_refresh_audience" {
-  type    = string
-  default = "https://mil-d-apim.azure-api.net/mil-idp"
-}
-
-variable "mil_idp_refresh_duration" {
+variable "mil_auth_refresh_duration" {
   type    = number
   default = 3600
 }
 
-variable "mil_idp_image" {
+variable "mil_auth_data_url" {
   type    = string
-  default = "ghcr.io/pagopa/mil-idp:latest"
 }
 
-variable "mil_idp_cpu" {
+variable "mil_auth_json_logging" {
+  type    = bool
+  default = false
+}
+
+variable "mil_auth_openapi_descriptor" {
+  type    = string
+  default = "https://raw.githubusercontent.com/pagopa/mil-auth/1.4.5/src/main/resources/META-INF/openapi.yaml"
+}
+
+variable "mil_auth_image" {
+  type    = string
+  default = "ghcr.io/pagopa/mil-auth:1.4.3"
+}
+
+variable "mil_auth_cpu" {
   type    = number
   default = 0.5
 }
 
-variable "mil_idp_ephemeral_storage" {
+variable "mil_auth_ephemeral_storage" {
   type    = string
   default = "1.0Gi"
 }
 
-variable "mil_idp_memory" {
+variable "mil_auth_memory" {
   type    = string
   default = "1.0Gi"
 }
 
-variable "mil_idp_max_replicas" {
+variable "mil_auth_max_replicas" {
   type    = number
   default = 5
 }
 
-variable "mil_idp_min_replicas" {
+variable "mil_auth_min_replicas" {
   type    = number
   default = 0
 }

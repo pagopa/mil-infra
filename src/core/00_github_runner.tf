@@ -1,8 +1,7 @@
 resource "azurerm_resource_group" "github_runner" {
   name     = "${local.project}-github-runner-rg"
   location = var.location
-
-  tags = var.tags
+  tags     = var.tags
 }
 
 resource "azurerm_subnet" "github_runner" {
@@ -13,8 +12,7 @@ resource "azurerm_subnet" "github_runner" {
 }
 
 module "github_runner" {
-  source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment?ref=v5.1.0"
-
+  source                    = "git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment?ref=v5.1.0"
   name                      = "${local.project}-github-runner-cae"
   resource_group_name       = azurerm_resource_group.github_runner.name
   location                  = var.location
@@ -24,6 +22,5 @@ module "github_runner" {
   log_analytics_customer_id = azurerm_log_analytics_workspace.log_analytics_workspace.workspace_id
   log_analytics_shared_key  = azurerm_log_analytics_workspace.log_analytics_workspace.primary_shared_key
   zone_redundant            = false
-
-  tags = var.tags
+  tags                      = var.tags
 }
