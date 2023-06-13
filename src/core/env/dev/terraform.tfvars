@@ -76,6 +76,7 @@ mil_payment_notice_memory                          = "1.0Gi"
 mil_payment_notice_max_replicas                    = 5
 mil_payment_notice_min_replicas                    = 0
 mil_payment_notice_closepayment_location_base_url  = "https://mil-d-apim.azure-api.net/mil-payment-notice"
+mil_payment_notice_openapi_descriptor              = "https://raw.githubusercontent.com/pagopa/mil-payment-notice/main/src/main/resources/META-INF/openapi.yaml"
 
 #
 # mil-fee-calculator
@@ -113,12 +114,28 @@ mil_auth_refresh_duration   = 3600
 mil_auth_json_logging       = false
 mil_auth_data_url           = "https://milconf.blob.core.windows.net"
 mil_auth_openapi_descriptor = "https://raw.githubusercontent.com/pagopa/mil-auth/1.4.5/src/main/resources/META-INF/openapi.yaml"
-mil_auth_image              = "ghcr.io/pagopa/mil-auth:1.4.5"
-mil_auth_cpu                = 0.5
+mil_auth_image              = "ghcr.io/pagopa/mil-auth:latest"
+mil_auth_cpu                = 2
 mil_auth_ephemeral_storage  = "1.0Gi"
-mil_auth_memory             = "1.0Gi"
+mil_auth_memory             = "4.0Gi"
 mil_auth_max_replicas       = 5
 mil_auth_min_replicas       = 0
+
+#
+# mil-preset
+#
+mil_preset_quarkus_log_level              = "ERROR"
+mil_preset_app_log_level                  = "DEBUG"
+mil_preset_mongo_connect_timeout          = "5s"
+mil_preset_mongo_read_timeout             = "10s"
+mil_preset_mongo_server_selection_timeout = "5s"
+mil_preset_image                          = "ghcr.io/pagopa/mil-preset:latest"
+mil_preset_cpu                            = 0.5
+mil_preset_ephemeral_storage              = "1.0Gi"
+mil_preset_memory                         = "1.0Gi"
+mil_preset_max_replicas                   = 5
+mil_preset_min_replicas                   = 0
+mil_preset_location_base_url              = "https://mil-d-apim.azure-api.net/mil-preset"
 
 #
 # APIM

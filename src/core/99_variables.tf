@@ -311,6 +311,11 @@ variable "mil_payment_notice_closepayment_location_base_url" {
   default = null
 }
 
+variable "mil_payment_notice_openapi_descriptor" {
+  type    = string
+  default = "https://raw.githubusercontent.com/pagopa/mil-payment-notice/main/src/main/resources/META-INF/openapi.yaml"
+}
+
 #
 # mil-fee-calculator specific.
 #
@@ -465,6 +470,69 @@ variable "mil_auth_max_replicas" {
 }
 
 variable "mil_auth_min_replicas" {
+  type    = number
+  default = 0
+}
+
+#
+# mil-presets
+#
+variable "mil_preset_quarkus_log_level" {
+  type    = string
+  default = "ERROR"
+}
+
+variable "mil_preset_app_log_level" {
+  type    = string
+  default = "DEBUG"
+}
+
+variable "mil_preset_mongo_connect_timeout" {
+  type    = string
+  default = "5s"
+}
+
+variable "mil_preset_mongo_read_timeout" {
+  type    = string
+  default = "10s"
+}
+
+variable "mil_preset_mongo_server_selection_timeout" {
+  type    = string
+  default = "5s"
+}
+
+variable "mil_preset_location_base_url" {
+  type    = string
+  default = null
+}
+
+variable "mil_preset_image" {
+  type    = string
+  default = "ghcr.io/pagopa/mil-preset:latest"
+}
+
+variable "mil_preset_cpu" {
+  type    = number
+  default = 0.5
+}
+
+variable "mil_preset_ephemeral_storage" {
+  type    = string
+  default = "1.0Gi"
+}
+
+variable "mil_preset_memory" {
+  type    = string
+  default = "1.0Gi"
+}
+
+variable "mil_preset_max_replicas" {
+  type    = number
+  default = 5
+}
+
+variable "mil_preset_min_replicas" {
   type    = number
   default = 0
 }
