@@ -15,7 +15,7 @@ module "payment_notice_api" {
 
   display_name          = "payment notice"
   content_format        = "openapi-link"
-  content_value         = "https://raw.githubusercontent.com/pagopa/mil-apis/2023-05-18-17-13/openapi-mono/payment-notice.yaml"
+  content_value         = var.mil_payment_notice_openapi_descriptor
   product_ids           = [module.mil_product.product_id]
   subscription_required = false
 }

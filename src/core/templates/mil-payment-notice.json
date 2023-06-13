@@ -40,6 +40,14 @@
                         {
                         	"name": "mil-acquirer-conf-subscription-key",
                         	"value": "${mil_acquirer_conf_subscription_key}"
+                        },
+                        {
+                            "name": "kafka-connection-string-1",
+                            "value": "${kafka_connection_string_1}"
+                        },
+                        {
+                            "name": "kafka-connection-string-2",
+                            "value": "${kafka_connection_string_2}"
                         }
                     ]
                 },
@@ -143,6 +151,22 @@
                                 {
                                 	"name": "paymentnotice.closepayment.location.base-url",
                                 	"value": "${paymentnotice_closepayment_location_base_url}"
+                                },
+                                {
+                                    "name": "kafka-connection-string-1",
+                                    "secretRef": "kafka-connection-string-1"
+                                },
+                                {
+                                    "name": "kafka-connection-string-2",
+                                    "secretRef": "kafka-connection-string-2"
+                                },
+                                {
+                                    "name": "kafka-bootstrap-server",
+                                    "value": "${eventhub_namespace}.servicebus.windows.net:9093"
+                                },
+                                {
+                                    "name": "kafka-topic",
+                                    "value": "${kafka_topic}"
                                 }
                             ],
                             "image": "${image}",

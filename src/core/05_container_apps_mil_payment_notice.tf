@@ -61,7 +61,12 @@ resource "azurerm_resource_group_template_deployment" "mil_payment_notice" {
       memory                                       = var.mil_payment_notice_memory,
       max_replicas                                 = var.mil_payment_notice_max_replicas,
       min_replicas                                 = var.mil_payment_notice_min_replicas,
-      paymentnotice_closepayment_location_base_url = var.mil_payment_notice_closepayment_location_base_url
+      paymentnotice_closepayment_location_base_url = var.mil_payment_notice_closepayment_location_base_url,
+      preset_location_base_url                     = var.mil_preset_location_base_url,
+      kafka_connection_string_1                    = azurerm_eventhub_namespace.mil_evhns.default_primary_connection_string,
+      kafka_connection_string_2                    = azurerm_eventhub_namespace.mil_evhns.default_secondary_connection_string,
+      eventhub_namespace                           = azurerm_eventhub_namespace.mil_evhns.name,
+      kafka_topic                                  = azurerm_eventhub.presets.name
     }
   )
 }
