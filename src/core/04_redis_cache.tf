@@ -6,7 +6,7 @@ module "redis_cache" {
   name                          = "${local.project}-redis"
   resource_group_name           = azurerm_resource_group.data.name
   location                      = azurerm_resource_group.data.location
-  capacity                      = 1
+  capacity                      = 2
   enable_non_ssl_port           = false
   family                        = "C"
   sku_name                      = "Basic"
