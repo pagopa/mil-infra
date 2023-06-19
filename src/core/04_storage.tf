@@ -17,20 +17,26 @@ resource "azurerm_storage_account" "conf" {
   }
 }
 
-resource "azurerm_storage_container" "acquirer_conf" {
+resource "azurerm_storage_container" "acquirers" {
   name                  = "acquirers"
   storage_account_name  = azurerm_storage_account.conf.name
   container_access_type = "blob"
 }
 
-resource "azurerm_storage_container" "client_conf" {
+resource "azurerm_storage_container" "clients" {
   name                  = "clients"
   storage_account_name  = azurerm_storage_account.conf.name
   container_access_type = "blob"
 }
 
-resource "azurerm_storage_container" "role_conf" {
+resource "azurerm_storage_container" "roles" {
   name                  = "roles"
+  storage_account_name  = azurerm_storage_account.conf.name
+  container_access_type = "blob"
+}
+
+resource "azurerm_storage_container" "users" {
+  name                  = "users"
   storage_account_name  = azurerm_storage_account.conf.name
   container_access_type = "blob"
 }

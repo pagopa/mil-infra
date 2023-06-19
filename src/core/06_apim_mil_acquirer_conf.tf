@@ -24,8 +24,8 @@ module "acquirer_conf_api" {
       operation_id = "getPspConfig"
       xml_content = templatefile("policies/mil-acquirer-conf-getPspConfig.xml",
         {
-          storage_container_uri = "https://${azurerm_storage_account.conf.name}.blob.core.windows.net/${azurerm_storage_container.acquirer_conf.name}/"
-          #storage_container_uri = "https://${azurerm_private_dns_zone.storage.name}/${azurerm_storage_container.acquirer_conf.name}/"
+          storage_container_uri = "https://${azurerm_storage_account.conf.name}.blob.core.windows.net/${azurerm_storage_container.acquirers.name}/"
+          #storage_container_uri = "https://${azurerm_private_dns_zone.storage.name}/${azurerm_storage_container.acquirers.name}/"
         }
       )
     }
