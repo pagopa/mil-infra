@@ -1,6 +1,8 @@
-# Container Apps Environment.
+#
+# Container Apps Environment
+#
 module "cae" {
-  source                    = "git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment?ref=v5.1.0"
+  source                    = "git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment?ref=v6.20.0"
   name                      = "${local.project}-cae"
   resource_group_name       = azurerm_resource_group.app.name
   location                  = azurerm_resource_group.app.location

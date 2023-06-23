@@ -1,4 +1,6 @@
+#
 # User assigned identity
+#
 resource "azurerm_user_assigned_identity" "appgw" {
   resource_group_name = azurerm_resource_group.network.name
   location            = azurerm_resource_group.network.location
@@ -23,7 +25,9 @@ data "azurerm_key_vault_certificate" "api-dev-mil" {
   key_vault_id = module.key_vault.id
 }
 
+#
 # Public IP
+#
 resource "azurerm_public_ip" "appgw" {
   name                = "${local.project}-agw-pip"
   resource_group_name = azurerm_resource_group.network.name
@@ -34,13 +38,15 @@ resource "azurerm_public_ip" "appgw" {
   tags                = var.tags
 }
 
+#
 # Application Gateway
+#
 module "app_gw" {
   depends_on = [
     azurerm_role_assignment.appgw_id_api-dev-mil
   ]
 
-  source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//app_gateway?ref=v5.1.0"
+  source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//app_gateway?ref=v6.20.0"
 
   resource_group_name = azurerm_resource_group.network.name
   location            = azurerm_resource_group.network.location

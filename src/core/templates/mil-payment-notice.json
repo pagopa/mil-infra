@@ -18,16 +18,16 @@
                     },
                     "secrets": [
                         {
-                            "name": "mongo-connection-string-secret-1",
+                            "name": "mongo-connection-string-1",
                             "value": "${mongo_connection_string_1}"
                         },
                         {
-                            "name": "mongo-connection-string-secret-2",
+                            "name": "mongo-connection-string-2",
                             "value": "${mongo_connection_string_2}"
                         },
                         {
                             "name": "redis-connection-string",
-                            "value": "rediss://:${redis_primary_access_key}@${redis_hostname}:${redis_ssl_port}"
+                            "value": "${redis_connection_string}"
                         },
                         {
                             "name": "node-soap-subscription-key",
@@ -126,11 +126,11 @@
                                 },
                                 {
                                     "name": "mongo-connection-string-1",
-                                    "secretRef": "mongo-connection-string-secret-1"
+                                    "secretRef": "mongo-connection-string-1"
                                 },
                                 {
                                     "name": "mongo-connection-string-2",
-                                    "secretRef": "mongo-connection-string-secret-2"
+                                    "secretRef": "mongo-connection-string-2"
                                 },
                                 {
                                     "name": "redis-connection-string",

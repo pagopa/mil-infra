@@ -1,11 +1,15 @@
-# DNS zone.
+#
+# DNS zone
+#
 resource "azurerm_dns_zone" "mil" {
   name                = "${var.dns_zone_mil_prefix}.${var.dns_external_domain}"
   resource_group_name = azurerm_resource_group.network.name
   tags                = var.tags
 }
 
-# This is executed for PROD ONLY and gives Public DNS Delegation to DEV.
+#
+# This is executed for PROD ONLY and gives Public DNS Delegation to DEV
+#
 resource "azurerm_dns_ns_record" "dev_mil" {
   count               = var.env_short == "p" ? 1 : 0
   name                = "dev"
@@ -21,7 +25,9 @@ resource "azurerm_dns_ns_record" "dev_mil" {
   ]
 }
 
-# This is executed for PROD ONLY and gives Public DNS Delegation to UAT.
+#
+# This is executed for PROD ONLY and gives Public DNS Delegation to UAT
+#
 resource "azurerm_dns_ns_record" "uat_mil" {
   count               = var.env_short == "p" ? 1 : 0
   name                = "uat"
@@ -37,8 +43,10 @@ resource "azurerm_dns_ns_record" "uat_mil" {
   ]
 }
 
+#
 # Certification Authority Authorization (CAA) record.
 # Specify which Certificate Authorities are allowed to issue certificates for this domain.
+#
 resource "azurerm_dns_caa_record" "mil" {
   name                = "@"
   zone_name           = azurerm_dns_zone.mil.name
@@ -60,7 +68,7 @@ resource "azurerm_dns_caa_record" "mil" {
     value = "digicert.com"
   }
 
-  # ...if someone else tries to issue a certificate, send an email to security+caa@pagopa.it.
+  # ...if someone else tries to issue a certificate, an email is sent to security+caa@pagopa.it.
   record {
     flags = 0
     tag   = "iodef"
@@ -68,14 +76,18 @@ resource "azurerm_dns_caa_record" "mil" {
   }
 }
 
+# ***********************
+# *** TEMPORARILY OFF ***
+# ***********************
 # application gateway records
 # api.*.userregistry.pagopa.it
-resource "azurerm_dns_a_record" "api" {
-  name                = "api"
-  zone_name           = azurerm_dns_zone.mil.name
-  resource_group_name = azurerm_resource_group.network.name
-  ttl                 = var.dns_default_ttl
-  records             = [azurerm_public_ip.appgw.ip_address]
-
-  tags = var.tags
-}
+#
+#resource "azurerm_dns_a_record" "api" {
+#  name                = "api"
+#  zone_name           = azurerm_dns_zone.mil.name
+#  resource_group_name = azurerm_resource_group.network.name
+#  ttl                 = var.dns_default_ttl
+#  records             = [azurerm_public_ip.appgw.ip_address]
+#
+#  tags = var.tags
+#}

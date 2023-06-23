@@ -47,7 +47,7 @@
                     <when condition="@( context.Variables.ContainsKey("filePrefix") && !context.Variables.ContainsKey("responseBody") )">
                         <!-- The responseBody isn't in the cache, Look for the configuration in the storage account -->
                         <send-request mode="new" response-variable-name="storageAccountResponse" timeout="5" ignore-error="true">
-                            <set-url>@( new Uri(new Uri("https://mocknodo.blob.core.windows.net/mocknodo/0000000020x/"), (string)context.Variables["filePrefix"] + (string)context.Variables["paymentToken"] + ".json").AbsoluteUri )</set-url>
+                            <set-url>@( new Uri(new Uri("https://${storage_account_name}.blob.core.windows.net/mocknodo/0000000020x/"), (string)context.Variables["filePrefix"] + (string)context.Variables["paymentToken"] + ".json").AbsoluteUri )</set-url>
                             <set-method>GET</set-method>
                         </send-request>
                         <choose>
@@ -90,7 +90,7 @@
                     <when condition="@(!context.Variables.ContainsKey("jsonBodyRequest") )">
                         <!--  if not retrieve it from storage  -->
                         <send-request mode="new" response-variable-name="storageAccountResponse" timeout="5" ignore-error="true">
-                            <set-url>@( new Uri("https://mocknodo.blob.core.windows.net/mocknodo/0000000020x/payments.json").AbsoluteUri )</set-url>
+                            <set-url>@( new Uri("https://${storage_account_name}.blob.core.windows.net/mocknodo/0000000020x/payments.json").AbsoluteUri )</set-url>
                             <set-method>GET</set-method>
                         </send-request>
                         <choose>

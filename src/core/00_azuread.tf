@@ -1,5 +1,5 @@
 #
-# Azure AD.
+# Azure AD
 #
 data "azuread_group" "adgroup_admin" {
   display_name = "${local.project}-adgroup-admin"

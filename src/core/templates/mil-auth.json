@@ -19,7 +19,7 @@
                     "secrets": [
                         {
                             "name": "redis-connection-string",
-                            "value": "rediss://:${redis_primary_access_key}@${redis_hostname}:${redis_ssl_port}/9"
+                            "value": "${redis_connection_string}"
                         }
                     ]
                 },

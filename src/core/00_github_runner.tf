@@ -1,3 +1,6 @@
+#
+# GitHub runner
+#
 resource "azurerm_resource_group" "github_runner" {
   name     = "${local.project}-github-runner-rg"
   location = var.location
@@ -12,7 +15,7 @@ resource "azurerm_subnet" "github_runner" {
 }
 
 module "github_runner" {
-  source                    = "git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment?ref=v5.1.0"
+  source                    = "git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment?ref=v6.20.0"
   name                      = "${local.project}-github-runner-cae"
   resource_group_name       = azurerm_resource_group.github_runner.name
   location                  = var.location

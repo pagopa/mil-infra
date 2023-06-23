@@ -1,6 +1,9 @@
-# API for mil-acquirer-conf.
+#
+# API for mil-acquirer-conf
+#
 module "mock_nodo_api" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v5.1.0"
+  count                 = (var.env_short == "d" || var.env_short == "u") ? 1 : 0
+  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v6.20.0"
   name                = "${local.project}-mock-nodo"
   api_management_name = module.apim.name
   resource_group_name = module.apim.resource_group_name
@@ -24,11 +27,11 @@ module "mock_nodo_api" {
   api_operation_policies = [
     {
       operation_id = "mockSoap"
-      xml_content  = templatefile("policies/mil-mock-nodo-soap.xml", {})
+      xml_content  = templatefile("policies/mil-mock-nodo-soap.xml", { storage_account_name = "${azurerm_storage_account.mock[0].name}" })
     },
     {
       operation_id = "mockRest"
-      xml_content  = templatefile("policies/mil-mock-nodo-rest.xml", {})
+      xml_content  = templatefile("policies/mil-mock-nodo-rest.xml", { storage_account_name = "${azurerm_storage_account.mock[0].name}" })
     }
   ]
 

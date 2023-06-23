@@ -30,22 +30,22 @@ resource "azurerm_cosmosdb_mongo_database" "mil" {
 }
 
 # Collection for services
-resource "azurerm_cosmosdb_mongo_collection" "services" {
-  account_name        = azurerm_cosmosdb_mongo_database.mil.account_name
-  database_name       = azurerm_cosmosdb_mongo_database.mil.name
-  name                = "services"
-  resource_group_name = azurerm_cosmosdb_mongo_database.mil.resource_group_name
-
-  index {
-    keys   = ["_id"]
-    unique = true
-  }
-
-  index {
-    keys   = ["channel"]
-    unique = true
-  }
-}
+#resource "azurerm_cosmosdb_mongo_collection" "services" {
+#  account_name        = azurerm_cosmosdb_mongo_database.mil.account_name
+#  database_name       = azurerm_cosmosdb_mongo_database.mil.name
+#  name                = "services"
+#  resource_group_name = azurerm_cosmosdb_mongo_database.mil.resource_group_name
+#
+#  index {
+#    keys   = ["_id"]
+#    unique = true
+#  }
+#
+#  index {
+#    keys   = ["channel"]
+#    unique = true
+#  }
+#}
 
 #
 # Collection for payment notices
@@ -61,16 +61,16 @@ resource "azurerm_cosmosdb_mongo_collection" "paymentTransactions" {
     unique = true
   }
 
-  index {
-    keys = [
-      "paymentTransaction.terminalId",
-      "paymentTransaction.merchantId",
-      "paymentTransaction.channel",
-      "paymentTransaction.acquirerId",
-      "paymentTransaction.insertTimestamp"
-    ]
-    unique = false
-  }
+  #index {
+  #  keys = [
+  #    "paymentTransaction.terminalId",
+  #    "paymentTransaction.merchantId",
+  #    "paymentTransaction.channel",
+  #    "paymentTransaction.acquirerId",
+  #    "paymentTransaction.insertTimestamp"
+  #  ]
+  #  unique = false
+  #}
 }
 
 #

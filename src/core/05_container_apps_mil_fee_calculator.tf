@@ -1,4 +1,6 @@
-# Container App for mil-payment-notice
+#
+# Container App for mil-fee-calculator
+#
 data "azurerm_key_vault_secret" "gec_subscription_key" {
   name         = "gec-subscription-key"
   key_vault_id = module.key_vault.id

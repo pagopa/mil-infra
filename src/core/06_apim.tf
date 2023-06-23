@@ -1,12 +1,16 @@
-# Publisher e-mail will be taken from key-vault.
+#
+# Publisher e-mail will be taken from key-vault
+#
 data "azurerm_key_vault_secret" "apim_publisher_email" {
   name         = "apim-publisher-email"
   key_vault_id = module.key_vault.id
 }
 
-# API Manager.
+#
+# API Manager
+#
 module "apim" {
-  source               = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management?ref=v5.1.0"
+  source               = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management?ref=v6.20.0"
   name                 = "${local.project}-apim"
   resource_group_name  = azurerm_resource_group.integration.name
   location             = azurerm_resource_group.integration.location
@@ -25,9 +29,11 @@ module "apim" {
   tags = var.tags
 }
 
+#
 # Subscription for tracing. For DEV only.
+#
 resource "azurerm_api_management_subscription" "tracing" {
-  count               = var.env_short == "d" ? 1 : 0
+  count               = (var.env_short == "d" || var.env_short == "u") ? 1 : 0
   api_management_name = module.apim.name
   resource_group_name = module.apim.resource_group_name
   display_name        = "Tracing"

@@ -1,3 +1,6 @@
+#
+# Event hub namespace
+#
 resource "azurerm_eventhub_namespace" "mil_evhns" {
   name                          = "${local.project}-evhns"
   resource_group_name           = azurerm_resource_group.data.name
@@ -11,6 +14,9 @@ resource "azurerm_eventhub_namespace" "mil_evhns" {
   tags                          = var.tags
 }
 
+#
+# Event hub used by mil-payment-notice -> mil-preset
+#
 resource "azurerm_eventhub" "presets" {
   name                = "${local.project}-presets-evh"
   namespace_name      = azurerm_eventhub_namespace.mil_evhns.name

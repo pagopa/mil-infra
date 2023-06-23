@@ -1,15 +1,15 @@
 #
 # General
 #
-env_short      = "d"
-env            = "dev"
+env_short      = "u"
+env            = "uat"
 prefix         = "mil"
 location       = "westeurope"
 location_short = "weu"
 
 tags = {
   CreatedBy   = "Terraform"
-  Environment = "DEV"
+  Environment = "UAT"
   Owner       = "mil"
   Source      = "https://github.com/pagopa/mil-infra"
   CostCenter  = "TS310 - PAGAMENTI & SERVIZI"
@@ -18,7 +18,7 @@ tags = {
 #
 # DNS
 #
-dns_zone_mil_prefix = "dev.mil"
+dns_zone_mil_prefix = "uat.mil"
 
 #
 # CIDRs
@@ -54,10 +54,10 @@ mil_payment_notice_app_log_level                    = "DEBUG"
 mil_payment_notice_mongo_connect_timeout            = "5s"
 mil_payment_notice_mongo_read_timeout               = "10s"
 mil_payment_notice_mongo_server_selection_timeout   = "5s"
-mil_payment_notice_node_soap_service_url            = "https://mil-d-apim.azure-api.net/mockNodo"
+mil_payment_notice_node_soap_service_url            = "https://mil-u-apim.azure-api.net/mockNodo"
 mil_payment_notice_node_soap_client_connect_timeout = 2000
 mil_payment_notice_node_soap_client_read_timeout    = 2000
-mil_payment_notice_node_rest_service_url            = "https://mil-d-apim.azure-api.net/mockNodo"
+mil_payment_notice_node_rest_service_url            = "https://mil-u-apim.azure-api.net/mockNodo"
 mil_payment_notice_rest_client_connect_timeout      = 2000
 mil_payment_notice_rest_client_read_timeout         = 2000
 mil_payment_notice_close_payment_max_retry          = 3
@@ -70,7 +70,7 @@ mil_payment_notice_ephemeral_storage                = "1.0Gi"
 mil_payment_notice_memory                           = "1.0Gi"
 mil_payment_notice_max_replicas                     = 5
 mil_payment_notice_min_replicas                     = 0
-mil_payment_notice_closepayment_location_base_url   = "https://mil-d-apim.azure-api.net/mil-payment-notice"
+mil_payment_notice_closepayment_location_base_url   = "https://mil-u-apim.azure-api.net/mil-payment-notice"
 #mil_payment_notice_node_soap_service_url = "https://api.uat.platform.pagopa.it/nodo-auth/node-for-psp/v1"
 #mil_payment_notice_node_soap_service_url = "https://api.uat.platform.pagopa.it/nodo/node-for-psp/v1"
 #mil_payment_notice_node_rest_service_url = "https://api.uat.platform.pagopa.it/nodo-auth/nodo-per-pm/v2"
@@ -84,7 +84,7 @@ mil_fee_calculator_image               = "ghcr.io/pagopa/mil-fee-calculator@sha2
 mil_fee_calculator_openapi_descriptor  = "https://raw.githubusercontent.com/pagopa/mil-apis/a4aac33f6af1f7328c9a457c75622fd62ad00356/openapi-mono/fee.yaml"
 mil_fee_calculator_quarkus_log_level   = "ERROR"
 mil_fee_calculator_app_log_level       = "DEBUG"
-mil_fee_calculator_gec_url             = "https://mil-d-apim.azure-api.net/mockNodo"
+mil_fee_calculator_gec_url             = "https://mil-u-apim.azure-api.net/mockNodo"
 mil_fee_calculator_gec_connect_timeout = 2000
 mil_fee_calculator_gec_read_timeout    = 2000
 mil_fee_calculator_cpu                 = 0.5
@@ -97,7 +97,7 @@ mil_fee_calculator_min_replicas        = 0
 #
 # mil-payment-notice and mil-fee-calculator
 #
-mil_acquirer_conf_url                = "https://mil-d-apim.azure-api.net"
+mil_acquirer_conf_url                = "https://mil-u-apim.azure-api.net"
 mil_acquirer_conf_ver                = "1.0.0"
 mil_acquirer_conf_connect_timeout    = 2000
 mil_acquirer_conf_read_timeout       = 2000
@@ -137,7 +137,7 @@ mil_preset_ephemeral_storage              = "1.0Gi"
 mil_preset_memory                         = "1.0Gi"
 mil_preset_max_replicas                   = 5
 mil_preset_min_replicas                   = 0
-mil_preset_location_base_url              = "https://mil-d-apim.azure-api.net/mil-preset"
+mil_preset_location_base_url              = "https://mil-u-apim.azure-api.net/mil-preset"
 
 #
 # APIM

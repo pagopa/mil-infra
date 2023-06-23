@@ -1,5 +1,5 @@
 #
-# General variables definition.
+# General variables definition
 #
 variable "prefix" {
   type = string
@@ -49,7 +49,7 @@ variable "tags" {
 }
 
 #
-# Specific variables definition.
+# Specific variables definition
 #
 variable "dns_zone_mil_prefix" {
   type        = string
@@ -137,74 +137,74 @@ variable "app_gateway" {
 #
 # mil-functions specific.
 #
-variable "mil_functions_image" {
-  type        = string
-  description = "Image of mil-functions microservice."
-  default     = "ghcr.io/pagopa/mil-functions:latest"
-}
-
-variable "mil_functions_quarkus_log_level" {
-  type        = string
-  description = "Log level for Quarkus platform."
-  default     = "ERROR"
-}
-
-variable "mil_functions_app_log_level" {
-  type        = string
-  description = "Log level for application."
-  default     = "DEBUG"
-}
-
-variable "mil_functions_mongo_connect_timeout" {
-  type        = string
-  description = "Mongo connect timeout."
-  default     = "5s"
-}
-
-variable "mil_functions_mongo_read_timeout" {
-  type        = string
-  description = "Mongo read timeout."
-  default     = "10s"
-}
-
-variable "mil_functions_mongo_server_selection_timeout" {
-  type        = string
-  description = "Mongo server selection timeout."
-  default     = "5s"
-}
-
-variable "mil_functions_cpu" {
-  type        = number
-  description = "CPUs assigned to the container."
-  default     = 0.5
-}
-
-variable "mil_functions_ephemeral_storage" {
-  type        = string
-  description = "Ephemeral storage assigned to the container."
-  default     = "1.0Gi"
-}
-
-variable "mil_functions_memory" {
-  type        = string
-  description = "Memory assigned to the container."
-  default     = "1.0Gi"
-}
-
-variable "mil_functions_max_replicas" {
-  type        = number
-  description = "Max number of replicas."
-  default     = 5
-}
-
-variable "mil_functions_min_replicas" {
-  type        = number
-  description = "Min number of replicas."
-  default     = 0
-}
+#variable "mil_functions_image" {
+#  type        = string
+#  description = "Image of mil-functions microservice."
+#  default     = "ghcr.io/pagopa/mil-functions:latest"
+#}
+#
+#variable "mil_functions_quarkus_log_level" {
+#  type        = string
+#  description = "Log level for Quarkus platform."
+#  default     = "ERROR"
+#}
+#
+#variable "mil_functions_app_log_level" {
+#  type        = string
+#  description = "Log level for application."
+#  default     = "DEBUG"
+#}
+#
+#variable "mil_functions_mongo_connect_timeout" {
+#  type        = string
+#  description = "Mongo connect timeout."
+#  default     = "5s"
+#}
+#
+#variable "mil_functions_mongo_read_timeout" {
+#  type        = string
+#  description = "Mongo read timeout."
+#  default     = "10s"
+#}
+#
+#variable "mil_functions_mongo_server_selection_timeout" {
+#  type        = string
+#  description = "Mongo server selection timeout."
+#  default     = "5s"
+#}
+#
+#variable "mil_functions_cpu" {
+#  description = "CPUs assigned to the container."
+#  type        = number
+#  default     = 0.5
+#}
+#
+#variable "mil_functions_ephemeral_storage" {
+#  type        = string
+#  default     = "1.0Gi"
+#  description = "Ephemeral storage assigned to the container."
+#}
+#
+#variable "mil_functions_memory" {
+#  type        = string
+#  description = "Memory assigned to the container."
+#  default     = "1.0Gi"
+#}
+#
+#variable "mil_functions_max_replicas" {
+#  type        = number
+#  description = "Max number of replicas."
+#  default     = 5
+#}
+#
+#variable "mil_functions_min_replicas" {
+#  type        = number
+#  description = "Min number of replicas."
+#  default     = 0
+#}
 
 #
-# mil-payment-notice specific.
+# mil-payment-notice specific
 #
 variable "mil_payment_notice_quarkus_log_level" {
   type    = string
@@ -277,8 +277,7 @@ variable "mil_payment_notice_activatepayment_expiration_time" {
 }
 
 variable "mil_payment_notice_image" {
-  type    = string
-  default = "ghcr.io/pagopa/mil-payment-notice:latest"
+  type = string
 }
 
 variable "mil_payment_notice_cpu" {
@@ -312,16 +311,18 @@ variable "mil_payment_notice_closepayment_location_base_url" {
 }
 
 variable "mil_payment_notice_openapi_descriptor" {
-  type    = string
-  default = "https://raw.githubusercontent.com/pagopa/mil-payment-notice/main/src/main/resources/META-INF/openapi.yaml"
+  type = string
 }
 
 #
-# mil-fee-calculator specific.
+# mil-fee-calculator specific
 #
 variable "mil_fee_calculator_image" {
-  type    = string
-  default = "ghcr.io/pagopa/mil-fee-calculator:latest"
+  type = string
+}
+
+variable "mil_fee_calculator_openapi_descriptor" {
+  type = string
 }
 
 variable "mil_fee_calculator_quarkus_log_level" {
@@ -375,11 +376,10 @@ variable "mil_fee_calculator_min_replicas" {
 }
 
 #
-# mil-payment-notice and mil-fee-calculator specific.
+# mil-payment-notice and mil-fee-calculator specific
 #
 variable "mil_acquirer_conf_url" {
-  type    = string
-  default = null
+  type = string
 }
 
 variable "mil_acquirer_conf_ver" {
@@ -397,8 +397,12 @@ variable "mil_acquirer_conf_read_timeout" {
   default = 2000
 }
 
+variable "mil_acquirer_conf_openapi_descriptor" {
+  type = string
+}
+
 #
-# mil-auth
+# mil-auth specific
 #
 variable "mil_auth_quarkus_log_level" {
   type    = string
@@ -422,16 +426,12 @@ variable "mil_auth_keysize" {
 
 variable "mil_auth_access_duration" {
   type    = number
-  default = 300
+  default = 900
 }
 
 variable "mil_auth_refresh_duration" {
   type    = number
   default = 3600
-}
-
-variable "mil_auth_data_url" {
-  type    = string
 }
 
 variable "mil_auth_json_logging" {
@@ -440,13 +440,11 @@ variable "mil_auth_json_logging" {
 }
 
 variable "mil_auth_openapi_descriptor" {
-  type    = string
-  default = "https://raw.githubusercontent.com/pagopa/mil-auth/1.4.5/src/main/resources/META-INF/openapi.yaml"
+  type = string
 }
 
 variable "mil_auth_image" {
-  type    = string
-  default = "ghcr.io/pagopa/mil-auth:1.4.3"
+  type = string
 }
 
 variable "mil_auth_cpu" {
@@ -474,8 +472,13 @@ variable "mil_auth_min_replicas" {
   default = 0
 }
 
+variable "mil_auth_redis_db" {
+  type    = string
+  default = "9"
+}
+
 #
-# mil-presets
+# mil-preset specific
 #
 variable "mil_preset_quarkus_log_level" {
   type    = string
@@ -508,8 +511,7 @@ variable "mil_preset_location_base_url" {
 }
 
 variable "mil_preset_image" {
-  type    = string
-  default = "ghcr.io/pagopa/mil-preset:latest"
+  type = string
 }
 
 variable "mil_preset_cpu" {
@@ -535,6 +537,10 @@ variable "mil_preset_max_replicas" {
 variable "mil_preset_min_replicas" {
   type    = number
   default = 0
+}
+
+variable "mil_preset_openapi_descriptor" {
+  type = string
 }
 
 # API Manager specific.

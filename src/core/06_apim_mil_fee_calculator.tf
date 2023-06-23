@@ -1,6 +1,8 @@
-# API for mil-fee-calculator.
+#
+# API for mil-fee-calculator
+#
 module "fee_calculator_api" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v5.1.0"
+  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v6.20.0"
   name                = "${local.project}-fee-calculator"
   api_management_name = module.apim.name
   resource_group_name = module.apim.resource_group_name
@@ -15,7 +17,7 @@ module "fee_calculator_api" {
 
   display_name          = "fee calculator"
   content_format        = "openapi-link"
-  content_value         = "https://raw.githubusercontent.com/pagopa/mil-apis/main/openapi-mono/fee.yaml"
+  content_value         = var.mil_fee_calculator_openapi_descriptor
   product_ids           = [module.mil_product.product_id]
   subscription_required = false
 }

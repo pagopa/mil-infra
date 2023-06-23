@@ -1,6 +1,8 @@
-# API for mil-acquirer-conf.
+#
+# API for mil-acquirer-conf
+#
 module "acquirer_conf_api" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v5.1.0"
+  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v6.20.0"
   name                = "${local.project}-acquirer-conf"
   api_management_name = module.apim.name
   resource_group_name = module.apim.resource_group_name
@@ -15,7 +17,7 @@ module "acquirer_conf_api" {
 
   display_name          = "acquirer conf"
   content_format        = "openapi-link"
-  content_value         = "https://raw.githubusercontent.com/pagopa/mil-apis/main/openapi-mono/acquirer-conf.yaml"
+  content_value         = var.mil_acquirer_conf_openapi_descriptor
   product_ids           = [module.mil_product.product_id]
   subscription_required = false
 

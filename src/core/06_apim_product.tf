@@ -1,6 +1,8 @@
-# Product.
+#
+# Product
+#
 module "mil_product" {
-  source                = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product?ref=v5.1.0"
+  source                = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product?ref=v6.20.0"
   product_id            = "mil"
   display_name          = "Multi-channel Integration Layer"
   description           = "Multi-channel Integration Layer for SW Client Project"
