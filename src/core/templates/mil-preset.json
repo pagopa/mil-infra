@@ -87,6 +87,14 @@
                                 {
                                     "name": "kafka-bootstrap-server",
                                     "value": "${eventhub_namespace}.servicebus.windows.net:9093"
+                                },
+                                {
+                                    "name": "kafka-topic",
+                                    "value": "${kafka_topic}"
+                                },
+                                {
+                                    "name": "jwt-publickey-location",
+                                    "value": "${jwt_publickey_location}"
                                 }
                             ],
                             "image": "${image}",

@@ -17,8 +17,8 @@
         <set-variable name="paymentTokens" value="@( 
 													JArray.Parse(context.Request.Body.As<JObject>(preserveContent: true).GetValue("paymentTokens").ToString())[0]
 													)" />
-		<!-- outcome input value -->
-		<set-variable name="outcomeInputValue" value="@( 
+        <!-- outcome input value -->
+        <set-variable name="outcomeInputValue" value="@( 
 													context.Request.Body.As<JObject>(preserveContent: true).GetValue("outcome").ToString()
 													)" />
         <set-variable name="paymentToken" value="@((string)((JValue)context.Variables["paymentTokens"]).Value)" />
@@ -47,7 +47,7 @@
                     <when condition="@( context.Variables.ContainsKey("filePrefix") && !context.Variables.ContainsKey("responseBody") )">
                         <!-- The responseBody isn't in the cache, Look for the configuration in the storage account -->
                         <send-request mode="new" response-variable-name="storageAccountResponse" timeout="5" ignore-error="true">
-                            <set-url>@( new Uri(new Uri("https://${storage_account_name}.blob.core.windows.net/mocknodo/0000000020x/"), (string)context.Variables["filePrefix"] + (string)context.Variables["paymentToken"] + ".json").AbsoluteUri )</set-url>
+                            <set-url>@( new Uri(new Uri("https://mocknodo.blob.core.windows.net/mocknodo/0000000020x/"), (string)context.Variables["filePrefix"] + (string)context.Variables["paymentToken"] + ".json").AbsoluteUri )</set-url>
                             <set-method>GET</set-method>
                         </send-request>
                         <choose>
@@ -90,7 +90,7 @@
                     <when condition="@(!context.Variables.ContainsKey("jsonBodyRequest") )">
                         <!--  if not retrieve it from storage  -->
                         <send-request mode="new" response-variable-name="storageAccountResponse" timeout="5" ignore-error="true">
-                            <set-url>@( new Uri("https://${storage_account_name}.blob.core.windows.net/mocknodo/0000000020x/payments.json").AbsoluteUri )</set-url>
+                            <set-url>@( new Uri("https://mocknodo.blob.core.windows.net/mocknodo/0000000020x/payments.json").AbsoluteUri )</set-url>
                             <set-method>GET</set-method>
                         </send-request>
                         <choose>
@@ -104,17 +104,42 @@
                     </when>
                 </choose>
                 <!--  send request to /payment/{transactionId} API -->
-				<choose>
-					<when condition="@((string) context.Variables["outcomeInputValue"] == "OK")">
-					
-						<send-one-way-request mode="new">
-							<set-url>@( new Uri(new Uri("https://mil-d-apim.azure-api.net/mil-payment-notice/payments/"), (string)context.Variables["transactionaId"]).AbsoluteUri )</set-url>
-							<set-method>POST</set-method>
-							<set-body>@( (((string)context.Variables["jsonBodyRequest"]).Replace("<pt>",(string)context.Variables["paymentToken"])) )</set-body>
-						</send-one-way-request>
-					
-					</when>
-				 </choose>
+                <choose>
+                    <when condition="@((string) context.Variables["outcomeInputValue"] == "OK")">
+                        <cache-lookup-value key="cachedAccessToken" variable-name="nodeAccessToken" caching-type="internal" />
+                        <choose>
+                            <when condition="@(!context.Variables.ContainsKey("nodeAccessToken") )">
+                                <!--  if not retrieve it from storage  -->
+                                <send-request mode="new" response-variable-name="idpResponse" timeout="5" ignore-error="true">
+                                    <set-url>@( new Uri("https://mil-d-apim.azure-api.net/mil-auth/token").AbsoluteUri )</set-url>
+                                    <set-method>POST</set-method>
+                                    <set-header name="Content-Type" exists-action="override">
+                                        <value>application/x-www-form-urlencoded</value>
+                                    </set-header>
+                                    <set-header name="RequestId" exists-action="override">
+                                        <value>00000000-0000-0000-0000-000000000000</value>
+                                    </set-header>
+                                    <set-body>@($"client_secret=be81144b-e8ec-487d-a440-ea8d144343f7&client_id=92faf319-4219-455f-841b-bb692684672a&grant_type=client_credentials")</set-body>
+                                </send-request>
+                                <choose>
+                                    <when condition="@( ((IResponse)context.Variables["idpResponse"]).StatusCode == 200 )">
+                                        <set-variable name="nodeAccessToken" value="@((string)((IResponse)context.Variables["idpResponse"]).Body.As<JObject>()["access_token"])" />
+                                        <!-- Store it in the cache -->
+                                        <cache-store-value key="cachedAccessToken" value="@( (string)context.Variables["nodeAccessToken"] )" duration="840" caching-type="internal" />
+                                    </when>
+                                </choose>
+                            </when>
+                        </choose>
+                        <send-one-way-request mode="new">
+                            <set-url>@( new Uri(new Uri("https://mil-d-apim.azure-api.net/mil-payment-notice/payments/"), (string)context.Variables["transactionaId"]).AbsoluteUri )</set-url>
+                            <set-method>POST</set-method>
+                            <set-header name="Authorization" exists-action="override">
+                                <value>@($"Bearer {(string)context.Variables["nodeAccessToken"]}")</value>
+                            </set-header>
+                            <set-body>@( (((string)context.Variables["jsonBodyRequest"]).Replace("<pt>",(string)context.Variables["paymentToken"])) )</set-body>
+                        </send-one-way-request>
+                    </when>
+                </choose>
                 <!-- set response status associated to the paymentToken -->
                 <choose>
                     <!-- Unparsable response -->

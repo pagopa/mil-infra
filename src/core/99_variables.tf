@@ -314,6 +314,11 @@ variable "mil_payment_notice_openapi_descriptor" {
   type = string
 }
 
+variable "mil_payment_notice_jwt_publickey_location" {
+  type    = string
+  default = null
+}
+
 #
 # mil-fee-calculator specific
 #
@@ -373,6 +378,11 @@ variable "mil_fee_calculator_max_replicas" {
 variable "mil_fee_calculator_min_replicas" {
   type    = number
   default = 0
+}
+
+variable "mil_fee_calculator_jwt_publickey_location" {
+  type    = string
+  default = null
 }
 
 #
@@ -543,7 +553,100 @@ variable "mil_preset_openapi_descriptor" {
   type = string
 }
 
+variable "mil_preset_jwt_publickey_location" {
+  type    = string
+  default = null
+}
+
+#
+# mil-idpay specific
+#
+variable "mil_idpay_image" {
+  type = string
+}
+
+variable "mil_idpay_cpu" {
+  type    = number
+  default = 0.5
+}
+
+variable "mil_idpay_ephemeral_storage" {
+  type    = string
+  default = "1.0Gi"
+}
+
+variable "mil_idpay_memory" {
+  type    = string
+  default = "1.0Gi"
+}
+
+variable "mil_idpay_max_replicas" {
+  type    = number
+  default = 5
+}
+
+variable "mil_idpay_min_replicas" {
+  type    = number
+  default = 0
+}
+
+variable "mil_idpay_openapi_descriptor" {
+  type = string
+}
+
+variable "mil_idpay_quarkus_log_level" {
+  type    = string
+  default = "ERROR"
+}
+
+variable "mil_idpay_app_log_level" {
+  type    = string
+  default = "DEBUG"
+}
+
+variable "mil_idpay_mongo_connect_timeout" {
+  type    = string
+  default = "5s"
+}
+
+variable "mil_idpay_mongo_read_timeout" {
+  type    = string
+  default = "10s"
+}
+
+variable "mil_idpay_mongo_server_selection_timeout" {
+  type    = string
+  default = "5s"
+}
+
+variable "mil_idpay_transaction_max_retry" {
+  type    = number
+  default = 3
+}
+
+variable "mil_idpay_transaction_retry_after" {
+  type    = number
+  default = 30
+}
+
+variable "mil_idpay_location_base_url" {
+  type    = string
+  default = null
+}
+
+variable "mil_idpay_idpay_rest_api_url" {
+  type    = string
+  default = null
+}
+
+variable "mil_idpay_jwt_publickey_location" {
+  type    = string
+  default = null
+}
+
+#
 # API Manager specific.
+#
 variable "apim_sku" {
   type        = string
   description = "String made up of two components separated by an underscore: the 1st component is the name (Consumption, Developer, Basic, Standard, Premium); the 2nd component is the capacity (it must be an integer greater than 0)."

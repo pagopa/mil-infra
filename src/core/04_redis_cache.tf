@@ -6,14 +6,16 @@
 # PRIVATE ENDPOINT APP SUBNET -> REDIS
 #
 resource "azurerm_private_dns_zone" "redis" {
+  count               = var.env_short == "p" ? 1 : 0
   name                = "privatelink.redis.cache.windows.net"
   resource_group_name = azurerm_resource_group.network.name
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "redis" {
+  count                 = var.env_short == "p" ? 1 : 0
   name                  = azurerm_virtual_network.intern.name
   resource_group_name   = azurerm_resource_group.network.name
-  private_dns_zone_name = azurerm_private_dns_zone.redis.name
+  private_dns_zone_name = azurerm_private_dns_zone.redis[0].name
   virtual_network_id    = azurerm_virtual_network.intern.id
 }
 
@@ -30,15 +32,15 @@ module "redis_cache" {
   family                        = "C"
   sku_name                      = "Basic"
   enable_authentication         = true
-  public_network_access_enabled = false
+  public_network_access_enabled = var.env_short == "p" ? false : true
   redis_version                 = 6
   zones                         = null
 
   private_endpoint = {
-    enabled              = true
-    virtual_network_id   = azurerm_private_dns_zone_virtual_network_link.redis.virtual_network_id
+    enabled              = var.env_short == "p" ? true : false
+    virtual_network_id   = var.env_short == "p" ? azurerm_private_dns_zone_virtual_network_link.redis[0].virtual_network_id : "dontcare"
     subnet_id            = azurerm_subnet.app.id
-    private_dns_zone_ids = [azurerm_private_dns_zone.redis.id]
+    private_dns_zone_ids = [var.env_short == "p" ? azurerm_private_dns_zone.redis[0].id : "dontcare"]
   }
 
   tags = var.tags

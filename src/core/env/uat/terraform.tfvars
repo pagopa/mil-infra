@@ -71,6 +71,7 @@ mil_payment_notice_memory                           = "1.0Gi"
 mil_payment_notice_max_replicas                     = 5
 mil_payment_notice_min_replicas                     = 0
 mil_payment_notice_closepayment_location_base_url   = "https://mil-u-apim.azure-api.net/mil-payment-notice"
+mil_payment_notice_jwt_publickey_location           = "https://mil-u-apim-2.azure-api.net/mil-auth/.well-known/jwks.json"
 #mil_payment_notice_node_soap_service_url = "https://api.uat.platform.pagopa.it/nodo-auth/node-for-psp/v1"
 #mil_payment_notice_node_soap_service_url = "https://api.uat.platform.pagopa.it/nodo/node-for-psp/v1"
 #mil_payment_notice_node_rest_service_url = "https://api.uat.platform.pagopa.it/nodo-auth/nodo-per-pm/v2"
@@ -92,6 +93,7 @@ mil_fee_calculator_ephemeral_storage   = "1.0Gi"
 mil_fee_calculator_memory              = "1.0Gi"
 mil_fee_calculator_max_replicas        = 5
 mil_fee_calculator_min_replicas        = 0
+mil_fee_calculator_jwt_publickey_location       = "https://mil-u-apim-2.azure-api.net/mil-auth/.well-known/jwks.json"
 #mil_fee_calculator_gec_url = "https://api.uat.platform.pagopa.it/afm/node/calculator-service/v1"
 
 #
@@ -138,6 +140,26 @@ mil_preset_memory                         = "1.0Gi"
 mil_preset_max_replicas                   = 5
 mil_preset_min_replicas                   = 0
 mil_preset_location_base_url              = "https://mil-u-apim.azure-api.net/mil-preset"
+mil_preset_jwt_publickey_location         = "https://mil-u-apim-2.azure-api.net/mil-auth/.well-known/jwks.json"
+
+#
+# mil-idpay
+#
+mil_idpay_quarkus_log_level              = "ERROR"
+mil_idpay_app_log_level                  = "DEBUG"
+mil_idpay_mongo_connect_timeout          = "5s"
+mil_idpay_mongo_read_timeout             = "10s"
+mil_idpay_mongo_server_selection_timeout = "5s"
+mil_idpay_image                          = "ghcr.io/pagopa/mil-idpay@sha256:f66ae55a4d3e5b2697955b572017c30201be0a9ea5577a2bef51a65b379657d7"
+mil_idpay_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/mil-idpay/5cf9769a89d23b17d7ae44280b8503469b694306/src/main/resources/META-INF/openapi.yaml"
+mil_idpay_cpu                            = 0.5
+mil_idpay_ephemeral_storage              = "1.0Gi"
+mil_idpay_memory                         = "1.0Gi"
+mil_idpay_max_replicas                   = 5
+mil_idpay_min_replicas                   = 0
+mil_idpay_location_base_url              = "https://mil-u-apim-2.azure-api.net/mil-idpay"
+mil_idpay_jwt_publickey_location         = "https://mil-u-apim-2.azure-api.net/mil-auth/.well-known/jwks.json"
+mil_idpay_idpay_rest_api_url             = "https://1cb54e4c-ea9a-4465-becc-b5d15fcd63bf.mock.pstmn.io"
 
 #
 # APIM

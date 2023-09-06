@@ -13,15 +13,12 @@
 <policies>
     <inbound>
         <base />
-         <!-- Retrieve the primaryCreditorInstitution form the body request -->
-         <set-variable name="primaryCreditorInstitution" value="@( 
+        <!-- Retrieve the primaryCreditorInstitution form the body request -->
+        <set-variable name="primaryCreditorInstitution" value="@( 
 													context.Request.Body.As<JObject>(preserveContent: true).GetValue("primaryCreditorInstitution").ToString()
 													)" />
-       
         <!--  set the fiscal codes as static string containing all fiscal code as stubs -->
         <set-variable name="fiscalCodes" value="@("00000000201,00000000202,00000000203,00000000204,00000000205,00000000206,00000000207,00000000208,00000000209")" />
-
-
         <choose>
             <!-- checks if the fiscal code in the body is a stub or not -->
             <when condition="@( context.Variables.ContainsKey("primaryCreditorInstitution") &&  ((string)context.Variables["fiscalCodes"]).Contains((String)context.Variables["primaryCreditorInstitution"]))">
@@ -32,8 +29,7 @@
                     <when condition="@( !context.Variables.ContainsKey("responseBody") )">
                         <!-- The responseBody isn't in the cache, Look for the configuration in the storage account -->
                         <send-request mode="new" response-variable-name="storageAccountResponse" timeout="5" ignore-error="true">
-                            <set-url>https://${storage_account_name}.blob.core.windows.net/mocknodo/GEC/gec.json</set-url>
-							
+                            <set-url>https://mocknodo.blob.core.windows.net/mocknodo/GEC/gec.json</set-url>
                             <set-method>GET</set-method>
                         </send-request>
                         <choose>
@@ -57,7 +53,7 @@
             <otherwise>
                 <!-- if the -->
                 <!--  remove Ocp-Apim-Subscription-Key header  -->
-               <!-- <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />-->
+                <!-- <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />-->
                 <forward-request />
             </otherwise>
         </choose>

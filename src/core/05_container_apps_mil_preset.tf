@@ -34,12 +34,14 @@ resource "azurerm_resource_group_template_deployment" "mil_preset" {
       kafka_connection_string_1      = azurerm_eventhub_namespace.mil_evhns.default_primary_connection_string,
       kafka_connection_string_2      = azurerm_eventhub_namespace.mil_evhns.default_secondary_connection_string,
       eventhub_namespace             = azurerm_eventhub_namespace.mil_evhns.name,
+      kafka_topic                    = azurerm_eventhub.presets.name,
       image                          = var.mil_preset_image,
       cpu                            = var.mil_preset_cpu,
       ephemeral_storage              = var.mil_preset_ephemeral_storage,
       memory                         = var.mil_preset_memory,
       max_replicas                   = var.mil_preset_max_replicas,
-      min_replicas                   = var.mil_preset_min_replicas
+      min_replicas                   = var.mil_preset_min_replicas,
+      jwt_publickey_location         = var.mil_preset_jwt_publickey_location
     }
   )
 }

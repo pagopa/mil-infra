@@ -167,6 +167,10 @@
                                 {
                                     "name": "kafka-topic",
                                     "value": "${kafka_topic}"
+                                },
+                                {
+                                    "name": "jwt-publickey-location",
+                                    "value": "${jwt_publickey_location}"
                                 }
                             ],
                             "image": "${image}",

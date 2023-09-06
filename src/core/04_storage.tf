@@ -2,18 +2,17 @@
 # Storage account
 #
 resource "azurerm_storage_account" "conf" {
-  name                     = "${var.prefix}${var.env_short}confst"
-  resource_group_name      = azurerm_resource_group.data.name
-  location                 = azurerm_resource_group.data.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  account_kind             = "StorageV2"
-  #public_network_access_enabled = false
-  tags                     = var.tags
+  name                          = "${var.prefix}${var.env_short}confst"
+  resource_group_name           = azurerm_resource_group.data.name
+  location                      = azurerm_resource_group.data.location
+  account_tier                  = "Standard"
+  account_replication_type      = "LRS"
+  account_kind                  = "StorageV2"
+  public_network_access_enabled = var.env_short == "p" ? false : true
+  tags                          = var.tags
 
   network_rules {
-    default_action = "Deny"
-    bypass         = ["Metrics", "Logging", "AzureServices"]
+    default_action = var.env_short == "p" ? "Deny" : "Allow"
   }
 }
 
@@ -57,18 +56,21 @@ resource "azurerm_storage_container" "users" {
 # PRIVATE ENDPOINT APP SUBNET -> STORAGE ACCOUNT
 #
 resource "azurerm_private_dns_zone" "storage" {
+  count               = var.env_short == "p" ? 1 : 0
   name                = "privatelink.blob.core.windows.net"
   resource_group_name = azurerm_resource_group.network.name
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "storage" {
+  count                 = var.env_short == "p" ? 1 : 0
   name                  = azurerm_virtual_network.intern.name
   resource_group_name   = azurerm_resource_group.network.name
-  private_dns_zone_name = azurerm_private_dns_zone.storage.name
+  private_dns_zone_name = azurerm_private_dns_zone.storage[0].name
   virtual_network_id    = azurerm_virtual_network.intern.id
 }
 
 resource "azurerm_private_endpoint" "storage_pep" {
+  count               = var.env_short == "p" ? 1 : 0
   name                = "${local.project}-storage-pep"
   location            = azurerm_resource_group.network.location
   resource_group_name = azurerm_resource_group.network.name
@@ -78,7 +80,7 @@ resource "azurerm_private_endpoint" "storage_pep" {
 
   private_dns_zone_group {
     name                 = "${local.project}-storage-pdzg"
-    private_dns_zone_ids = [azurerm_private_dns_zone.storage.id]
+    private_dns_zone_ids = [azurerm_private_dns_zone.storage[0].id]
   }
 
   private_service_connection {

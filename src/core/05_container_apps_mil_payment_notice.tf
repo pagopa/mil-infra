@@ -29,13 +29,13 @@ resource "azurerm_resource_group_template_deployment" "mil_payment_notice" {
 
   template_content = templatefile("templates/mil-payment-notice.json",
     {
-      content_version                              = "1.0.1.0",
-      name                                         = local.payment_notice_ca_name,
-      location                                     = azurerm_resource_group.app.location,
-      mongo_connection_string_1                    = azurerm_cosmosdb_account.mil.connection_strings[0],
-      mongo_connection_string_2                    = azurerm_cosmosdb_account.mil.connection_strings[1],
+      content_version           = "1.0.1.0",
+      name                      = local.payment_notice_ca_name,
+      location                  = azurerm_resource_group.app.location,
+      mongo_connection_string_1 = azurerm_cosmosdb_account.mil.connection_strings[0],
+      mongo_connection_string_2 = azurerm_cosmosdb_account.mil.connection_strings[1],
       #redis_connection_string                      = "rediss://:${module.redis_cache.primary_access_key}@${module.redis_cache.hostname}:${module.redis_cache.ssl_port}"
-      redis_connection_string                      = module.redis_cache.primary_connection_string,
+      redis_connection_string = module.redis_cache.primary_connection_string,
       #redis_primary_access_key                     = module.redis_cache.primary_access_key,
       #redis_hostname                               = module.redis_cache.hostname,
       #redis_ssl_port                               = module.redis_cache.ssl_port,
@@ -70,7 +70,8 @@ resource "azurerm_resource_group_template_deployment" "mil_payment_notice" {
       kafka_connection_string_1                    = azurerm_eventhub_namespace.mil_evhns.default_primary_connection_string,
       kafka_connection_string_2                    = azurerm_eventhub_namespace.mil_evhns.default_secondary_connection_string,
       eventhub_namespace                           = azurerm_eventhub_namespace.mil_evhns.name,
-      kafka_topic                                  = azurerm_eventhub.presets.name
+      kafka_topic                                  = azurerm_eventhub.presets.name,
+      jwt_publickey_location                       = var.mil_payment_notice_jwt_publickey_location
     }
   )
 }

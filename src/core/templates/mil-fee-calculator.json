@@ -79,6 +79,10 @@
                                 {
                                 	"name": "mil.acquirer-conf.version",
                                 	"value": "${mil_acquirer_conf_ver}"
+                                },
+                                {
+                                    "name": "jwt-publickey-location",
+                                    "value": "${jwt_publickey_location}"
                                 }
                             ],
                             "image": "${image}",

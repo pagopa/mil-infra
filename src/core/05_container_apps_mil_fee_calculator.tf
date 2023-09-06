@@ -51,7 +51,8 @@ resource "azurerm_resource_group_template_deployment" "mil_fee_calculator" {
       ephemeral_storage                  = var.mil_fee_calculator_ephemeral_storage,
       memory                             = var.mil_fee_calculator_memory,
       max_replicas                       = var.mil_fee_calculator_max_replicas,
-      min_replicas                       = var.mil_fee_calculator_min_replicas
+      min_replicas                       = var.mil_fee_calculator_min_replicas,
+      jwt_publickey_location             = var.mil_fee_calculator_jwt_publickey_location
     }
   )
 }

@@ -9,7 +9,7 @@ resource "azurerm_eventhub_namespace" "mil_evhns" {
   capacity                      = 1
   local_authentication_enabled  = true
   zone_redundant                = true
-  public_network_access_enabled = true
+  public_network_access_enabled = var.env_short == "p" ? false : true
   auto_inflate_enabled          = false
   tags                          = var.tags
 }

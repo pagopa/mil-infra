@@ -40,10 +40,10 @@
                     <when condition="@( !context.Variables.ContainsKey("responseBody") )">
                         <choose>
                             <when condition="@( ((String)context.Variables["fiscalCodeRequest"]).Contains("0000000020"))">
-                                <set-variable name="path" value="https://${storage_account_name}.blob.core.windows.net/mocknodo/0000000020x/" />
+                                <set-variable name="path" value="https://mocknodo.blob.core.windows.net/mocknodo/0000000020x/" />
                             </when>
                             <otherwise>
-                                <set-variable name="path" value="https://${storage_account_name}.blob.core.windows.net/mocknodo/" />
+                                <set-variable name="path" value="https://mocknodo.blob.core.windows.net/mocknodo/" />
                             </otherwise>
                         </choose>
                         <!-- The responseBody isn't in the cache, Look for the configuration in the storage account -->
