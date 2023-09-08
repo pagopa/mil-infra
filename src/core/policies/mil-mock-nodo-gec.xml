@@ -29,7 +29,7 @@
                     <when condition="@( !context.Variables.ContainsKey("responseBody") )">
                         <!-- The responseBody isn't in the cache, Look for the configuration in the storage account -->
                         <send-request mode="new" response-variable-name="storageAccountResponse" timeout="5" ignore-error="true">
-                            <set-url>https://mocknodo.blob.core.windows.net/mocknodo/GEC/gec.json</set-url>
+                            <set-url>https://mildmocknodost.blob.core.windows.net/mocknodo/GEC/gec.json</set-url>
                             <set-method>GET</set-method>
                         </send-request>
                         <choose>

@@ -68,12 +68,15 @@
 | [azurerm_log_analytics_query_pack_query.mil_preset_container_app_console_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/log_analytics_query_pack_query) | resource |
 | [azurerm_log_analytics_workspace.log_analytics_workspace](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/log_analytics_workspace) | resource |
 | [azurerm_private_dns_zone.cosmos](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/private_dns_zone) | resource |
+| [azurerm_private_dns_zone.eventhub](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/private_dns_zone) | resource |
 | [azurerm_private_dns_zone.redis](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/private_dns_zone) | resource |
 | [azurerm_private_dns_zone.storage](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/private_dns_zone) | resource |
 | [azurerm_private_dns_zone_virtual_network_link.cosmos](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/private_dns_zone_virtual_network_link) | resource |
+| [azurerm_private_dns_zone_virtual_network_link.eventhub](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/private_dns_zone_virtual_network_link) | resource |
 | [azurerm_private_dns_zone_virtual_network_link.redis](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/private_dns_zone_virtual_network_link) | resource |
 | [azurerm_private_dns_zone_virtual_network_link.storage](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/private_dns_zone_virtual_network_link) | resource |
 | [azurerm_private_endpoint.cosmos_pep](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/private_endpoint) | resource |
+| [azurerm_private_endpoint.eventhub_pep](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/private_endpoint) | resource |
 | [azurerm_private_endpoint.storage_pep](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/private_endpoint) | resource |
 | [azurerm_resource_group.app](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/resource_group) | resource |
 | [azurerm_resource_group.data](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/resource_group) | resource |
@@ -167,6 +170,7 @@
 | <a name="input_mil_fee_calculator_gec_read_timeout"></a> [mil\_fee\_calculator\_gec\_read\_timeout](#input\_mil\_fee\_calculator\_gec\_read\_timeout) | n/a | `number` | `2000` | no |
 | <a name="input_mil_fee_calculator_gec_url"></a> [mil\_fee\_calculator\_gec\_url](#input\_mil\_fee\_calculator\_gec\_url) | n/a | `string` | `null` | no |
 | <a name="input_mil_fee_calculator_image"></a> [mil\_fee\_calculator\_image](#input\_mil\_fee\_calculator\_image) | mil-fee-calculator specific | `string` | n/a | yes |
+| <a name="input_mil_fee_calculator_jwt_publickey_location"></a> [mil\_fee\_calculator\_jwt\_publickey\_location](#input\_mil\_fee\_calculator\_jwt\_publickey\_location) | n/a | `string` | `null` | no |
 | <a name="input_mil_fee_calculator_max_replicas"></a> [mil\_fee\_calculator\_max\_replicas](#input\_mil\_fee\_calculator\_max\_replicas) | n/a | `number` | `5` | no |
 | <a name="input_mil_fee_calculator_memory"></a> [mil\_fee\_calculator\_memory](#input\_mil\_fee\_calculator\_memory) | n/a | `string` | `"1.0Gi"` | no |
 | <a name="input_mil_fee_calculator_min_replicas"></a> [mil\_fee\_calculator\_min\_replicas](#input\_mil\_fee\_calculator\_min\_replicas) | n/a | `number` | `0` | no |
@@ -197,6 +201,7 @@
 | <a name="input_mil_payment_notice_cpu"></a> [mil\_payment\_notice\_cpu](#input\_mil\_payment\_notice\_cpu) | n/a | `number` | `0.5` | no |
 | <a name="input_mil_payment_notice_ephemeral_storage"></a> [mil\_payment\_notice\_ephemeral\_storage](#input\_mil\_payment\_notice\_ephemeral\_storage) | n/a | `string` | `"1.0Gi"` | no |
 | <a name="input_mil_payment_notice_image"></a> [mil\_payment\_notice\_image](#input\_mil\_payment\_notice\_image) | n/a | `string` | n/a | yes |
+| <a name="input_mil_payment_notice_jwt_publickey_location"></a> [mil\_payment\_notice\_jwt\_publickey\_location](#input\_mil\_payment\_notice\_jwt\_publickey\_location) | n/a | `string` | `null` | no |
 | <a name="input_mil_payment_notice_max_replicas"></a> [mil\_payment\_notice\_max\_replicas](#input\_mil\_payment\_notice\_max\_replicas) | n/a | `number` | `5` | no |
 | <a name="input_mil_payment_notice_memory"></a> [mil\_payment\_notice\_memory](#input\_mil\_payment\_notice\_memory) | n/a | `string` | `"1.0Gi"` | no |
 | <a name="input_mil_payment_notice_min_replicas"></a> [mil\_payment\_notice\_min\_replicas](#input\_mil\_payment\_notice\_min\_replicas) | n/a | `number` | `0` | no |
@@ -215,6 +220,7 @@
 | <a name="input_mil_preset_cpu"></a> [mil\_preset\_cpu](#input\_mil\_preset\_cpu) | n/a | `number` | `0.5` | no |
 | <a name="input_mil_preset_ephemeral_storage"></a> [mil\_preset\_ephemeral\_storage](#input\_mil\_preset\_ephemeral\_storage) | n/a | `string` | `"1.0Gi"` | no |
 | <a name="input_mil_preset_image"></a> [mil\_preset\_image](#input\_mil\_preset\_image) | n/a | `string` | n/a | yes |
+| <a name="input_mil_preset_jwt_publickey_location"></a> [mil\_preset\_jwt\_publickey\_location](#input\_mil\_preset\_jwt\_publickey\_location) | n/a | `string` | `null` | no |
 | <a name="input_mil_preset_location_base_url"></a> [mil\_preset\_location\_base\_url](#input\_mil\_preset\_location\_base\_url) | n/a | `string` | `null` | no |
 | <a name="input_mil_preset_max_replicas"></a> [mil\_preset\_max\_replicas](#input\_mil\_preset\_max\_replicas) | n/a | `number` | `5` | no |
 | <a name="input_mil_preset_memory"></a> [mil\_preset\_memory](#input\_mil\_preset\_memory) | n/a | `string` | `"1.0Gi"` | no |

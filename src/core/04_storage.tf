@@ -8,11 +8,11 @@ resource "azurerm_storage_account" "conf" {
   account_tier                  = "Standard"
   account_replication_type      = "LRS"
   account_kind                  = "StorageV2"
-  public_network_access_enabled = var.env_short == "p" ? false : true
+  public_network_access_enabled = var.env_short == "d" ? true : false
   tags                          = var.tags
 
   network_rules {
-    default_action = var.env_short == "p" ? "Deny" : "Allow"
+    default_action = var.env_short == "d" ? "Allow" : "Deny"
   }
 }
 
@@ -56,13 +56,13 @@ resource "azurerm_storage_container" "users" {
 # PRIVATE ENDPOINT APP SUBNET -> STORAGE ACCOUNT
 #
 resource "azurerm_private_dns_zone" "storage" {
-  count               = var.env_short == "p" ? 1 : 0
+  count               = var.env_short == "d" ? 0 : 1
   name                = "privatelink.blob.core.windows.net"
   resource_group_name = azurerm_resource_group.network.name
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "storage" {
-  count                 = var.env_short == "p" ? 1 : 0
+  count                 = var.env_short == "d" ? 0 : 1
   name                  = azurerm_virtual_network.intern.name
   resource_group_name   = azurerm_resource_group.network.name
   private_dns_zone_name = azurerm_private_dns_zone.storage[0].name
@@ -70,7 +70,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "storage" {
 }
 
 resource "azurerm_private_endpoint" "storage_pep" {
-  count               = var.env_short == "p" ? 1 : 0
+  count               = var.env_short == "d" ? 0 : 1
   name                = "${local.project}-storage-pep"
   location            = azurerm_resource_group.network.location
   resource_group_name = azurerm_resource_group.network.name
