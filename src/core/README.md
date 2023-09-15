@@ -4,7 +4,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | = 1.3.9 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.9 |
 | <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) | = 2.39.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | = 3.53.0 |
 
@@ -22,6 +22,7 @@
 | <a name="module_acquirer_conf_api"></a> [acquirer\_conf\_api](#module\_acquirer\_conf\_api) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v6.20.0 |
 | <a name="module_apim"></a> [apim](#module\_apim) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management | v6.20.0 |
 | <a name="module_auth_api"></a> [auth\_api](#module\_auth\_api) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v6.20.0 |
+| <a name="module_auth_kv_api"></a> [auth\_kv\_api](#module\_auth\_kv\_api) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v6.20.0 |
 | <a name="module_cae"></a> [cae](#module\_cae) | git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment | v6.20.0 |
 | <a name="module_fee_calculator_api"></a> [fee\_calculator\_api](#module\_fee\_calculator\_api) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v6.20.0 |
 | <a name="module_github_runner"></a> [github\_runner](#module\_github\_runner) | git::https://github.com/pagopa/terraform-azurerm-v3.git//container_app_environment | v6.20.0 |
@@ -38,8 +39,12 @@
 
 | Name | Type |
 |------|------|
+| [azuread_application.mil_services](https://registry.terraform.io/providers/hashicorp/azuread/2.39.0/docs/resources/application) | resource |
+| [azuread_application_password.mil_services](https://registry.terraform.io/providers/hashicorp/azuread/2.39.0/docs/resources/application_password) | resource |
+| [azuread_service_principal.mil_services](https://registry.terraform.io/providers/hashicorp/azuread/2.39.0/docs/resources/service_principal) | resource |
 | [azurerm_api_management_api_diagnostic.acquirer_conf_api](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.auth_api](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/api_management_api_diagnostic) | resource |
+| [azurerm_api_management_api_diagnostic.auth_kv_api](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.fee_calculator_api](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.idpay_api](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.payment_notice_api](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/api_management_api_diagnostic) | resource |
@@ -58,6 +63,7 @@
 | [azurerm_dns_zone.mil](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/dns_zone) | resource |
 | [azurerm_eventhub.presets](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/eventhub) | resource |
 | [azurerm_eventhub_namespace.mil_evhns](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/eventhub_namespace) | resource |
+| [azurerm_key_vault.appl_key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/key_vault) | resource |
 | [azurerm_log_analytics_query_pack.query_pack](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/log_analytics_query_pack) | resource |
 | [azurerm_log_analytics_query_pack_query.failed_requestes](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/log_analytics_query_pack_query) | resource |
 | [azurerm_log_analytics_query_pack_query.mil_auth_container_app_console_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/log_analytics_query_pack_query) | resource |
@@ -86,6 +92,7 @@
 | [azurerm_resource_group.network](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/resource_group) | resource |
 | [azurerm_resource_group.sec](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/resource_group) | resource |
 | [azurerm_resource_group_template_deployment.mil_auth](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/resource_group_template_deployment) | resource |
+| [azurerm_resource_group_template_deployment.mil_auth_kv](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/resource_group_template_deployment) | resource |
 | [azurerm_resource_group_template_deployment.mil_fee_calculator](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/resource_group_template_deployment) | resource |
 | [azurerm_resource_group_template_deployment.mil_idpay](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/resource_group_template_deployment) | resource |
 | [azurerm_resource_group_template_deployment.mil_payment_notice](https://registry.terraform.io/providers/hashicorp/azurerm/3.53.0/docs/resources/resource_group_template_deployment) | resource |
