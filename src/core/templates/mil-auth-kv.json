@@ -69,6 +69,10 @@
                                     "value": "${data_url}"
                                 },
                                 {
+                                    "name": "auth.keyvault.url",
+                                    "value": "${keyvault_url}"
+                                },
+                                {
                                     "name": "azure.tenant.id",
                                     "secretRef": "azure-tenant-id"
                                 },

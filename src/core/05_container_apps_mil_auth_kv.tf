@@ -27,6 +27,7 @@ resource "azurerm_resource_group_template_deployment" "mil_auth_kv" {
       access_duration        = var.mil_auth_access_duration,
       refresh_duration       = var.mil_auth_refresh_duration,
       data_url               = azurerm_storage_account.conf.primary_blob_endpoint,
+      keyvault_url           = azurerm_key_vault.appl_key_vault.vault_uri,
       image                  = var.mil_auth_image,
       cpu                    = var.mil_auth_cpu,
       ephemeral_storage      = var.mil_auth_ephemeral_storage,
