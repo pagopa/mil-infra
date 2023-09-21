@@ -18,8 +18,16 @@
                     },
                     "secrets": [
                         {
-                            "name": "redis-connection-string",
-                            "value": "${redis_connection_string}"
+                            "name": "azure-tenant-id",
+                            "value": "${azure_tenant_id}"
+                        },
+                        {
+                            "name": "azure-client-id",
+                            "value": "${azure_client_id}"
+                        },
+                        {
+                            "name": "azure-client-secret",
+                            "value": "${azure_client_secret}"
                         }
                     ]
                 },
@@ -57,16 +65,28 @@
                                     "value": "${refresh_duration}"
                                 },
                                 {
-                                    "name": "auth.redis-connection-string",
-                                    "secretRef": "redis-connection-string"
-                                },
-                                {
                                     "name": "auth.data.url",
                                     "value": "${data_url}"
                                 },
                                 {
-                                    "name": "auth.json-logging",
-                                    "value": "${json_logging}"
+                                    "name": "auth.keyvault.url",
+                                    "value": "${keyvault_url}"
+                                },
+                                {
+                                    "name": "auth.keyvault.api-version",
+                                    "value": "${keyvault_api_version}"
+                                },
+                                {
+                                    "name": "azure.tenant.id",
+                                    "secretRef": "azure-tenant-id"
+                                },
+                                {
+                                    "name": "azure.client.id",
+                                    "secretRef": "azure-client-id"
+                                },
+                                {
+                                    "name": "azure.client.secret",
+                                    "secretRef": "azure-client-secret"
                                 }
                             ],
                             "image": "${image}",

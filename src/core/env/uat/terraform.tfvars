@@ -108,21 +108,22 @@ mil_acquirer_conf_openapi_descriptor = "https://raw.githubusercontent.com/pagopa
 #
 # mil-auth
 #
-mil_auth_quarkus_log_level  = "ERROR"
-mil_auth_app_log_level      = "DEBUG"
-mil_auth_cryptoperiod       = 86400000
-mil_auth_keysize            = 4096
-mil_auth_access_duration    = 900
-mil_auth_refresh_duration   = 3600
-mil_auth_json_logging       = false
-mil_auth_openapi_descriptor = "https://raw.githubusercontent.com/pagopa/mil-auth/f931b8a37490d8b13d5f8ae4043690a1ac773f19/src/main/resources/META-INF/openapi.yaml"
-mil_auth_image              = "ghcr.io/pagopa/mil-auth@sha256:80a9ab5585489b8be8ebac3b05fdfd7bfadef9d0f5fb9efedb7c18eaf7e4dae1"
-mil_auth_cpu                = 0.5
-mil_auth_ephemeral_storage  = "1.0Gi"
-mil_auth_memory             = "1.0Gi"
-mil_auth_max_replicas       = 5
-mil_auth_min_replicas       = 0
-mil_auth_redis_db           = "9"
+mil_auth_quarkus_log_level          = "ERROR"
+mil_auth_app_log_level              = "DEBUG"
+mil_auth_cryptoperiod               = 86400000
+mil_auth_keysize                    = 4096
+mil_auth_access_duration            = 900
+mil_auth_refresh_duration           = 3600
+mil_auth_json_logging               = false
+mil_auth_openapi_descriptor         = "https://raw.githubusercontent.com/pagopa/mil-auth/f931b8a37490d8b13d5f8ae4043690a1ac773f19/src/main/resources/META-INF/openapi.yaml"
+mil_auth_image                      = "ghcr.io/pagopa/mil-auth@sha256:80a9ab5585489b8be8ebac3b05fdfd7bfadef9d0f5fb9efedb7c18eaf7e4dae1"
+mil_auth_cpu                        = 0.5
+mil_auth_ephemeral_storage          = "1.0Gi"
+mil_auth_memory                     = "1.0Gi"
+mil_auth_max_replicas               = 5
+mil_auth_min_replicas               = 0
+mil_auth_redis_db                   = "9"
+mil_auth_azure_keyvault_api_version = "7.4"
 
 #
 # mil-preset

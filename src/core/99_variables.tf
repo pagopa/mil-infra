@@ -444,11 +444,6 @@ variable "mil_auth_refresh_duration" {
   default = 3600
 }
 
-variable "mil_auth_json_logging" {
-  type    = bool
-  default = false
-}
-
 variable "mil_auth_openapi_descriptor" {
   type = string
 }
@@ -482,9 +477,9 @@ variable "mil_auth_min_replicas" {
   default = 0
 }
 
-variable "mil_auth_redis_db" {
+variable "mil_auth_azure_keyvault_api_version" {
   type    = string
-  default = "9"
+  default = "7.4"
 }
 
 #
