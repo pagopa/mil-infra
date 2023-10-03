@@ -114,7 +114,6 @@ mil_auth_cryptoperiod               = 86400000
 mil_auth_keysize                    = 4096
 mil_auth_access_duration            = 900
 mil_auth_refresh_duration           = 3600
-mil_auth_json_logging               = false
 mil_auth_openapi_descriptor         = "https://raw.githubusercontent.com/pagopa/mil-auth/4c5bbcd682d6b2bdffc5400ea2bce8347395f425/src/main/resources/META-INF/openapi.yaml"
 mil_auth_image                      = "ghcr.io/pagopa/mil-auth@sha256:1adac086d94eebddf58858b1429f4be298b414e351588ece6029c8cd18ff06df"
 mil_auth_cpu                        = 0.5
@@ -159,7 +158,23 @@ mil_idpay_max_replicas                   = 5
 mil_idpay_min_replicas                   = 0
 mil_idpay_location_base_url              = "https://mil-d-apim.azure-api.net/mil-idpay"
 mil_idpay_jwt_publickey_location         = "https://mil-d-apim.azure-api.net/mil-auth/.well-known/jwks.json"
-mil_idpay_idpay_rest_api_url             = "https://1cb54e4c-ea9a-4465-becc-b5d15fcd63bf.mock.pstmn.io"
+mil_idpay_idpay_rest_api_url             = "https://mil-d-apim.azure-api.net/idpay-ipzs-mock"
+
+#
+# mil-idpay
+#
+mil_idpay_ipzs_mock_quarkus_log_level              = "ERROR"
+mil_idpay_ipzs_mock_app_log_level                  = "DEBUG"
+mil_idpay_ipzs_mock_mongo_connect_timeout          = "5s"
+mil_idpay_ipzs_mock_mongo_read_timeout             = "10s"
+mil_idpay_ipzs_mock_mongo_server_selection_timeout = "5s"
+mil_idpay_ipzs_mock_image                          = "ghcr.io/pagopa/idpay-ipzs-mock:latest"
+mil_idpay_ipzs_mock_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/idpay-ipzs-mock/main/src/main/resources/META-INF/openapi.yml"
+mil_idpay_ipzs_mock_cpu                            = 0.5
+mil_idpay_ipzs_mock_ephemeral_storage              = "1.0Gi"
+mil_idpay_ipzs_mock_memory                         = "1.0Gi"
+mil_idpay_ipzs_mock_max_replicas                   = 5
+mil_idpay_ipzs_mock_min_replicas                   = 0
 
 #
 # APIM

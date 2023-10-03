@@ -640,6 +640,67 @@ variable "mil_idpay_jwt_publickey_location" {
 }
 
 #
+# idpay-ipzs-mock specific
+#
+variable "mil_idpay_ipzs_mock_image" {
+  type = string
+}
+
+variable "mil_idpay_ipzs_mock_cpu" {
+  type    = number
+  default = 0.5
+}
+
+variable "mil_idpay_ipzs_mock_ephemeral_storage" {
+  type    = string
+  default = "1.0Gi"
+}
+
+variable "mil_idpay_ipzs_mock_memory" {
+  type    = string
+  default = "1.0Gi"
+}
+
+variable "mil_idpay_ipzs_mock_max_replicas" {
+  type    = number
+  default = 5
+}
+
+variable "mil_idpay_ipzs_mock_min_replicas" {
+  type    = number
+  default = 0
+}
+
+variable "mil_idpay_ipzs_mock_openapi_descriptor" {
+  type = string
+}
+
+variable "mil_idpay_ipzs_mock_quarkus_log_level" {
+  type    = string
+  default = "ERROR"
+}
+
+variable "mil_idpay_ipzs_mock_app_log_level" {
+  type    = string
+  default = "DEBUG"
+}
+
+variable "mil_idpay_ipzs_mock_mongo_connect_timeout" {
+  type    = string
+  default = "5s"
+}
+
+variable "mil_idpay_ipzs_mock_mongo_read_timeout" {
+  type    = string
+  default = "10s"
+}
+
+variable "mil_idpay_ipzs_mock_mongo_server_selection_timeout" {
+  type    = string
+  default = "5s"
+}
+
+#
 # API Manager specific.
 #
 variable "apim_sku" {

@@ -19,38 +19,38 @@ resource "azurerm_storage_account" "conf" {
 #
 # Storage container for acquirer conf used by mil-acquirer-conf
 #
-resource "azurerm_storage_container" "acquirers" {
-  name                  = "acquirers"
-  storage_account_name  = azurerm_storage_account.conf.name
-  container_access_type = "blob"
-}
+#resource "azurerm_storage_container" "acquirers" {
+#  name                  = "acquirers"
+#  storage_account_name  = azurerm_storage_account.conf.name
+#  container_access_type = "blob"
+#}
 
 #
 # Storage container for clients conf used by mil-auth
 #
-resource "azurerm_storage_container" "clients" {
-  name                  = "clients"
-  storage_account_name  = azurerm_storage_account.conf.name
-  container_access_type = "blob"
-}
+#resource "azurerm_storage_container" "clients" {
+#  name                  = "clients"
+#  storage_account_name  = azurerm_storage_account.conf.name
+#  container_access_type = "blob"
+#}
 
 #
 # Storage container for roles conf used by mil-auth
 #
-resource "azurerm_storage_container" "roles" {
-  name                  = "roles"
-  storage_account_name  = azurerm_storage_account.conf.name
-  container_access_type = "blob"
-}
+#resource "azurerm_storage_container" "roles" {
+#  name                  = "roles"
+#  storage_account_name  = azurerm_storage_account.conf.name
+#  container_access_type = "blob"
+#}
 
 #
 # Storage container for users conf used by mil-auth (this is a temporary solution)
 #
-resource "azurerm_storage_container" "users" {
-  name                  = "users"
-  storage_account_name  = azurerm_storage_account.conf.name
-  container_access_type = "blob"
-}
+#resource "azurerm_storage_container" "users" {
+#  name                  = "users"
+#  storage_account_name  = azurerm_storage_account.conf.name
+#  container_access_type = "blob"
+#}
 
 #
 # PRIVATE ENDPOINT APP SUBNET -> STORAGE ACCOUNT
