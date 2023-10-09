@@ -158,7 +158,11 @@ mil_idpay_max_replicas                   = 5
 mil_idpay_min_replicas                   = 0
 mil_idpay_location_base_url              = "https://mil-u-apim.azure-api.net/mil-idpay"
 mil_idpay_jwt_publickey_location         = "https://mil-u-apim.azure-api.net/mil-auth/.well-known/jwks.json"
-mil_idpay_idpay_rest_api_url             = "https://1cb54e4c-ea9a-4465-becc-b5d15fcd63bf.mock.pstmn.io"
+mil_idpay_idpay_rest_api_url             = "https://mil-u-apim.azure-api.net/idpay-ipzs-mock"
+mil_idpay_ipzs_rest_api_url              = "https://mil-u-apim.azure-api.net/idpay-ipzs-mock"
+mil_idpay_azuread_resp_api_url           = "https://login.microsoft.com"
+mil_idpay_cryptoperiod                   = 86400000
+mil_idpay_keysize                        = 4096
 
 #
 # APIM

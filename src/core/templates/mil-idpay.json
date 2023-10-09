@@ -28,7 +28,19 @@
 						{
 							"name": "idpay-subscription-key",
 							"value": "${idpay_subscription_key}"
-						}
+						},
+						{
+                            "name": "azure-tenant-id",
+                            "value": "${azure_tenant_id}"
+                        },
+                        {
+                            "name": "azure-client-id",
+                            "value": "${azure_client_id}"
+                        },
+                        {
+                            "name": "azure-client-secret",
+                            "value": "${azure_client_secret}"
+                        }
 					]
 				},
 				"managedEnvironmentId": "${managed_environment_id}",
@@ -91,7 +103,39 @@
 								{
 									"name": "mongo.server-selection-timeout",
 									"value": "${mongo_server_selection_timeout}"
-								}
+								},
+                                {
+                                    "name": "azuread_tenant_id",
+                                    "secretRef": "azure-tenant-id"
+                                },
+                                {
+                                    "name": "azuread_client_id",
+                                    "secretRef": "azure-client-id"
+                                },
+                                {
+                                    "name": "azuread_client_secret",
+                                    "secretRef": "azure-client-secret"
+                                },
+                                {
+                                    "name": "ipzs-rest-api.url",
+                                    "value": "${ipzs_rest_api_url}"
+                                },
+                                {
+                                    "name": "azuread-rest-api.url",
+                                    "value": "${azuread_rest_api_url}"
+                                },
+                                {
+                                    "name": "azurekv-rest-api.url",
+                                    "value": "${azurekv_rest_api_url}"
+                                },
+                                {
+                                    "name": "idpay.keysize",
+                                    "value": "${keysize}"
+                                },
+                                {
+                                    "name": "idpay.cryptoperiod",
+                                    "value": "${cryptoperiod}"
+                                }
 							],
 							"image": "${image}",
 							"name": "mil-idpay",

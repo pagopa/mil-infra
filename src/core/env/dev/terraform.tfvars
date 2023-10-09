@@ -149,8 +149,10 @@ mil_idpay_app_log_level                  = "DEBUG"
 mil_idpay_mongo_connect_timeout          = "5s"
 mil_idpay_mongo_read_timeout             = "10s"
 mil_idpay_mongo_server_selection_timeout = "5s"
-mil_idpay_image                          = "ghcr.io/pagopa/mil-idpay@sha256:2b6b97b969826944c2d95aca9928c3c354fa90ae6bb27d39e39e89277d49208e"
-mil_idpay_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/mil-idpay/5cf9769a89d23b17d7ae44280b8503469b694306/src/main/resources/META-INF/openapi.yaml"
+#mil_idpay_image                          = "ghcr.io/pagopa/mil-idpay@sha256:2b6b97b969826944c2d95aca9928c3c354fa90ae6bb27d39e39e89277d49208e"
+#mil_idpay_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/mil-idpay/5cf9769a89d23b17d7ae44280b8503469b694306/src/main/resources/META-INF/openapi.yaml"
+mil_idpay_image                          = "ghcr.io/pagopa/mil-idpay:latest"
+mil_idpay_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/mil-idpay/main/src/main/resources/META-INF/openapi.yaml"
 mil_idpay_cpu                            = 0.5
 mil_idpay_ephemeral_storage              = "1.0Gi"
 mil_idpay_memory                         = "1.0Gi"
@@ -159,6 +161,10 @@ mil_idpay_min_replicas                   = 0
 mil_idpay_location_base_url              = "https://mil-d-apim.azure-api.net/mil-idpay"
 mil_idpay_jwt_publickey_location         = "https://mil-d-apim.azure-api.net/mil-auth/.well-known/jwks.json"
 mil_idpay_idpay_rest_api_url             = "https://mil-d-apim.azure-api.net/idpay-ipzs-mock"
+mil_idpay_ipzs_rest_api_url              = "https://mil-d-apim.azure-api.net/idpay-ipzs-mock"
+mil_idpay_azuread_resp_api_url           = "https://login.microsoftonline.com"
+mil_idpay_cryptoperiod                   = 86400000
+mil_idpay_keysize                        = 4096
 
 #
 # mil-idpay

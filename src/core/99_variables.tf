@@ -639,6 +639,26 @@ variable "mil_idpay_jwt_publickey_location" {
   default = null
 }
 
+variable "mil_idpay_ipzs_rest_api_url" {
+  type    = string
+  default = null
+}
+
+variable "mil_idpay_azuread_resp_api_url" {
+  type    = string
+  default = "https://login.microsoftonline.com"
+}
+
+variable "mil_idpay_cryptoperiod" {
+  type    = number
+  default = 86400000
+}
+
+variable "mil_idpay_keysize" {
+  type    = number
+  default = 4096
+}
+
 #
 # idpay-ipzs-mock specific
 #

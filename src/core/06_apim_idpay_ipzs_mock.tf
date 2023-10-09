@@ -2,6 +2,7 @@
 # API for idpay-ipzs-mock
 #
 module "idpay_ipzs_mock_api" {
+  count               = (var.env_short == "d" || var.env_short == "u") ? 1 : 0
   source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v6.20.0"
   name                = "${local.project}-idpay-ipzs-mock"
   api_management_name = module.apim.name

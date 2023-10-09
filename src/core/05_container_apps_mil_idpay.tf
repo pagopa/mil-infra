@@ -40,7 +40,15 @@ resource "azurerm_resource_group_template_deployment" "mil_idpay" {
       idpay_rest_api_url             = var.mil_idpay_idpay_rest_api_url,
       mongo_connect_timeout          = var.mil_idpay_mongo_connect_timeout,
       mongo_read_timeout             = var.mil_idpay_mongo_read_timeout,
-      mongo_server_selection_timeout = var.mil_idpay_mongo_server_selection_timeout
+      mongo_server_selection_timeout = var.mil_idpay_mongo_server_selection_timeout,
+      azure_tenant_id                = data.azurerm_client_config.current.tenant_id,
+      azure_client_id                = azuread_application.mil_services.application_id,
+      azure_client_secret            = azuread_application_password.mil_services.value,
+      ipzs_rest_api_url              = var.mil_idpay_ipzs_rest_api_url,
+      azuread_rest_api_url           = var.mil_idpay_azuread_resp_api_url,
+      azurekv_rest_api_url           = azurerm_key_vault.appl_key_vault.vault_uri,
+      keysize                        = var.mil_idpay_keysize,
+      cryptoperiod                   = var.mil_idpay_cryptoperiod
     }
   )
 }

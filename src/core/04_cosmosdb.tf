@@ -160,6 +160,69 @@ resource "azurerm_cosmosdb_mongo_collection" "idpayTransactions" {
 }
 
 #
+# Database x idpay-ipzs-mock
+#
+resource "azurerm_cosmosdb_mongo_database" "idpay" {
+  count               = (var.env_short == "d" || var.env_short == "u") ? 1 : 0
+  account_name        = azurerm_cosmosdb_account.mil.name
+  name                = "idpay"
+  resource_group_name = azurerm_cosmosdb_account.mil.resource_group_name
+}
+
+#
+# Collection for idpay-ipzs-mock
+#
+resource "azurerm_cosmosdb_mongo_collection" "initiatives" {
+  count               = (var.env_short == "d" || var.env_short == "u") ? 1 : 0
+  account_name        = azurerm_cosmosdb_mongo_database.idpay[0].account_name
+  database_name       = azurerm_cosmosdb_mongo_database.idpay[0].name
+  name                = "initiatives"
+  resource_group_name = azurerm_cosmosdb_mongo_database.idpay[0].resource_group_name
+
+  index {
+    keys   = ["_id"]
+    unique = true
+  }
+
+  index {
+    keys = [
+      "initiative.merchantId"
+    ]
+    unique = false
+  }
+  
+  index {
+    keys = [
+      "initiative.initiativeId"
+    ]
+    unique = false
+  }
+}
+
+#
+# Collection for idpay-ipzs-mock
+#
+resource "azurerm_cosmosdb_mongo_collection" "idpayLocalTransactions" {
+  count               = (var.env_short == "d" || var.env_short == "u") ? 1 : 0
+  account_name        = azurerm_cosmosdb_mongo_database.idpay[0].account_name
+  database_name       = azurerm_cosmosdb_mongo_database.idpay[0].name
+  name                = "idpayLocalTransactions"
+  resource_group_name = azurerm_cosmosdb_mongo_database.idpay[0].resource_group_name
+
+  index {
+    keys   = ["_id"]
+    unique = true
+  }
+
+  index {
+    keys = [
+      "idpayLocalTransactions.merchantId"
+    ]
+    unique = false
+  }
+}
+
+#
 # PRIVATE ENDPOINT APP SUBNET -> COSMOS
 #
 resource "azurerm_private_dns_zone" "cosmos" {
