@@ -11,32 +11,11 @@
             "location": "${location}",
             "properties": {
                 "configuration": {
-                    "activeRevisionsMode": "Multiple",
                     "ingress": {
                         "external": true,
                         "targetPort": 8080,
-                        "transport": "Http",
-                        "traffic": [
-                            {
-                                "weight": 100,
-                                "latestRevision": true
-                            }
-                        ]
-                    },
-                    "secrets": [
-                        {
-                            "name": "azure-tenant-id",
-                            "value": "${azure_tenant_id}"
-                        },
-                        {
-                            "name": "azure-client-id",
-                            "value": "${azure_client_id}"
-                        },
-                        {
-                            "name": "azure-client-secret",
-                            "value": "${azure_client_secret}"
-                        }
-                    ]
+                        "transport": "Http"
+                    }
                 },
                 "managedEnvironmentId": "${managed_environment_id}",
                 "template": {
@@ -82,22 +61,10 @@
                                 {
                                     "name": "auth.keyvault.api-version",
                                     "value": "${keyvault_api_version}"
-                                },
-                                {
-                                    "name": "azure.tenant.id",
-                                    "secretRef": "azure-tenant-id"
-                                },
-                                {
-                                    "name": "azure.client.id",
-                                    "secretRef": "azure-client-id"
-                                },
-                                {
-                                    "name": "azure.client.secret",
-                                    "secretRef": "azure-client-secret"
                                 }
                             ],
                             "image": "${image}",
-                            "name": "mil-auth",
+                            "name": "${name}",
                             "resources": {
                                 "cpu": ${cpu},
                                 "ephemeralStorage": "${ephemeral_storage}",
@@ -110,13 +77,20 @@
                         "minReplicas": ${min_replicas}
                     }
                 }
-            }
+            }#,
+            #"identity": {
+            #    "type": "SystemAssigned"
+            #}
         }
     ],
     "outputs": {
         "ingress_fqdn": {
             "type": "String",
             "value": "[reference(resourceId('Microsoft.App/containerApps','${name}')).configuration.ingress.fqdn]"
-        }
+        }#,
+        #"principal_id": {
+        #    "type": "String",
+        #    "value": "[reference(resourceId('Microsoft.App/containerApps','${name}')).identity.principalId]"
+        #}
     }
 }

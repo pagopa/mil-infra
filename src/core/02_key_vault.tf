@@ -2,7 +2,7 @@
 # Key vault
 #
 module "key_vault" {
-  source                    = "git::https://github.com/pagopa/terraform-azurerm-v3.git//key_vault?ref=v6.20.0"
+  source                    = "git::https://github.com/pagopa/terraform-azurerm-v3.git//key_vault?ref=v7.14.0"
   name                      = "${local.project}-kv"
   location                  = azurerm_resource_group.sec.location
   resource_group_name       = azurerm_resource_group.sec.name
@@ -111,6 +111,18 @@ resource "azurerm_key_vault" "appl_key_vault" {
 
     certificate_permissions = []
   }
+}
+
+resource "azurerm_key_vault" "auth_key_vault" {
+  name                          = "${local.project}-auth-kv"
+  location                      = azurerm_resource_group.sec.location
+  resource_group_name           = azurerm_resource_group.sec.name
+  tenant_id                     = data.azurerm_client_config.current.tenant_id
+  enabled_for_disk_encryption   = true
+  purge_protection_enabled      = true
+  sku_name                      = "premium"
+  public_network_access_enabled = var.env_short == "d" ? true : false
+  enable_rbac_authorization     = true
 }
 
 #

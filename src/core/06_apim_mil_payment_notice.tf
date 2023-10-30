@@ -2,7 +2,7 @@
 # API for mil-payment-notice
 #
 module "payment_notice_api" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v6.20.0"
+  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v7.14.0"
   name                = "${local.project}-payment-notice"
   api_management_name = module.apim.name
   resource_group_name = module.apim.resource_group_name

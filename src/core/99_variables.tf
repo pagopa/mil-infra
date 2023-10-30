@@ -103,6 +103,11 @@ variable "github_runner_cidr" {
   description = "GitHub runner Subnet CIDR."
 }
 
+variable "vpn_snet_cidr" {
+  type        = string
+  description = "VPN Subnet CIDR."
+}
+
 #
 # Monitor
 #
@@ -732,4 +737,15 @@ variable "apim_publisher_name" {
   type        = string
   description = "The name of the publisher."
   default     = "PagoPA S.p.A."
+}
+
+#
+# VPN specific.
+#
+variable "vpn_sku" {
+  type = string
+}
+
+variable "vpn_pip_sku" {
+  type = string
 }

@@ -10,7 +10,7 @@ data "azurerm_key_vault_secret" "apim_publisher_email" {
 # API Manager
 #
 module "apim" {
-  source               = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management?ref=v6.20.0"
+  source               = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management?ref=v7.14.0"
   name                 = "${local.project}-apim"
   resource_group_name  = azurerm_resource_group.integration.name
   location             = azurerm_resource_group.integration.location

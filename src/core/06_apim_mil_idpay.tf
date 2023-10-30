@@ -2,7 +2,7 @@
 # API for mil-idpay
 #
 module "idpay_api" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v6.20.0"
+  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v7.14.0"
   name                = "${local.project}-idpay"
   api_management_name = module.apim.name
   resource_group_name = module.apim.resource_group_name
@@ -10,7 +10,7 @@ module "idpay_api" {
   protocols           = ["https"]
 
   # Absolute URL of the backend service implementing this API.
-  service_url = "https://${local.mil_idpay_ingress_fqdn}"
+  service_url = "https://${azurerm_container_app.mil_idpay.ingress[0].fqdn}"
 
   # The Path for this API Management API, which is a relative URL which uniquely identifies this API and all of its resource paths within the API Management Service.
   path = "mil-idpay"

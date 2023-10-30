@@ -1,5 +1,5 @@
 #
-# Storage account
+# Storage account for configuration files
 #
 resource "azurerm_storage_account" "conf" {
   name                          = "${var.prefix}${var.env_short}confst"
@@ -17,74 +17,47 @@ resource "azurerm_storage_account" "conf" {
 }
 
 #
-# Storage container for acquirer conf used by mil-acquirer-conf
+# Storage container for acquirer configuration
 #
-#resource "azurerm_storage_container" "acquirers" {
-#  name                  = "acquirers"
-#  storage_account_name  = azurerm_storage_account.conf.name
-#  container_access_type = "blob"
-#}
-
-#
-# Storage container for clients conf used by mil-auth
-#
-#resource "azurerm_storage_container" "clients" {
-#  name                  = "clients"
-#  storage_account_name  = azurerm_storage_account.conf.name
-#  container_access_type = "blob"
-#}
-
-#
-# Storage container for roles conf used by mil-auth
-#
-#resource "azurerm_storage_container" "roles" {
-#  name                  = "roles"
-#  storage_account_name  = azurerm_storage_account.conf.name
-#  container_access_type = "blob"
-#}
-
-#
-# Storage container for users conf used by mil-auth (this is a temporary solution)
-#
-#resource "azurerm_storage_container" "users" {
-#  name                  = "users"
-#  storage_account_name  = azurerm_storage_account.conf.name
-#  container_access_type = "blob"
-#}
+resource "azurerm_storage_container" "acquirers" {
+  name                  = "acquirers2"
+  storage_account_name  = azurerm_storage_account.conf.name
+  container_access_type = "blob"
+}
 
 #
 # PRIVATE ENDPOINT APP SUBNET -> STORAGE ACCOUNT
 #
-resource "azurerm_private_dns_zone" "storage" {
+resource "azurerm_private_dns_zone" "conf_storage" {
   count               = var.env_short == "d" ? 0 : 1
   name                = "privatelink.blob.core.windows.net"
   resource_group_name = azurerm_resource_group.network.name
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "storage" {
+resource "azurerm_private_dns_zone_virtual_network_link" "conf_storage" {
   count                 = var.env_short == "d" ? 0 : 1
   name                  = azurerm_virtual_network.intern.name
   resource_group_name   = azurerm_resource_group.network.name
-  private_dns_zone_name = azurerm_private_dns_zone.storage[0].name
+  private_dns_zone_name = azurerm_private_dns_zone.conf_storage[0].name
   virtual_network_id    = azurerm_virtual_network.intern.id
 }
 
-resource "azurerm_private_endpoint" "storage_pep" {
+resource "azurerm_private_endpoint" "conf_storage_pep" {
   count               = var.env_short == "d" ? 0 : 1
-  name                = "${local.project}-storage-pep"
+  name                = "${local.project}-conf-storage-pep"
   location            = azurerm_resource_group.network.location
   resource_group_name = azurerm_resource_group.network.name
   subnet_id           = azurerm_subnet.app.id
 
-  custom_network_interface_name = "${local.project}-storage-pep-nic"
+  custom_network_interface_name = "${local.project}-conf-storage-pep-nic"
 
   private_dns_zone_group {
-    name                 = "${local.project}-storage-pdzg"
-    private_dns_zone_ids = [azurerm_private_dns_zone.storage[0].id]
+    name                 = "${local.project}-conf-storage-pdzg"
+    private_dns_zone_ids = [azurerm_private_dns_zone.conf_storage[0].id]
   }
 
   private_service_connection {
-    name                           = "${local.project}-storage-psc"
+    name                           = "${local.project}-conf-storage-psc"
     private_connection_resource_id = azurerm_storage_account.conf.id
     subresource_names              = ["blob"]
     is_manual_connection           = false

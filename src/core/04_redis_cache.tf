@@ -23,7 +23,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "redis" {
 # Redis Cache proper
 #
 module "redis_cache" {
-  source                        = "git::https://github.com/pagopa/terraform-azurerm-v3.git//redis_cache?ref=v6.20.0"
+  source                        = "git::https://github.com/pagopa/terraform-azurerm-v3.git//redis_cache?ref=v7.14.0"
   name                          = "${local.project}-redis"
   resource_group_name           = azurerm_resource_group.data.name
   location                      = azurerm_resource_group.data.location

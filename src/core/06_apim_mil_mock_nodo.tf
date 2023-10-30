@@ -2,8 +2,8 @@
 # API for mil-acquirer-conf
 #
 module "mock_nodo_api" {
-  count               = (var.env_short == "d" || var.env_short == "u") ? 1 : 0
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v6.20.0"
+  count               = var.env_short == "d" ? 1 : 0
+  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v7.14.0"
   name                = "${local.project}-mock-nodo"
   api_management_name = module.apim.name
   resource_group_name = module.apim.resource_group_name

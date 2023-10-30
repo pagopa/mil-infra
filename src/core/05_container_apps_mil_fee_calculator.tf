@@ -12,7 +12,7 @@ data "azurerm_key_vault_secret" "mil_acquirer_conf_subscription_key" {
 }
 
 locals {
-  fee_calculator_ca_name = "${local.project}-fee-calculator-ca"
+  fee_calculator_ca_name = "${local.project}-fee-calculator-ca-2"
 }
 
 resource "azurerm_resource_group_template_deployment" "mil_fee_calculator" {
@@ -34,7 +34,7 @@ resource "azurerm_resource_group_template_deployment" "mil_fee_calculator" {
       location                           = azurerm_resource_group.app.location,
       mongo_connection_string_1          = azurerm_cosmosdb_account.mil.connection_strings[0],
       mongo_connection_string_2          = azurerm_cosmosdb_account.mil.connection_strings[1],
-      managed_environment_id             = module.cae.id,
+      managed_environment_id             = azurerm_container_app_environment.mil.id, # module.cae.id,
       gec_subscription_key               = data.azurerm_key_vault_secret.gec_subscription_key.value,
       quarkus_log_level                  = var.mil_fee_calculator_quarkus_log_level,
       app_log_level                      = var.mil_fee_calculator_app_log_level,

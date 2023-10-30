@@ -157,13 +157,25 @@ resource "azurerm_cosmosdb_mongo_collection" "idpayTransactions" {
     ]
     unique = false
   }
+
+  index {
+    keys = [
+      "idpayTransaction.terminalId",
+      "idpayTransaction.merchantId",
+      "idpayTransaction.channel",
+      "idpayTransaction.acquirerId",
+      "idpayTransaction.timestamp",
+      "idpayTransaction.status"
+    ]
+    unique = false
+  }
 }
 
 #
 # Database x idpay-ipzs-mock
 #
 resource "azurerm_cosmosdb_mongo_database" "idpay" {
-  count               = (var.env_short == "d" || var.env_short == "u") ? 1 : 0
+  count               = var.env_short == "d" ? 1 : 0
   account_name        = azurerm_cosmosdb_account.mil.name
   name                = "idpay"
   resource_group_name = azurerm_cosmosdb_account.mil.resource_group_name
@@ -173,7 +185,7 @@ resource "azurerm_cosmosdb_mongo_database" "idpay" {
 # Collection for idpay-ipzs-mock
 #
 resource "azurerm_cosmosdb_mongo_collection" "initiatives" {
-  count               = (var.env_short == "d" || var.env_short == "u") ? 1 : 0
+  count               = var.env_short == "d" ? 1 : 0
   account_name        = azurerm_cosmosdb_mongo_database.idpay[0].account_name
   database_name       = azurerm_cosmosdb_mongo_database.idpay[0].name
   name                = "initiatives"
@@ -190,7 +202,7 @@ resource "azurerm_cosmosdb_mongo_collection" "initiatives" {
     ]
     unique = false
   }
-  
+
   index {
     keys = [
       "initiative.initiativeId"
@@ -203,7 +215,7 @@ resource "azurerm_cosmosdb_mongo_collection" "initiatives" {
 # Collection for idpay-ipzs-mock
 #
 resource "azurerm_cosmosdb_mongo_collection" "idpayLocalTransactions" {
-  count               = (var.env_short == "d" || var.env_short == "u") ? 1 : 0
+  count               = var.env_short == "d" ? 1 : 0
   account_name        = azurerm_cosmosdb_mongo_database.idpay[0].account_name
   database_name       = azurerm_cosmosdb_mongo_database.idpay[0].name
   name                = "idpayLocalTransactions"

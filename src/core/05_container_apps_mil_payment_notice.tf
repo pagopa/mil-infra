@@ -12,7 +12,7 @@ data "azurerm_key_vault_secret" "node_rest_subscription_key" {
 }
 
 locals {
-  payment_notice_ca_name = "${local.project}-payment-notice-ca"
+  payment_notice_ca_name = "${local.project}-payment-notice-ca-2"
 }
 
 resource "azurerm_resource_group_template_deployment" "mil_payment_notice" {
@@ -39,7 +39,7 @@ resource "azurerm_resource_group_template_deployment" "mil_payment_notice" {
       #redis_primary_access_key                     = module.redis_cache.primary_access_key,
       #redis_hostname                               = module.redis_cache.hostname,
       #redis_ssl_port                               = module.redis_cache.ssl_port,
-      managed_environment_id                       = module.cae.id,
+      managed_environment_id                       = azurerm_container_app_environment.mil.id, # module.cae.id,
       node_soap_subscription_key                   = data.azurerm_key_vault_secret.node_soap_subscription_key.value,
       node_rest_subscription_key                   = data.azurerm_key_vault_secret.node_rest_subscription_key.value,
       quarkus_log_level                            = var.mil_payment_notice_quarkus_log_level,
