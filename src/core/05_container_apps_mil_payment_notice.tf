@@ -56,7 +56,7 @@ resource "azurerm_resource_group_template_deployment" "mil_payment_notice" {
       close_payment_max_retry                      = var.mil_payment_notice_close_payment_max_retry,
       closepayment_retry_after                     = var.mil_payment_notice_closepayment_retry_after,
       activatepayment_expiration_time              = var.mil_payment_notice_activatepayment_expiration_time,
-      mil_acquirer_conf_url                        = var.mil_acquirer_conf_url,
+      mil_acquirer_conf_url                        = azurerm_storage_account.conf.primary_blob_endpoint # var.mil_acquirer_conf_url,
       mil_acquirer_conf_subscription_key           = data.azurerm_key_vault_secret.mil_acquirer_conf_subscription_key.value,
       mil_acquirer_conf_ver                        = var.mil_acquirer_conf_ver,
       image                                        = var.mil_payment_notice_image,

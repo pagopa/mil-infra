@@ -64,13 +64,13 @@ mil_payment_notice_rest_client_read_timeout         = 2000
 mil_payment_notice_close_payment_max_retry          = 3
 mil_payment_notice_closepayment_retry_after         = 5
 mil_payment_notice_activatepayment_expiration_time  = 30000
-mil_payment_notice_image                            = "ghcr.io/pagopa/mil-payment-notice@sha256:20b51f3072bc5240d9cd71ad41d3ad9b537c44d7c5d7f157bbaadcc4a9d0a2e1"
-mil_payment_notice_openapi_descriptor               = "https://raw.githubusercontent.com/pagopa/mil-payment-notice/485d8f64402b54066a87c988b3973da4f9790db0/src/main/resources/META-INF/openapi.yaml"
-mil_payment_notice_cpu                              = 0.5
+mil_payment_notice_image                            = "ghcr.io/pagopa/mil-payment-notice:2.2.1-rc"
+mil_payment_notice_openapi_descriptor               = "https://raw.githubusercontent.com/pagopa/mil-payment-notice/main/src/main/resources/META-INF/openapi.yaml"
+mil_payment_notice_cpu                              = 1
 mil_payment_notice_ephemeral_storage                = "1.0Gi"
-mil_payment_notice_memory                           = "1.0Gi"
+mil_payment_notice_memory                           = "2Gi"
 mil_payment_notice_max_replicas                     = 5
-mil_payment_notice_min_replicas                     = 0
+mil_payment_notice_min_replicas                     = 1
 mil_payment_notice_closepayment_location_base_url   = "https://mil-d-apim.azure-api.net/mil-payment-notice"
 mil_payment_notice_jwt_publickey_location           = "https://mil-d-apim.azure-api.net/mil-auth/.well-known/jwks.json"
 #mil_payment_notice_node_soap_service_url = "https://api.uat.platform.pagopa.it/nodo-auth/node-for-psp/v1"
@@ -82,18 +82,18 @@ mil_payment_notice_jwt_publickey_location           = "https://mil-d-apim.azure-
 #
 # mil-fee-calculator
 #
-mil_fee_calculator_image                  = "ghcr.io/pagopa/mil-fee-calculator@sha256:a9375f1efc6aef13edab04813b4f76ae7cb91252dcb9810409b29e0da4156383"
-mil_fee_calculator_openapi_descriptor     = "https://raw.githubusercontent.com/pagopa/mil-apis/a4aac33f6af1f7328c9a457c75622fd62ad00356/openapi-mono/fee.yaml"
+mil_fee_calculator_image                  = "ghcr.io/pagopa/mil-fee-calculator:1.2.1-rc"
+mil_fee_calculator_openapi_descriptor     = "https://raw.githubusercontent.com/pagopa/mil-apis/main/openapi-mono/fee.yaml"
 mil_fee_calculator_quarkus_log_level      = "ERROR"
 mil_fee_calculator_app_log_level          = "DEBUG"
 mil_fee_calculator_gec_url                = "https://mil-d-apim.azure-api.net/mockNodo"
 mil_fee_calculator_gec_connect_timeout    = 2000
 mil_fee_calculator_gec_read_timeout       = 2000
-mil_fee_calculator_cpu                    = 0.5
+mil_fee_calculator_cpu                    = 1
 mil_fee_calculator_ephemeral_storage      = "1.0Gi"
-mil_fee_calculator_memory                 = "1.0Gi"
+mil_fee_calculator_memory                 = "2Gi"
 mil_fee_calculator_max_replicas           = 5
-mil_fee_calculator_min_replicas           = 0
+mil_fee_calculator_min_replicas           = 1
 mil_fee_calculator_jwt_publickey_location = "https://mil-d-apim.azure-api.net/mil-auth/.well-known/jwks.json"
 #mil_fee_calculator_gec_url = "https://api.uat.platform.pagopa.it/afm/node/calculator-service/v1"
 
@@ -109,22 +109,22 @@ mil_acquirer_conf_openapi_descriptor = "https://raw.githubusercontent.com/pagopa
 #
 # mil-auth
 #
-mil_auth_quarkus_log_level  = "ERROR"
-mil_auth_app_log_level      = "DEBUG"
-mil_auth_cryptoperiod       = 86400000
-mil_auth_keysize            = 4096
-mil_auth_access_duration    = 900
-mil_auth_refresh_duration   = 3600
-mil_auth_openapi_descriptor = "https://raw.githubusercontent.com/pagopa/mil-auth/4c5bbcd682d6b2bdffc5400ea2bce8347395f425/src/main/resources/META-INF/openapi.yaml"
-mil_auth_image              = "ghcr.io/pagopa/mil-auth@sha256:1adac086d94eebddf58858b1429f4be298b414e351588ece6029c8cd18ff06df"
-#mil_auth_openapi_descriptor         = "https://raw.githubusercontent.com/pagopa/mil-auth/main/src/main/resources/META-INF/openapi.yaml"
-#mil_auth_image                      = "ghcr.io/pagopa/mil-auth:refs_heads_main"
-mil_auth_cpu                        = 0.5
-mil_auth_ephemeral_storage          = "1.0Gi"
-mil_auth_memory                     = "1.0Gi"
-mil_auth_max_replicas               = 5
-mil_auth_min_replicas               = 0
-mil_auth_azure_keyvault_api_version = "7.4"
+mil_auth_armored_storage_account           = false
+mil_auth_armored_key_vault                 = false
+mil_auth_quarkus_log_level                 = "ERROR"
+mil_auth_app_log_level                     = "DEBUG"
+mil_auth_quarkus_rest_client_logging_scope = "all"
+mil_auth_cryptoperiod                      = 86400000
+mil_auth_keysize                           = 4096
+mil_auth_access_duration                   = 900
+mil_auth_refresh_duration                  = 3600
+mil_auth_openapi_descriptor                = "https://raw.githubusercontent.com/pagopa/mil-auth/main/src/main/resources/META-INF/openapi.yaml"
+mil_auth_image                             = "ghcr.io/pagopa/mil-auth:1.10.0-RC"
+mil_auth_cpu                               = 1
+mil_auth_memory                            = "2Gi"
+mil_auth_max_replicas                      = 5
+mil_auth_min_replicas                      = 1
+mil_auth_azure_keyvault_api_version        = "7.4"
 
 #
 # mil-preset
@@ -136,11 +136,11 @@ mil_preset_mongo_read_timeout             = "10s"
 mil_preset_mongo_server_selection_timeout = "5s"
 mil_preset_image                          = "ghcr.io/pagopa/mil-preset@sha256:503de693c32776db7186c299c381f42d0b86b2dc6adf93c014ad7b6fd2a99004"
 mil_preset_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/mil-apis/6c6b07a95aa70a62217e6f9d02b5cc229b97ff14/openapi-mono/preset.yaml"
-mil_preset_cpu                            = 0.5
+mil_preset_cpu                            = 1
 mil_preset_ephemeral_storage              = "1.0Gi"
-mil_preset_memory                         = "1.0Gi"
+mil_preset_memory                         = "2Gi"
 mil_preset_max_replicas                   = 5
-mil_preset_min_replicas                   = 0
+mil_preset_min_replicas                   = 1
 mil_preset_location_base_url              = "https://mil-d-apim.azure-api.net/mil-preset"
 mil_preset_jwt_publickey_location         = "https://mil-d-apim.azure-api.net/mil-auth/.well-known/jwks.json"
 
@@ -156,11 +156,11 @@ mil_idpay_mongo_server_selection_timeout = "5s"
 #mil_idpay_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/mil-idpay/5cf9769a89d23b17d7ae44280b8503469b694306/src/main/resources/META-INF/openapi.yaml"
 mil_idpay_image                  = "ghcr.io/pagopa/mil-idpay:latest"
 mil_idpay_openapi_descriptor     = "https://raw.githubusercontent.com/pagopa/mil-idpay/main/src/main/resources/META-INF/openapi.yaml"
-mil_idpay_cpu                    = 0.5
+mil_idpay_cpu                    = 1
 mil_idpay_ephemeral_storage      = "1.0Gi"
-mil_idpay_memory                 = "1Gi"
+mil_idpay_memory                 = "2Gi"
 mil_idpay_max_replicas           = 5
-mil_idpay_min_replicas           = 0
+mil_idpay_min_replicas           = 1
 mil_idpay_location_base_url      = "https://mil-d-apim.azure-api.net/mil-idpay"
 mil_idpay_jwt_publickey_location = "https://mil-d-apim.azure-api.net/mil-auth/.well-known/jwks.json"
 mil_idpay_idpay_rest_api_url     = "https://mil-d-apim.azure-api.net/idpay-ipzs-mock"
@@ -179,11 +179,11 @@ mil_idpay_ipzs_mock_mongo_read_timeout             = "10s"
 mil_idpay_ipzs_mock_mongo_server_selection_timeout = "5s"
 mil_idpay_ipzs_mock_image                          = "ghcr.io/pagopa/idpay-ipzs-mock:latest"
 mil_idpay_ipzs_mock_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/idpay-ipzs-mock/main/src/main/resources/META-INF/openapi.yml"
-mil_idpay_ipzs_mock_cpu                            = 0.5
+mil_idpay_ipzs_mock_cpu                            = 1
 mil_idpay_ipzs_mock_ephemeral_storage              = "1.0Gi"
-mil_idpay_ipzs_mock_memory                         = "1.0Gi"
+mil_idpay_ipzs_mock_memory                         = "2Gi"
 mil_idpay_ipzs_mock_max_replicas                   = 5
-mil_idpay_ipzs_mock_min_replicas                   = 0
+mil_idpay_ipzs_mock_min_replicas                   = 1
 
 #
 # APIM

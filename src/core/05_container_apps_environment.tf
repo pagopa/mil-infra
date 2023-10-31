@@ -23,6 +23,6 @@ resource "azurerm_container_app_environment" "mil" {
   internal_load_balancer_enabled = false
   infrastructure_subnet_id       = azurerm_subnet.app.id
   tags                           = var.tags
- # Argument not allowed with 3.71.0
- # zone_redundancy_enabled        = false
+  # Argument not allowed with 3.71.0
+  # zone_redundancy_enabled        = false
 }

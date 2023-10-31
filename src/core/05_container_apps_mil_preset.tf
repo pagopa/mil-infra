@@ -24,7 +24,7 @@ resource "azurerm_resource_group_template_deployment" "mil_preset" {
       location                       = azurerm_resource_group.app.location,
       mongo_connection_string_1      = azurerm_cosmosdb_account.mil.connection_strings[0],
       mongo_connection_string_2      = azurerm_cosmosdb_account.mil.connection_strings[1],
-      managed_environment_id         =azurerm_container_app_environment.mil.id, # module.cae.id,
+      managed_environment_id         = azurerm_container_app_environment.mil.id, # module.cae.id,
       quarkus_log_level              = var.mil_preset_quarkus_log_level,
       app_log_level                  = var.mil_preset_app_log_level,
       mongo_connect_timeout          = var.mil_preset_mongo_connect_timeout,

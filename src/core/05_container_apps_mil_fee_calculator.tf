@@ -41,7 +41,7 @@ resource "azurerm_resource_group_template_deployment" "mil_fee_calculator" {
       gec_url                            = var.mil_fee_calculator_gec_url,
       gec_connect_timeout                = var.mil_fee_calculator_gec_connect_timeout,
       gec_read_timeout                   = var.mil_fee_calculator_gec_read_timeout,
-      mil_acquirer_conf_url              = var.mil_acquirer_conf_url,
+      mil_acquirer_conf_url              = azurerm_storage_account.conf.primary_blob_endpoint,
       mil_acquirer_conf_subscription_key = data.azurerm_key_vault_secret.mil_acquirer_conf_subscription_key.value,
       mil_acquirer_conf_ver              = var.mil_acquirer_conf_ver,
       mil_acquirer_conf_connect_timeout  = var.mil_acquirer_conf_connect_timeout,

@@ -51,6 +51,7 @@
 | [azurerm_api_management_api_diagnostic.preset_api](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_subscription.tracing](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/api_management_subscription) | resource |
 | [azurerm_application_insights.mil](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/application_insights) | resource |
+| [azurerm_container_app.mil_auth](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/container_app) | resource |
 | [azurerm_container_app.mil_idpay](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/container_app) | resource |
 | [azurerm_container_app_environment.mil](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/container_app_environment) | resource |
 | [azurerm_cosmosdb_account.mil](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/cosmosdb_account) | resource |
@@ -69,29 +70,33 @@
 | [azurerm_eventhub.presets](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/eventhub) | resource |
 | [azurerm_eventhub_namespace.mil_evhns](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/eventhub_namespace) | resource |
 | [azurerm_key_vault.appl_key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/key_vault) | resource |
+| [azurerm_key_vault.auth_key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/key_vault) | resource |
 | [azurerm_log_analytics_query_pack.query_pack](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/log_analytics_query_pack) | resource |
+| [azurerm_log_analytics_query_pack_query.auth_ca_console_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/log_analytics_query_pack_query) | resource |
 | [azurerm_log_analytics_query_pack_query.failed_requestes](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/log_analytics_query_pack_query) | resource |
-| [azurerm_log_analytics_query_pack_query.mil_auth_container_app_console_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/log_analytics_query_pack_query) | resource |
 | [azurerm_log_analytics_query_pack_query.mil_errors_container_app_console_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/log_analytics_query_pack_query) | resource |
 | [azurerm_log_analytics_query_pack_query.mil_fee_calculator_container_app_console_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/log_analytics_query_pack_query) | resource |
 | [azurerm_log_analytics_query_pack_query.mil_idpay_container_app_console_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/log_analytics_query_pack_query) | resource |
 | [azurerm_log_analytics_query_pack_query.mil_payment_notice_container_app_console_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/log_analytics_query_pack_query) | resource |
 | [azurerm_log_analytics_query_pack_query.mil_preset_container_app_console_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/log_analytics_query_pack_query) | resource |
 | [azurerm_log_analytics_workspace.log_analytics_workspace](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/log_analytics_workspace) | resource |
+| [azurerm_private_dns_zone.auth_key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone) | resource |
+| [azurerm_private_dns_zone.auth_storage](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone) | resource |
+| [azurerm_private_dns_zone.conf_storage](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone) | resource |
 | [azurerm_private_dns_zone.cosmos](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone) | resource |
 | [azurerm_private_dns_zone.eventhub](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone) | resource |
-| [azurerm_private_dns_zone.keyvault](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone) | resource |
 | [azurerm_private_dns_zone.redis](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone) | resource |
-| [azurerm_private_dns_zone.storage](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone) | resource |
+| [azurerm_private_dns_zone_virtual_network_link.auth_key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone_virtual_network_link) | resource |
+| [azurerm_private_dns_zone_virtual_network_link.auth_storage](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone_virtual_network_link) | resource |
+| [azurerm_private_dns_zone_virtual_network_link.conf_storage](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone_virtual_network_link) | resource |
 | [azurerm_private_dns_zone_virtual_network_link.cosmos](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone_virtual_network_link) | resource |
 | [azurerm_private_dns_zone_virtual_network_link.eventhub](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone_virtual_network_link) | resource |
-| [azurerm_private_dns_zone_virtual_network_link.keyvault](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone_virtual_network_link) | resource |
 | [azurerm_private_dns_zone_virtual_network_link.redis](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone_virtual_network_link) | resource |
-| [azurerm_private_dns_zone_virtual_network_link.storage](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_dns_zone_virtual_network_link) | resource |
+| [azurerm_private_endpoint.auth_key_vault_pep](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_endpoint) | resource |
+| [azurerm_private_endpoint.auth_storage_pep](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_endpoint) | resource |
+| [azurerm_private_endpoint.conf_storage_pep](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_endpoint) | resource |
 | [azurerm_private_endpoint.cosmos_pep](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_endpoint) | resource |
 | [azurerm_private_endpoint.eventhub_pep](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_endpoint) | resource |
-| [azurerm_private_endpoint.keyvault_pep](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_endpoint) | resource |
-| [azurerm_private_endpoint.storage_pep](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/private_endpoint) | resource |
 | [azurerm_resource_group.app](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/resource_group) | resource |
 | [azurerm_resource_group.data](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/resource_group) | resource |
 | [azurerm_resource_group.github_runner](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/resource_group) | resource |
@@ -99,18 +104,24 @@
 | [azurerm_resource_group.monitor](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/resource_group) | resource |
 | [azurerm_resource_group.network](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/resource_group) | resource |
 | [azurerm_resource_group.sec](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/resource_group) | resource |
-| [azurerm_resource_group_template_deployment.mil_auth](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/resource_group_template_deployment) | resource |
 | [azurerm_resource_group_template_deployment.mil_fee_calculator](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/resource_group_template_deployment) | resource |
 | [azurerm_resource_group_template_deployment.mil_idpay_ipzs_mock](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/resource_group_template_deployment) | resource |
 | [azurerm_resource_group_template_deployment.mil_payment_notice](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/resource_group_template_deployment) | resource |
 | [azurerm_resource_group_template_deployment.mil_preset](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/resource_group_template_deployment) | resource |
+| [azurerm_role_assignment.auth_kv](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/role_assignment) | resource |
+| [azurerm_role_assignment.auth_storage](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/role_assignment) | resource |
+| [azurerm_storage_account.auth](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/storage_account) | resource |
 | [azurerm_storage_account.conf](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/storage_account) | resource |
 | [azurerm_storage_account.mock](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/storage_account) | resource |
 | [azurerm_storage_blob.stub_gec](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/storage_blob) | resource |
 | [azurerm_storage_blob.stub_verify_ko_activate_ko](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/storage_blob) | resource |
 | [azurerm_storage_blob.stub_verify_ok_activate_ko](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/storage_blob) | resource |
 | [azurerm_storage_blob.stub_verify_ok_activate_ok](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/storage_blob) | resource |
+| [azurerm_storage_container.acquirers](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/storage_container) | resource |
+| [azurerm_storage_container.clients](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/storage_container) | resource |
 | [azurerm_storage_container.mock](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/storage_container) | resource |
+| [azurerm_storage_container.roles](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/storage_container) | resource |
+| [azurerm_storage_container.users](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/storage_container) | resource |
 | [azurerm_subnet.apim](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/subnet) | resource |
 | [azurerm_subnet.app](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/subnet) | resource |
 | [azurerm_subnet.appgw](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/subnet) | resource |
@@ -163,16 +174,16 @@
 | <a name="input_mil_auth_access_duration"></a> [mil\_auth\_access\_duration](#input\_mil\_auth\_access\_duration) | n/a | `number` | `900` | no |
 | <a name="input_mil_auth_app_log_level"></a> [mil\_auth\_app\_log\_level](#input\_mil\_auth\_app\_log\_level) | n/a | `string` | `"DEBUG"` | no |
 | <a name="input_mil_auth_azure_keyvault_api_version"></a> [mil\_auth\_azure\_keyvault\_api\_version](#input\_mil\_auth\_azure\_keyvault\_api\_version) | n/a | `string` | `"7.4"` | no |
-| <a name="input_mil_auth_cpu"></a> [mil\_auth\_cpu](#input\_mil\_auth\_cpu) | n/a | `number` | `0.5` | no |
+| <a name="input_mil_auth_cpu"></a> [mil\_auth\_cpu](#input\_mil\_auth\_cpu) | n/a | `number` | `1` | no |
 | <a name="input_mil_auth_cryptoperiod"></a> [mil\_auth\_cryptoperiod](#input\_mil\_auth\_cryptoperiod) | n/a | `number` | `86400000` | no |
-| <a name="input_mil_auth_ephemeral_storage"></a> [mil\_auth\_ephemeral\_storage](#input\_mil\_auth\_ephemeral\_storage) | n/a | `string` | `"1.0Gi"` | no |
 | <a name="input_mil_auth_image"></a> [mil\_auth\_image](#input\_mil\_auth\_image) | n/a | `string` | n/a | yes |
 | <a name="input_mil_auth_keysize"></a> [mil\_auth\_keysize](#input\_mil\_auth\_keysize) | n/a | `number` | `4096` | no |
-| <a name="input_mil_auth_max_replicas"></a> [mil\_auth\_max\_replicas](#input\_mil\_auth\_max\_replicas) | n/a | `number` | `5` | no |
-| <a name="input_mil_auth_memory"></a> [mil\_auth\_memory](#input\_mil\_auth\_memory) | n/a | `string` | `"1.0Gi"` | no |
-| <a name="input_mil_auth_min_replicas"></a> [mil\_auth\_min\_replicas](#input\_mil\_auth\_min\_replicas) | n/a | `number` | `0` | no |
+| <a name="input_mil_auth_max_replicas"></a> [mil\_auth\_max\_replicas](#input\_mil\_auth\_max\_replicas) | n/a | `number` | `10` | no |
+| <a name="input_mil_auth_memory"></a> [mil\_auth\_memory](#input\_mil\_auth\_memory) | n/a | `string` | `"2Gi"` | no |
+| <a name="input_mil_auth_min_replicas"></a> [mil\_auth\_min\_replicas](#input\_mil\_auth\_min\_replicas) | n/a | `number` | `1` | no |
 | <a name="input_mil_auth_openapi_descriptor"></a> [mil\_auth\_openapi\_descriptor](#input\_mil\_auth\_openapi\_descriptor) | n/a | `string` | n/a | yes |
-| <a name="input_mil_auth_quarkus_log_level"></a> [mil\_auth\_quarkus\_log\_level](#input\_mil\_auth\_quarkus\_log\_level) | mil-auth specific | `string` | `"ERROR"` | no |
+| <a name="input_mil_auth_quarkus_log_level"></a> [mil\_auth\_quarkus\_log\_level](#input\_mil\_auth\_quarkus\_log\_level) | ------------------------------------------------------------------------------ Variables definition. ------------------------------------------------------------------------------ | `string` | `"ERROR"` | no |
+| <a name="input_mil_auth_quarkus_rest_client_logging_scope"></a> [mil\_auth\_quarkus\_rest\_client\_logging\_scope](#input\_mil\_auth\_quarkus\_rest\_client\_logging\_scope) | Scope for Quarkus REST client logging. Allowed values are: all, request-response, none. | `string` | `"all"` | no |
 | <a name="input_mil_auth_refresh_duration"></a> [mil\_auth\_refresh\_duration](#input\_mil\_auth\_refresh\_duration) | n/a | `number` | `3600` | no |
 | <a name="input_mil_fee_calculator_app_log_level"></a> [mil\_fee\_calculator\_app\_log\_level](#input\_mil\_fee\_calculator\_app\_log\_level) | n/a | `string` | `"DEBUG"` | no |
 | <a name="input_mil_fee_calculator_cpu"></a> [mil\_fee\_calculator\_cpu](#input\_mil\_fee\_calculator\_cpu) | n/a | `number` | `0.5` | no |
