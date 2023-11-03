@@ -47,7 +47,7 @@
                     <when condition="@( context.Variables.ContainsKey("filePrefix") && !context.Variables.ContainsKey("responseBody") )">
                         <!-- The responseBody isn't in the cache, Look for the configuration in the storage account -->
                         <send-request mode="new" response-variable-name="storageAccountResponse" timeout="5" ignore-error="true">
-                            <set-url>@( new Uri(new Uri("https://mildmocknodost.blob.core.windows.net/mocknodo/0000000020x/"), (string)context.Variables["filePrefix"] + (string)context.Variables["paymentToken"] + ".json").AbsoluteUri )</set-url>
+                            <set-url>@( new Uri(new Uri("${mock_nodo_st}mocknodo/0000000020x/"), (string)context.Variables["filePrefix"] + (string)context.Variables["paymentToken"] + ".json").AbsoluteUri )</set-url>
                             <set-method>GET</set-method>
                         </send-request>
                         <choose>
@@ -90,7 +90,7 @@
                     <when condition="@(!context.Variables.ContainsKey("jsonBodyRequest") )">
                         <!--  if not retrieve it from storage  -->
                         <send-request mode="new" response-variable-name="storageAccountResponse" timeout="5" ignore-error="true">
-                            <set-url>@( new Uri("https://mildmocknodost.blob.core.windows.net/mocknodo/0000000020x/payments.json").AbsoluteUri )</set-url>
+                            <set-url>@( new Uri("${mock_nodo_st}mocknodo/0000000020x/payments.json").AbsoluteUri )</set-url>
                             <set-method>GET</set-method>
                         </send-request>
                         <choose>
@@ -111,7 +111,7 @@
                             <when condition="@(!context.Variables.ContainsKey("nodeAccessToken") )">
                                 <!--  if not retrieve it from storage  -->
                                 <send-request mode="new" response-variable-name="idpResponse" timeout="5" ignore-error="true">
-                                    <set-url>@( new Uri("https://mil-d-apim.azure-api.net/mil-auth/token").AbsoluteUri )</set-url>
+                                    <set-url>@( new Uri("${mil_auth_url}/token").AbsoluteUri )</set-url>
                                     <set-method>POST</set-method>
                                     <set-header name="Content-Type" exists-action="override">
                                         <value>application/x-www-form-urlencoded</value>
@@ -119,7 +119,7 @@
                                     <set-header name="RequestId" exists-action="override">
                                         <value>00000000-0000-0000-0000-000000000000</value>
                                     </set-header>
-                                    <set-body>@($"client_secret=be81144b-e8ec-487d-a440-ea8d144343f7&client_id=92faf319-4219-455f-841b-bb692684672a&grant_type=client_credentials")</set-body>
+                                    <set-body>@($"client_secret=${client_secret}&client_id=${client_id}&grant_type=client_credentials")</set-body>
                                 </send-request>
                                 <choose>
                                     <when condition="@( ((IResponse)context.Variables["idpResponse"]).StatusCode == 200 )">
@@ -131,7 +131,7 @@
                             </when>
                         </choose>
                         <send-one-way-request mode="new">
-                            <set-url>@( new Uri(new Uri("https://mil-d-apim.azure-api.net/mil-payment-notice/payments/"), (string)context.Variables["transactionaId"]).AbsoluteUri )</set-url>
+                            <set-url>@( new Uri(new Uri("${mil_payment_notice_url}/payments/"), (string)context.Variables["transactionaId"]).AbsoluteUri )</set-url>
                             <set-method>POST</set-method>
                             <set-header name="Authorization" exists-action="override">
                                 <value>@($"Bearer {(string)context.Variables["nodeAccessToken"]}")</value>

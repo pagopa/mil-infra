@@ -1,18 +1,19 @@
 # ==============================================================================
-# This files contains stuff needed to run mil-auth microservice.
+# This file contains stuff needed to run mil-auth microservice.
+# The resources in this file are used by mil-auth only.
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
 # Variables definition.
 # ------------------------------------------------------------------------------
 variable "mil_auth_armored_storage_account" {
-  type    = bool
-  default = true
+  description = "If true the storage account will be protected with a private link and the storage containers will be private."
+  type        = bool
 }
 
 variable "mil_auth_armored_key_vault" {
-  type    = bool
-  default = true
+  description = "If true the key vault will be protected with a private link."
+  type        = bool
 }
 
 variable "mil_auth_quarkus_log_level" {
@@ -84,8 +85,13 @@ variable "mil_auth_azure_keyvault_api_version" {
   default = "7.4"
 }
 
+variable "mil_auth_path" {
+  type    = string
+  default = "mil-auth"
+}
+
 # ------------------------------------------------------------------------------
-# Storage account containing files to configure mil-auth.
+# Storage account containing configuration files.
 # ------------------------------------------------------------------------------
 resource "azurerm_storage_account" "auth" {
   name                          = "${var.prefix}${var.env_short}authst"
@@ -101,30 +107,30 @@ resource "azurerm_storage_account" "auth" {
 # ------------------------------------------------------------------------------
 # Storage container containing files to configure clients.
 # ------------------------------------------------------------------------------
-resource "azurerm_storage_container" "clients" {
-  name                  = "clients"
-  storage_account_name  = azurerm_storage_account.auth.name
-  container_access_type = var.mil_auth_armored_storage_account ? "private" : "blob"
-}
+#resource "azurerm_storage_container" "clients" {
+#  name                  = "clients"
+#  storage_account_name  = azurerm_storage_account.auth.name
+#  container_access_type = var.mil_auth_armored_storage_account ? "private" : "blob"
+#}
 
 # ------------------------------------------------------------------------------
 # Storage container containing files to configure roles.
 # ------------------------------------------------------------------------------
-resource "azurerm_storage_container" "roles" {
-  name                  = "roles"
-  storage_account_name  = azurerm_storage_account.auth.name
-  container_access_type = var.mil_auth_armored_storage_account ? "private" : "blob"
-}
+#resource "azurerm_storage_container" "roles" {
+#  name                  = "roles"
+#  storage_account_name  = azurerm_storage_account.auth.name
+#  container_access_type = var.mil_auth_armored_storage_account ? "private" : "blob"
+#}
 
 # ------------------------------------------------------------------------------
 # Storage container containing files to configure users (this is a temporary
 # solution).
 # ------------------------------------------------------------------------------
-resource "azurerm_storage_container" "users" {
-  name                  = "users"
-  storage_account_name  = azurerm_storage_account.auth.name
-  container_access_type = var.mil_auth_armored_storage_account ? "private" : "blob"
-}
+#resource "azurerm_storage_container" "users" {
+#  name                  = "users"
+#  storage_account_name  = azurerm_storage_account.auth.name
+#  container_access_type = var.mil_auth_armored_storage_account ? "private" : "blob"
+#}
 
 # ------------------------------------------------------------------------------
 # Private endpoint from APP SUBNET (containing Container Apps) to the storage
@@ -167,7 +173,7 @@ resource "azurerm_private_endpoint" "auth_storage_pep" {
 }
 
 # ------------------------------------------------------------------------------
-# Key vault for cryptographics operation.
+# Key vault for cryptographics operations.
 # ------------------------------------------------------------------------------
 resource "azurerm_key_vault" "auth_key_vault" {
   name                          = "${local.project}-auth-kv"
@@ -179,6 +185,7 @@ resource "azurerm_key_vault" "auth_key_vault" {
   sku_name                      = "premium"
   public_network_access_enabled = var.mil_auth_armored_key_vault ? false : true
   enable_rbac_authorization     = true
+  tags                          = var.tags
 }
 
 # ------------------------------------------------------------------------------
@@ -215,13 +222,13 @@ resource "azurerm_private_endpoint" "auth_key_vault_pep" {
   private_service_connection {
     name                           = "${local.project}-auth-kv-psc"
     private_connection_resource_id = azurerm_key_vault.auth_key_vault.id
-    subresource_names              = ["namespace"]
+    subresource_names              = ["vault"]
     is_manual_connection           = false
   }
 }
 
 # ------------------------------------------------------------------------------
-# Container app for mil-auth.
+# Container app.
 # ------------------------------------------------------------------------------
 resource "azurerm_container_app" "mil_auth" {
   name                         = "${local.project}-auth-ca"
@@ -308,6 +315,7 @@ resource "azurerm_container_app" "mil_auth" {
     traffic_weight {
       latest_revision = true
       percentage      = 100
+      #revision_suffix = formatdate("YYYYMMDDhhmmssZZZZ", timestamp())
     }
   }
 
@@ -316,7 +324,7 @@ resource "azurerm_container_app" "mil_auth" {
 
 # ------------------------------------------------------------------------------
 # Assignement of role "Key Vault Crypto Officer" to system-managed identity of
-# mil-auth container app, to use key vault.
+# container app, to use key vault.
 # ------------------------------------------------------------------------------
 resource "azurerm_role_assignment" "auth_kv" {
   scope                = azurerm_key_vault.auth_key_vault.id
@@ -326,7 +334,7 @@ resource "azurerm_role_assignment" "auth_kv" {
 
 # ------------------------------------------------------------------------------
 # Assignement of role "Storage Blob Data Reader" to system-managed identity of
-# mil-auth container app, to use storage account.
+# container app, to use storage account.
 # ------------------------------------------------------------------------------
 resource "azurerm_role_assignment" "auth_storage" {
   scope                = azurerm_storage_account.auth.id
@@ -335,7 +343,7 @@ resource "azurerm_role_assignment" "auth_storage" {
 }
 
 # ------------------------------------------------------------------------------
-# Query for stdout/stdin of mil-auth container app.
+# Query for stdout/stdin of container app.
 # ------------------------------------------------------------------------------
 resource "azurerm_log_analytics_query_pack_query" "auth_ca_console_logs" {
   query_pack_id = azurerm_log_analytics_query_pack.query_pack.id
@@ -360,7 +368,7 @@ module "auth_api" {
   # The Path for this API Management API, which is a relative URL which uniquely
   # identifies this API and all of its resource paths within the API Management
   # Service.
-  path = "mil-auth"
+  path = var.mil_auth_path
 
   display_name          = "auth"
   content_format        = "openapi-link"

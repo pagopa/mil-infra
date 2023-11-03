@@ -1,6 +1,20 @@
-#
-# Storage account for configuration files
-#
+# ==============================================================================
+# This file contains stuff needed to setup the storage account that contains
+# acquirers configuration. It is used by mil-payment-notice and
+# mil-fee-calculator microservices.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Variables definition.
+# ------------------------------------------------------------------------------
+variable "armored_storage_account_for_acquirers_conf" {
+  description = "If true the storage account will be protected with a private link and the storage containers will be private."
+  type        = bool
+}
+
+# ------------------------------------------------------------------------------
+# Storage account.
+# ------------------------------------------------------------------------------
 resource "azurerm_storage_account" "conf" {
   name                          = "${var.prefix}${var.env_short}confst"
   resource_group_name           = azurerm_resource_group.data.name
@@ -8,34 +22,31 @@ resource "azurerm_storage_account" "conf" {
   account_tier                  = "Standard"
   account_replication_type      = "LRS"
   account_kind                  = "StorageV2"
-  public_network_access_enabled = var.env_short == "d" ? true : false
+  public_network_access_enabled = var.armored_storage_account_for_acquirers_conf ? false : true
   tags                          = var.tags
-
-  network_rules {
-    default_action = var.env_short == "d" ? "Allow" : "Deny"
-  }
 }
 
-#
-# Storage container for acquirer configuration
-#
-resource "azurerm_storage_container" "acquirers" {
-  name                  = "acquirers2"
-  storage_account_name  = azurerm_storage_account.conf.name
-  container_access_type = "blob"
-}
+# ------------------------------------------------------------------------------
+# Storage container.
+# ------------------------------------------------------------------------------
+#resource "azurerm_storage_container" "acquirers" {
+#  name                  = "acquirers"
+#  storage_account_name  = azurerm_storage_account.conf.name
+#  container_access_type = var.armored_storage_account_for_acquirers_conf ? "private" : "blob"
+#}
 
-#
-# PRIVATE ENDPOINT APP SUBNET -> STORAGE ACCOUNT
-#
+# ------------------------------------------------------------------------------
+# Private endpoint from APP SUBNET (containing Container Apps) to the storage
+# account.
+# ------------------------------------------------------------------------------
 resource "azurerm_private_dns_zone" "conf_storage" {
-  count               = var.env_short == "d" ? 0 : 1
+  count               = var.armored_storage_account_for_acquirers_conf ? 1 : 0
   name                = "privatelink.blob.core.windows.net"
   resource_group_name = azurerm_resource_group.network.name
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "conf_storage" {
-  count                 = var.env_short == "d" ? 0 : 1
+  count                 = var.armored_storage_account_for_acquirers_conf ? 1 : 0
   name                  = azurerm_virtual_network.intern.name
   resource_group_name   = azurerm_resource_group.network.name
   private_dns_zone_name = azurerm_private_dns_zone.conf_storage[0].name
@@ -43,7 +54,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "conf_storage" {
 }
 
 resource "azurerm_private_endpoint" "conf_storage_pep" {
-  count               = var.env_short == "d" ? 0 : 1
+  count               = var.armored_storage_account_for_acquirers_conf ? 1 : 0
   name                = "${local.project}-conf-storage-pep"
   location            = azurerm_resource_group.network.location
   resource_group_name = azurerm_resource_group.network.name

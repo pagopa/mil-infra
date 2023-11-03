@@ -1,15 +1,39 @@
-#
-# DNS zone
-#
+# ==============================================================================
+# This file contains stuff needed to setup the public DNS.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Variables definition.
+# ------------------------------------------------------------------------------
+variable "dns_zone_mil_prefix" {
+  type        = string
+  description = "Product DNS zone name prefix."
+}
+
+variable "dns_external_domain" {
+  type        = string
+  description = "Organization external domain."
+  default     = "pagopa.it"
+}
+
+variable "dns_default_ttl" {
+  type        = number
+  description = "Time-to-live (seconds)."
+  default     = 3600
+}
+
+# ------------------------------------------------------------------------------
+# DNS zone.
+# ------------------------------------------------------------------------------
 resource "azurerm_dns_zone" "mil" {
   name                = "${var.dns_zone_mil_prefix}.${var.dns_external_domain}"
   resource_group_name = azurerm_resource_group.network.name
   tags                = var.tags
 }
 
-#
-# This is executed for PROD ONLY and gives Public DNS Delegation to DEV
-#
+# ------------------------------------------------------------------------------
+# This is executed for PROD ONLY and gives Public DNS Delegation to DEV.
+# ------------------------------------------------------------------------------
 resource "azurerm_dns_ns_record" "dev_mil" {
   count               = var.env_short == "p" ? 1 : 0
   name                = "dev"
@@ -25,9 +49,9 @@ resource "azurerm_dns_ns_record" "dev_mil" {
   ]
 }
 
-#
-# This is executed for PROD ONLY and gives Public DNS Delegation to UAT
-#
+# ------------------------------------------------------------------------------
+# This is executed for PROD ONLY and gives Public DNS Delegation to UAT.
+# ------------------------------------------------------------------------------
 resource "azurerm_dns_ns_record" "uat_mil" {
   count               = var.env_short == "p" ? 1 : 0
   name                = "uat"
@@ -43,10 +67,11 @@ resource "azurerm_dns_ns_record" "uat_mil" {
   ]
 }
 
-#
+# ------------------------------------------------------------------------------
 # Certification Authority Authorization (CAA) record.
-# Specify which Certificate Authorities are allowed to issue certificates for this domain.
-#
+# Specify which Certificate Authorities are allowed to issue certificates for
+# this domain.
+# ------------------------------------------------------------------------------
 resource "azurerm_dns_caa_record" "mil" {
   name                = "@"
   zone_name           = azurerm_dns_zone.mil.name

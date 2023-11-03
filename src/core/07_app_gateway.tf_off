@@ -1,4 +1,18 @@
 #
+# App Gateway
+#
+variable "app_gateway" {
+  type = object({
+    min_capacity = number
+    max_capacity = number
+    waf_enabled  = bool
+    sku_name     = string
+    sku_tier     = string
+  })
+  description = "Application Gateway configuration"
+}
+
+#
 # User assigned identity
 #
 resource "azurerm_user_assigned_identity" "appgw" {

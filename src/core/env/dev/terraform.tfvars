@@ -98,15 +98,6 @@ mil_fee_calculator_jwt_publickey_location = "https://mil-d-apim.azure-api.net/mi
 #mil_fee_calculator_gec_url = "https://api.uat.platform.pagopa.it/afm/node/calculator-service/v1"
 
 #
-# mil-payment-notice and mil-fee-calculator
-#
-mil_acquirer_conf_url                = "https://mil-d-apim.azure-api.net"
-mil_acquirer_conf_ver                = "1.0.0"
-mil_acquirer_conf_connect_timeout    = 2000
-mil_acquirer_conf_read_timeout       = 2000
-mil_acquirer_conf_openapi_descriptor = "https://raw.githubusercontent.com/pagopa/mil-apis/a4aac33f6af1f7328c9a457c75622fd62ad00356/openapi-mono/acquirer-conf.yaml"
-
-#
 # mil-auth
 #
 mil_auth_armored_storage_account           = false
@@ -170,20 +161,19 @@ mil_idpay_cryptoperiod           = 86400000
 mil_idpay_keysize                = 4096
 
 #
-# mil-idpay
+# mock-idpay-ipzs
 #
-mil_idpay_ipzs_mock_quarkus_log_level              = "ERROR"
-mil_idpay_ipzs_mock_app_log_level                  = "DEBUG"
-mil_idpay_ipzs_mock_mongo_connect_timeout          = "5s"
-mil_idpay_ipzs_mock_mongo_read_timeout             = "10s"
-mil_idpay_ipzs_mock_mongo_server_selection_timeout = "5s"
-mil_idpay_ipzs_mock_image                          = "ghcr.io/pagopa/idpay-ipzs-mock:latest"
-mil_idpay_ipzs_mock_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/idpay-ipzs-mock/8414a22c5042db9a035ff014b77b6a015ec2426c/src/main/resources/META-INF/openapi.yml"
-mil_idpay_ipzs_mock_cpu                            = 1
-mil_idpay_ipzs_mock_ephemeral_storage              = "1.0Gi"
-mil_idpay_ipzs_mock_memory                         = "2Gi"
-mil_idpay_ipzs_mock_max_replicas                   = 5
-mil_idpay_ipzs_mock_min_replicas                   = 1
+mock_idpay_ipzs_quarkus_log_level              = "ERROR"
+mock_idpay_ipzs_app_log_level                  = "DEBUG"
+mock_idpay_ipzs_mongo_connect_timeout          = "5s"
+mock_idpay_ipzs_mongo_read_timeout             = "10s"
+mock_idpay_ipzs_mongo_server_selection_timeout = "5s"
+mock_idpay_ipzs_image                          = "ghcr.io/pagopa/idpay-ipzs-mock:latest"
+mock_idpay_ipzs_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/idpay-ipzs-mock/8414a22c5042db9a035ff014b77b6a015ec2426c/src/main/resources/META-INF/openapi.yml"
+mock_idpay_ipzs_cpu                            = 1
+mock_idpay_ipzs_memory                         = "2Gi"
+mock_idpay_ipzs_max_replicas                   = 5
+mock_idpay_ipzs_min_replicas                   = 1
 
 #
 # APIM
