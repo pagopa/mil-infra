@@ -19,7 +19,6 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_acquirer_conf_api"></a> [acquirer\_conf\_api](#module\_acquirer\_conf\_api) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v7.14.0 |
 | <a name="module_apim"></a> [apim](#module\_apim) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management | v7.14.0 |
 | <a name="module_appgw_cert"></a> [appgw\_cert](#module\_appgw\_cert) | git::https://github.com/pagopa/terraform-azurerm-v3.git//letsencrypt_credential | v7.14.0 |
 | <a name="module_auth_api"></a> [auth\_api](#module\_auth\_api) | git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v7.14.0 |
@@ -43,7 +42,6 @@
 | [azuread_application.mil_services](https://registry.terraform.io/providers/hashicorp/azuread/2.43.0/docs/resources/application) | resource |
 | [azuread_application_password.mil_services](https://registry.terraform.io/providers/hashicorp/azuread/2.43.0/docs/resources/application_password) | resource |
 | [azuread_service_principal.mil_services](https://registry.terraform.io/providers/hashicorp/azuread/2.43.0/docs/resources/service_principal) | resource |
-| [azurerm_api_management_api_diagnostic.acquirer_conf_api](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.auth_api](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.fee_calculator_api](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.idpay_api](https://registry.terraform.io/providers/hashicorp/azurerm/3.71.0/docs/resources/api_management_api_diagnostic) | resource |
@@ -173,6 +171,8 @@
 | <a name="input_mil_acquirer_conf_ver"></a> [mil\_acquirer\_conf\_ver](#input\_mil\_acquirer\_conf\_ver) | n/a | `string` | `"1.0.0"` | no |
 | <a name="input_mil_auth_access_duration"></a> [mil\_auth\_access\_duration](#input\_mil\_auth\_access\_duration) | n/a | `number` | `900` | no |
 | <a name="input_mil_auth_app_log_level"></a> [mil\_auth\_app\_log\_level](#input\_mil\_auth\_app\_log\_level) | n/a | `string` | `"DEBUG"` | no |
+| <a name="input_mil_auth_armored_key_vault"></a> [mil\_auth\_armored\_key\_vault](#input\_mil\_auth\_armored\_key\_vault) | n/a | `bool` | `true` | no |
+| <a name="input_mil_auth_armored_storage_account"></a> [mil\_auth\_armored\_storage\_account](#input\_mil\_auth\_armored\_storage\_account) | ------------------------------------------------------------------------------ Variables definition. ------------------------------------------------------------------------------ | `bool` | `true` | no |
 | <a name="input_mil_auth_azure_keyvault_api_version"></a> [mil\_auth\_azure\_keyvault\_api\_version](#input\_mil\_auth\_azure\_keyvault\_api\_version) | n/a | `string` | `"7.4"` | no |
 | <a name="input_mil_auth_cpu"></a> [mil\_auth\_cpu](#input\_mil\_auth\_cpu) | n/a | `number` | `1` | no |
 | <a name="input_mil_auth_cryptoperiod"></a> [mil\_auth\_cryptoperiod](#input\_mil\_auth\_cryptoperiod) | n/a | `number` | `86400000` | no |
@@ -182,7 +182,7 @@
 | <a name="input_mil_auth_memory"></a> [mil\_auth\_memory](#input\_mil\_auth\_memory) | n/a | `string` | `"2Gi"` | no |
 | <a name="input_mil_auth_min_replicas"></a> [mil\_auth\_min\_replicas](#input\_mil\_auth\_min\_replicas) | n/a | `number` | `1` | no |
 | <a name="input_mil_auth_openapi_descriptor"></a> [mil\_auth\_openapi\_descriptor](#input\_mil\_auth\_openapi\_descriptor) | n/a | `string` | n/a | yes |
-| <a name="input_mil_auth_quarkus_log_level"></a> [mil\_auth\_quarkus\_log\_level](#input\_mil\_auth\_quarkus\_log\_level) | ------------------------------------------------------------------------------ Variables definition. ------------------------------------------------------------------------------ | `string` | `"ERROR"` | no |
+| <a name="input_mil_auth_quarkus_log_level"></a> [mil\_auth\_quarkus\_log\_level](#input\_mil\_auth\_quarkus\_log\_level) | n/a | `string` | `"ERROR"` | no |
 | <a name="input_mil_auth_quarkus_rest_client_logging_scope"></a> [mil\_auth\_quarkus\_rest\_client\_logging\_scope](#input\_mil\_auth\_quarkus\_rest\_client\_logging\_scope) | Scope for Quarkus REST client logging. Allowed values are: all, request-response, none. | `string` | `"all"` | no |
 | <a name="input_mil_auth_refresh_duration"></a> [mil\_auth\_refresh\_duration](#input\_mil\_auth\_refresh\_duration) | n/a | `number` | `3600` | no |
 | <a name="input_mil_fee_calculator_app_log_level"></a> [mil\_fee\_calculator\_app\_log\_level](#input\_mil\_fee\_calculator\_app\_log\_level) | n/a | `string` | `"DEBUG"` | no |
