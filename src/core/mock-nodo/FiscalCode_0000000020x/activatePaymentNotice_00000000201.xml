@@ -3,7 +3,7 @@
     <soapenv:Body>
         <nfp:activatePaymentNoticeV2Response>
 			<outcome>OK</outcome>
-			<totalAmount>100.00</totalAmount>
+			<totalAmount>10.00</totalAmount>
 			<paymentDescription>TARI 2021</paymentDescription>
 			<fiscalCodePA>00000000201</fiscalCodePA>
 			<companyName>companyName</companyName>
@@ -12,7 +12,7 @@
 			<transferList>
 				<transfer>
 					<idTransfer>1</idTransfer>
-					<transferAmount>100.00</transferAmount>
+					<transferAmount>10.00</transferAmount>
 					<fiscalCodePA>00000000201</fiscalCodePA>
 					<IBAN>IT30N0103076271000001823603</IBAN>
 					<remittanceInformation>TARI Comune EC_TE</remittanceInformation>

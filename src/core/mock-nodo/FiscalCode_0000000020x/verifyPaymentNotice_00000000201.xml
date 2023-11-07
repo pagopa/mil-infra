@@ -5,7 +5,7 @@
             <outcome>OK</outcome>
             <paymentList>
                 <paymentOptionDescription>
-                    <amount>100.00</amount>
+                    <amount>10.00</amount>
                     <options>EQ</options>
                     <dueDate>2021-07-31</dueDate>
                     <paymentNote>pagamentoTest</paymentNote>
