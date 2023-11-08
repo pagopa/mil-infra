@@ -140,97 +140,7 @@ resource "azurerm_cosmosdb_mongo_collection" "idpayTransactions" {
 }
 
 # ------------------------------------------------------------------------------
-# Definition of an application to which assign grants.
-# THIS WILL BE REMOVED WHEN mil-idpay WILL USE SYSTEM-MANAGED IDENTITY. 
-# ------------------------------------------------------------------------------
-resource "azuread_application" "mil_services" {
-  display_name = "${local.project}-services"
-
-  required_resource_access {
-    # Microsoft Graph
-    resource_app_id = "00000003-0000-0000-c000-000000000000"
-
-    resource_access {
-      # User.Read
-      id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
-      type = "Scope"
-    }
-  }
-
-  required_resource_access {
-    # Azure Key Vault
-    resource_app_id = "cfa8b339-82a2-471a-a3c9-0fc0be7a4093"
-
-    resource_access {
-      # user_impersonation
-      id   = "f53da476-18e3-4152-8e01-aec403e6edc0"
-      type = "Scope"
-    }
-  }
-
-  device_only_auth_enabled       = false
-  fallback_public_client_enabled = false
-  group_membership_claims        = []
-  identifier_uris                = []
-  oauth2_post_response_required  = false
-  owners                         = []
-  prevent_duplicate_names        = false
-  sign_in_audience               = "AzureADMyOrg"
-
-  api {
-    known_client_applications      = []
-    mapped_claims_enabled          = false
-    requested_access_token_version = 1
-  }
-
-  feature_tags {
-    custom_single_sign_on = false
-    enterprise            = false
-    gallery               = false
-    hide                  = false
-  }
-
-  public_client {
-    redirect_uris = []
-  }
-
-  single_page_application {
-    redirect_uris = []
-  }
-
-  web {
-    redirect_uris = []
-
-    implicit_grant {
-      access_token_issuance_enabled = false
-      id_token_issuance_enabled     = false
-    }
-  }
-}
-
-# ------------------------------------------------------------------------------
-# Definition of the service principal for the application.
-# THIS WILL BE REMOVED WHEN mil-idpay WILL USE SYSTEM-MANAGED IDENTITY. 
-# ------------------------------------------------------------------------------
-resource "azuread_service_principal" "mil_services" {
-  application_id = azuread_application.mil_services.application_id
-  use_existing   = true
-}
-
-# ------------------------------------------------------------------------------
-# Definition of the credentials for the application.
-# THIS WILL BE REMOVED WHEN mil-idpay WILL USE SYSTEM-MANAGED IDENTITY. 
-# ------------------------------------------------------------------------------
-resource "azuread_application_password" "mil_services" {
-  application_object_id = azuread_application.mil_services.object_id
-  display_name          = "${local.project}-services"
-  end_date_relative     = "262800h"
-}
-
-# ------------------------------------------------------------------------------
 # Key vault for cryptographics operations.
-# THE DEFINITION OF THIS KEY VAUL WILL BE ALIGNED TO auth_key_vault WHEN
-# mil-idpay WILL USE SYSTEM-MANAGED IDENTITY.
 # ------------------------------------------------------------------------------
 resource "azurerm_key_vault" "appl_key_vault" {
   name                          = "${local.project}-appl-kv"
@@ -241,96 +151,8 @@ resource "azurerm_key_vault" "appl_key_vault" {
   purge_protection_enabled      = true
   sku_name                      = "premium"
   public_network_access_enabled = var.mil_idpay_armored_key_vault ? false : true
-
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
-
-    key_permissions = [
-      "Get",
-      "List",
-      "Update",
-      "Create",
-      "Import",
-      "Delete",
-      "Recover",
-      "Backup",
-      "Restore",
-      "GetRotationPolicy",
-      "SetRotationPolicy",
-      "Rotate",
-      "Encrypt",
-      "Decrypt",
-      "UnwrapKey",
-      "WrapKey",
-      "Verify",
-      "Sign",
-      "Purge",
-      "Release"
-    ]
-
-    secret_permissions = [
-      "Get",
-      "List",
-      "Set",
-      "Delete",
-      "Recover",
-      "Backup",
-      "Restore",
-      "Purge"
-    ]
-
-    certificate_permissions = [
-      "Get",
-      "List",
-      "Update",
-      "Create",
-      "Import",
-      "Delete",
-      "Recover",
-      "Backup",
-      "Restore",
-      "ManageContacts",
-      "ManageIssuers",
-      "GetIssuers",
-      "ListIssuers",
-      "SetIssuers",
-      "DeleteIssuers",
-      "Purge"
-    ]
-  }
-
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = azuread_service_principal.mil_services.object_id
-
-    key_permissions = [
-      "Get",
-      "List",
-      "Update",
-      "Create",
-      "Import",
-      "Delete",
-      "Recover",
-      "Backup",
-      "Restore",
-      "GetRotationPolicy",
-      "SetRotationPolicy",
-      "Rotate",
-      "Encrypt",
-      "Decrypt",
-      "UnwrapKey",
-      "WrapKey",
-      "Verify",
-      "Sign",
-      "Purge",
-      "Release"
-    ]
-
-    secret_permissions = []
-
-    certificate_permissions = []
-  }
+  enable_rbac_authorization     = true
+  tags                          = var.tags
 }
 
 # ------------------------------------------------------------------------------
@@ -427,21 +249,6 @@ resource "azurerm_container_app" "mil_idpay" {
       }
 
       env {
-        name        = "azuread_tenant_id"
-        secret_name = "azure-tenant-id"
-      }
-
-      env {
-        name        = "azuread_client_id"
-        secret_name = "azure-client-id"
-      }
-
-      env {
-        name        = "azuread_client_secret"
-        secret_name = "azure-client-secret"
-      }
-
-      env {
         name  = "ipzs-rest-api.url"
         value = var.mil_idpay_ipzs_rest_api_url
       }
@@ -483,7 +290,7 @@ resource "azurerm_container_app" "mil_idpay" {
     traffic_weight {
       latest_revision = true
       percentage      = 100
-      revision_suffix = formatdate("YYYYMMDDhhmmssZZZZ", timestamp())
+      #revision_suffix = formatdate("YYYYMMDDhhmmssZZZZ", timestamp())
     }
   }
 
@@ -500,21 +307,6 @@ resource "azurerm_container_app" "mil_idpay" {
   secret {
     name  = "idpay-subscription-key"
     value = data.azurerm_key_vault_secret.idpay_subscription_key.value
-  }
-
-  secret {
-    name  = "azure-tenant-id"
-    value = data.azurerm_client_config.current.tenant_id
-  }
-
-  secret {
-    name  = "azure-client-id"
-    value = azuread_application.mil_services.application_id
-  }
-
-  secret {
-    name  = "azure-client-secret"
-    value = azuread_application_password.mil_services.value
   }
 
   tags = var.tags

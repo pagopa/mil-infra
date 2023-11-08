@@ -130,11 +130,18 @@ resource "azurerm_cosmosdb_mongo_collection" "paymentTransactions" {
 
   index {
     keys = [
-      "terminalId",
-      "merchantId",
-      "channel",
-      "acquirerId",
-      "insertTimestamp"
+      "paymentTransaction.terminalId",
+      "paymentTransaction.merchantId",
+      "paymentTransaction.channel",
+      "paymentTransaction.acquirerId",
+      "paymentTransaction.insertTimestamp"
+    ]
+    unique = false
+  }
+
+    index {
+    keys = [
+      "paymentTransaction.insertTimestamp"
     ]
     unique = false
   }

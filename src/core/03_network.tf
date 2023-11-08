@@ -40,6 +40,11 @@ variable "vpn_snet_cidr" {
   description = "VPN Subnet CIDR."
 }
 
+variable "dnsforwarder_snet_cidr" {
+  type        = string
+  description = "DNS Forwarder Subnet CIDR."
+}
+
 # ------------------------------------------------------------------------------
 # Main virtual network.
 # ------------------------------------------------------------------------------
@@ -110,4 +115,24 @@ resource "azurerm_subnet" "apim" {
   resource_group_name  = azurerm_virtual_network.integr.resource_group_name
   virtual_network_name = azurerm_virtual_network.integr.name
   address_prefixes     = [var.apim_snet_cidr]
+}
+
+# ------------------------------------------------------------------------------
+# Subnet for DNS forwarder.
+# ------------------------------------------------------------------------------
+module "dns_forwarder_snet" {
+  source                                    = "git::https://github.com/pagopa/terraform-azurerm-v3.git//subnet?ref=v7.14.0"
+  name                                      = "${local.project}-dnsforwarder-snet"
+  resource_group_name                       = azurerm_virtual_network.intern.resource_group_name
+  virtual_network_name                      = azurerm_virtual_network.intern.name
+  address_prefixes                          = [var.dnsforwarder_snet_cidr]
+  private_endpoint_network_policies_enabled = true
+
+  delegation = {
+    name = "delegation"
+    service_delegation = {
+      name    = "Microsoft.ContainerInstance/containerGroups"
+      actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
+    }
+  }
 }

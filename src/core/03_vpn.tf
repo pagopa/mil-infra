@@ -49,3 +49,15 @@ module "vpn" {
 
   tags = var.tags
 }
+
+# ------------------------------------------------------------------------------
+# DNS forwarder.
+# ------------------------------------------------------------------------------
+module "vpn_dns_forwarder" {
+  source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//dns_forwarder?ref=v7.14.0"
+  name                = "${local.project}-vpn-dnsfrw"
+  location            = var.location
+  resource_group_name = azurerm_virtual_network.intern.resource_group_name
+  subnet_id           = module.dns_forwarder_snet.id
+  tags                = var.tags
+}
