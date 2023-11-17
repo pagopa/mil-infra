@@ -20,44 +20,86 @@ data "azuread_application" "vpn_app" {
   display_name = "${local.project}-app-vpn"
 }
 
-module "vpn" {
-  source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//vpn_gateway?ref=v7.14.0"
+resource "random_string" "dns" {
+  length  = 6
+  special = false
+  upper   = false
+}
 
-  name                = "${local.project}-intern-vpn"
+resource "azurerm_public_ip" "vpn" {
+  name                = "${local.project}-vpn-pip"
   location            = var.location
   resource_group_name = azurerm_resource_group.network.name
+  allocation_method = "Dynamic"
+  domain_name_label = "${lower(replace(local.project, "/[[:^alnum:]]/", ""))}vpn${random_string.dns.result}"
+  sku               = var.vpn_pip_sku
+  tags = var.tags
+}
+
+resource "azurerm_virtual_network_gateway" "vpn" {
+  name                = "${local.project}-vpn-gw"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.network.name
+  type                = "Vpn"
+  vpn_type            = "RouteBased"
+  active_active       = false
+  enable_bgp          = false
   sku                 = var.vpn_sku
-  pip_sku             = var.vpn_pip_sku
-  subnet_id           = azurerm_subnet.vpn.id
+  tags                = var.tags
 
-  #log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics_workspace.id
-  #log_storage_account_id     = module.operations_logs.id
+  ip_configuration {
+    name                          = "${local.project}-vpn-gw-config"
+    public_ip_address_id          = azurerm_public_ip.vpn.id
+    private_ip_address_allocation = "Dynamic"
+    subnet_id                     = azurerm_subnet.vpn.id
+  }
 
-  vpn_client_configuration = [
-    {
-      address_space         = ["172.16.1.0/24"],
-      vpn_client_protocols  = ["OpenVPN"],
+  vpn_client_configuration {
       aad_audience          = data.azuread_application.vpn_app.application_id
       aad_issuer            = "https://sts.windows.net/${data.azurerm_subscription.current.tenant_id}/"
       aad_tenant            = "https://login.microsoftonline.com/${data.azurerm_subscription.current.tenant_id}"
-      radius_server_address = null
-      radius_server_secret  = null
-      revoked_certificate   = []
-      root_certificate      = []
-    }
-  ]
-
-  tags = var.tags
+      address_space         = ["172.16.1.0/24"]
+      vpn_client_protocols  = ["OpenVPN"]
+  }
 }
 
 # ------------------------------------------------------------------------------
 # DNS forwarder.
 # ------------------------------------------------------------------------------
-module "vpn_dns_forwarder" {
-  source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//dns_forwarder?ref=v7.14.0"
+data "local_file" "corefile" {
+  filename = format("%s/Corefile", path.module)
+}
+
+resource "azurerm_container_group" "vpn_dns_forwarder" {
   name                = "${local.project}-vpn-dnsfrw"
   location            = var.location
   resource_group_name = azurerm_virtual_network.intern.resource_group_name
-  subnet_id           = module.dns_forwarder_snet.id
-  tags                = var.tags
+  ip_address_type     = "Private"
+  subnet_ids          = [azurerm_subnet.azurerm_subnet.dns_forwarder_snet.id]
+  os_type             = "Linux"
+  tags = var.tags
+
+  container {
+    name = "dns-forwarder"
+    # from https://hub.docker.com/r/coredns/coredns
+    image  = "coredns/coredns:1.10.1@sha256:be7652ce0b43b1339f3d14d9b14af9f588578011092c1f7893bd55432d83a378"
+    cpu    = "0.5"
+    memory = "0.5"
+    commands = ["/coredns", "-conf", "/app/conf/Corefile"]
+
+    ports {
+      port     = 53
+      protocol = "UDP"
+    }
+
+    volume {
+      mount_path = "/app/conf"
+      name       = "dns-forwarder-conf"
+      read_only  = true
+      secret = {
+        Corefile = base64encode(data.local_file.corefile.content)
+      }
+    }
+  }
 }
+

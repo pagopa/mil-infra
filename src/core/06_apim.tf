@@ -21,30 +21,63 @@ variable "apim_publisher_name" {
 # ------------------------------------------------------------------------------
 data "azurerm_key_vault_secret" "apim_publisher_email" {
   name         = "apim-publisher-email"
-  key_vault_id = module.key_vault.id
+  key_vault_id = azurerm_key_vault.general.id
 }
 
 # ------------------------------------------------------------------------------
 # API Manager.
 # ------------------------------------------------------------------------------
-module "apim" {
-  source               = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management?ref=v7.14.0"
+resource "azurerm_api_management" "mil" {
   name                 = "${local.project}-apim"
   resource_group_name  = azurerm_resource_group.integration.name
   location             = azurerm_resource_group.integration.location
-  subnet_id            = azurerm_subnet.apim.id
-  sku_name             = var.apim_sku
-  virtual_network_type = "External"
-  sign_up_enabled      = false
-  lock_enable          = false
   publisher_name       = var.apim_publisher_name
   publisher_email      = data.azurerm_key_vault_secret.apim_publisher_email.value
-  redis_cache_id       = null
-  application_insights = {
-    enabled             = true
+  sku_name             = var.apim_sku
+  virtual_network_type = "External"
+  tags                 = var.tags
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  virtual_network_configuration {
+    subnet_id = azurerm_subnet.apim.id
+  }
+
+  lifecycle {
+    ignore_changes = [
+      sku_name
+    ]
+  }
+}
+
+# ------------------------------------------------------------------------------
+# APIM logger.
+# ------------------------------------------------------------------------------
+resource "azurerm_api_management_logger" "mil" {
+  name                = "${local.project}-apim-logger"
+  api_management_name = azurerm_api_management.mil.name
+  resource_group_name = azurerm_resource_group.integration.name
+
+  application_insights {
     instrumentation_key = azurerm_application_insights.mil.instrumentation_key
   }
-  tags = var.tags
+}
+
+# ------------------------------------------------------------------------------
+# APIM diagnostic.
+# ------------------------------------------------------------------------------
+resource "azurerm_api_management_diagnostic" "this" {
+  identifier                = "applicationinsights"
+  resource_group_name       = azurerm_resource_group.integration.name
+  api_management_name       = azurerm_api_management.this.name
+  api_management_logger_id  = azurerm_api_management_logger.mil.id
+  sampling_percentage       = 5
+  always_log_errors         = true
+  log_client_ip             = true
+  verbosity                 = "error"
+  http_correlation_protocol = "W3C"
 }
 
 # ------------------------------------------------------------------------------

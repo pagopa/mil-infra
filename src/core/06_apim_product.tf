@@ -1,14 +1,12 @@
-#
-# Product
-#
-module "mil_product" {
-  source                = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_product?ref=v7.14.0"
+# ------------------------------------------------------------------------------
+# Product.
+# ------------------------------------------------------------------------------
+resource "azurerm_api_management_product" "mil" {
+  resource_group_name   = azurerm_api_management.mil.resource_group_name
   product_id            = "mil"
+  api_management_name   = azurerm_api_management.mil.name
   display_name          = "Multi-channel Integration Layer"
-  description           = "Multi-channel Integration Layer for SW Client Project"
-  api_management_name   = module.apim.name
-  resource_group_name   = module.apim.resource_group_name
-  published             = true
+  description           = "Multi-channel Integration Layer"
   subscription_required = false
-  approval_required     = false
+  published             = true
 }

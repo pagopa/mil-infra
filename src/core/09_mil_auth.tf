@@ -80,11 +80,6 @@ variable "mil_auth_min_replicas" {
   default = 1
 }
 
-variable "mil_auth_azure_keyvault_api_version" {
-  type    = string
-  default = "7.4"
-}
-
 variable "mil_auth_path" {
   type    = string
   default = "mil-auth"
@@ -136,20 +131,6 @@ resource "azurerm_storage_account" "auth" {
 # Private endpoint from APP SUBNET (containing Container Apps) to the storage
 # account.
 # ------------------------------------------------------------------------------
-resource "azurerm_private_dns_zone" "auth_storage" {
-  count               = var.mil_auth_armored_storage_account ? 1 : 0
-  name                = "privatelink.blob.core.windows.net"
-  resource_group_name = azurerm_resource_group.network.name
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "auth_storage" {
-  count                 = var.mil_auth_armored_storage_account ? 1 : 0
-  name                  = azurerm_virtual_network.intern.name
-  resource_group_name   = azurerm_resource_group.network.name
-  private_dns_zone_name = azurerm_private_dns_zone.auth_storage[0].name
-  virtual_network_id    = azurerm_virtual_network.intern.id
-}
-
 resource "azurerm_private_endpoint" "auth_storage_pep" {
   count               = var.mil_auth_armored_storage_account ? 1 : 0
   name                = "${local.project}-auth-storage-pep"
@@ -161,7 +142,7 @@ resource "azurerm_private_endpoint" "auth_storage_pep" {
 
   private_dns_zone_group {
     name                 = "${local.project}-auth-storage-pdzg"
-    private_dns_zone_ids = [azurerm_private_dns_zone.auth_storage[0].id]
+    private_dns_zone_ids = [azurerm_private_dns_zone.storage[0].id]
   }
 
   private_service_connection {
@@ -191,20 +172,6 @@ resource "azurerm_key_vault" "auth_key_vault" {
 # ------------------------------------------------------------------------------
 # Private endpoint from APP SUBNET (containing Container Apps) to the key vault.
 # ------------------------------------------------------------------------------
-resource "azurerm_private_dns_zone" "auth_key_vault" {
-  count               = var.mil_auth_armored_key_vault ? 1 : 0
-  name                = "privatelink.vaultcore.azure.net"
-  resource_group_name = azurerm_resource_group.network.name
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "auth_key_vault" {
-  count                 = var.mil_auth_armored_key_vault ? 1 : 0
-  name                  = azurerm_virtual_network.intern.name
-  resource_group_name   = azurerm_resource_group.network.name
-  private_dns_zone_name = azurerm_private_dns_zone.auth_key_vault[0].name
-  virtual_network_id    = azurerm_virtual_network.intern.id
-}
-
 resource "azurerm_private_endpoint" "auth_key_vault_pep" {
   count               = var.mil_auth_armored_key_vault ? 1 : 0
   name                = "${local.project}-auth-kv-pep"
@@ -216,7 +183,7 @@ resource "azurerm_private_endpoint" "auth_key_vault_pep" {
 
   private_dns_zone_group {
     name                 = "${local.project}-auth-kv-pdzg"
-    private_dns_zone_ids = [azurerm_private_dns_zone.auth_key_vault[0].id]
+    private_dns_zone_ids = [azurerm_private_dns_zone.key_vault[0].id]
   }
 
   private_service_connection {
@@ -294,8 +261,8 @@ resource "azurerm_container_app" "mil_auth" {
       }
 
       env {
-        name  = "auth.keyvault.api-version"
-        value = var.mil_auth_azure_keyvault_api_version
+        name  = "auth.base-url"
+        value = "${module.apim.gateway_url}/${var.mil_auth_path}"
       }
     }
 
@@ -354,39 +321,40 @@ resource "azurerm_log_analytics_query_pack_query" "auth_ca_console_logs" {
 # ------------------------------------------------------------------------------
 # API definition.
 # ------------------------------------------------------------------------------
-module "auth_api" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v7.14.0"
-  name                = "${local.project}-auth"
-  api_management_name = module.apim.name
-  resource_group_name = module.apim.resource_group_name
-  description         = "Authorization Microservice for Multi-channel Integration Layer of SW Client Project"
-  protocols           = ["https"]
-
-  # Absolute URL of the backend service implementing this API.
-  service_url = "https://${azurerm_container_app.mil_auth.ingress[0].fqdn}"
-
-  # The Path for this API Management API, which is a relative URL which uniquely
-  # identifies this API and all of its resource paths within the API Management
-  # Service.
-  path = var.mil_auth_path
-
+resource "azurerm_api_management_api" "auth" {
+  name                  = "${local.project}-auth"
+  resource_group_name   = azurerm_api_management.mil.resource_group_name
+  api_management_name   = azurerm_api_management.mil.name
+  revision              = "1"
   display_name          = "auth"
-  content_format        = "openapi-link"
-  content_value         = var.mil_auth_openapi_descriptor
-  product_ids           = [module.mil_product.product_id]
+  description           = "Authorization Microservice for Multi-channel Integration Layer of SW Client Project"
+  path                  = var.mil_auth_path
+  protocols             = ["https"]
+  service_url           = "https://${azurerm_container_app.mil_auth.ingress[0].fqdn}"
   subscription_required = false
+
+  import {
+    content_format = "openapi-link"
+    content_value  = var.mil_auth_openapi_descriptor
+  }
+}
+
+resource "azurerm_api_management_product_api" "auth" {
+  product_id          = azurerm_api_management_product.mil.product_id
+  api_name            = azurerm_api_management_api.auth.name
+  api_management_name = azurerm_api_management.mil.name
+  resource_group_name = azurerm_api_management.mil.resource_group_name
 }
 
 # ------------------------------------------------------------------------------
 # API diagnostic.
 # ------------------------------------------------------------------------------
-resource "azurerm_api_management_api_diagnostic" "auth_api" {
+resource "azurerm_api_management_api_diagnostic" "auth" {
   identifier               = "applicationinsights"
-  resource_group_name      = module.apim.resource_group_name
-  api_management_name      = module.apim.name
-  api_name                 = module.auth_api.name
-  api_management_logger_id = module.apim.logger_id
-
+  resource_group_name      = azurerm_api_management.mil.resource_group_name
+  api_management_name      = azurerm_api_management.mil.name
+  api_name                 = azurerm_api_management_api.auth.name
+  api_management_logger_id = azurerm_api_management_logger.mil.id
   sampling_percentage       = 100.0
   always_log_errors         = true
   log_client_ip             = true

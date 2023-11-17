@@ -25,11 +25,6 @@ variable "appgw_snet_cidr" {
   description = "App GW Subnet CIDR."
 }
 
-variable "data_snet_cidr" {
-  type        = string
-  description = "Data Subnet CIDR."
-}
-
 variable "app_snet_cidr" {
   type        = string
   description = "Application Subnet CIDR."
@@ -77,16 +72,6 @@ resource "azurerm_subnet" "app" {
 }
 
 # ------------------------------------------------------------------------------
-# Subnet for data-related stuff.
-# ------------------------------------------------------------------------------
-resource "azurerm_subnet" "data" {
-  name                 = "${local.project}-data-snet"
-  resource_group_name  = azurerm_virtual_network.intern.resource_group_name
-  virtual_network_name = azurerm_virtual_network.intern.name
-  address_prefixes     = [var.data_snet_cidr]
-}
-
-# ------------------------------------------------------------------------------
 # Subnet for VPN.
 # ------------------------------------------------------------------------------
 resource "azurerm_subnet" "vpn" {
@@ -120,19 +105,55 @@ resource "azurerm_subnet" "apim" {
 # ------------------------------------------------------------------------------
 # Subnet for DNS forwarder.
 # ------------------------------------------------------------------------------
-module "dns_forwarder_snet" {
-  source                                    = "git::https://github.com/pagopa/terraform-azurerm-v3.git//subnet?ref=v7.14.0"
-  name                                      = "${local.project}-dnsforwarder-snet"
-  resource_group_name                       = azurerm_virtual_network.intern.resource_group_name
-  virtual_network_name                      = azurerm_virtual_network.intern.name
-  address_prefixes                          = [var.dnsforwarder_snet_cidr]
-  private_endpoint_network_policies_enabled = true
+resource "azurerm_subnet" "dns_forwarder_snet" {
+  name                                          = "${local.project}-dnsforwarder-snet"
+  resource_group_name                           = azurerm_virtual_network.intern.resource_group_name
+  virtual_network_name                          = azurerm_virtual_network.intern.name
+  address_prefixes                              = [var.dnsforwarder_snet_cidr]
+  private_link_service_network_policies_enabled = true
+  private_endpoint_network_policies_enabled     = false
 
-  delegation = {
+  delegation {
     name = "delegation"
-    service_delegation = {
+    service_delegation {
       name    = "Microsoft.ContainerInstance/containerGroups"
       actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
     }
   }
+}
+
+# ------------------------------------------------------------------------------
+# Private DNS for private endpoint from APP SUBNET (containing Container Apps)
+# to the key vaultd.
+# ------------------------------------------------------------------------------
+resource "azurerm_private_dns_zone" "key_vault" {
+  count               = (var.mil_auth_armored_key_vault || var.mil_idpay_armored_key_vault) ? 1 : 0
+  name                = "privatelink.vaultcore.azure.net"
+  resource_group_name = azurerm_resource_group.network.name
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "key_vault" {
+  count                 = (var.mil_auth_armored_key_vault || var.mil_idpay_armored_key_vault) ? 1 : 0
+  name                  = azurerm_virtual_network.intern.name
+  resource_group_name   = azurerm_resource_group.network.name
+  private_dns_zone_name = azurerm_private_dns_zone.key_vault[0].name
+  virtual_network_id    = azurerm_virtual_network.intern.id
+}
+
+# ------------------------------------------------------------------------------
+# Private DNS for private endpoint from APP SUBNET (containing Container Apps)
+# to the storage account.
+# ------------------------------------------------------------------------------
+resource "azurerm_private_dns_zone" "storage" {
+  count               = (var.armored_storage_account_for_acquirers_conf || var.mil_auth_armored_storage_account) ? 1 : 0
+  name                = "privatelink.blob.core.windows.net"
+  resource_group_name = azurerm_resource_group.network.name
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "storage" {
+  count                 = (var.armored_storage_account_for_acquirers_conf || var.mil_auth_armored_storage_account) ? 1 : 0
+  name                  = azurerm_virtual_network.intern.name
+  resource_group_name   = azurerm_resource_group.network.name
+  private_dns_zone_name = azurerm_private_dns_zone.storage[0].name
+  virtual_network_id    = azurerm_virtual_network.intern.id
 }

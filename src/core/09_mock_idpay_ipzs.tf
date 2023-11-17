@@ -66,6 +66,11 @@ variable "mock_idpay_ipzs_mongo_server_selection_timeout" {
   default = "5s"
 }
 
+variable "mock_idpay_ipzs_path" {
+  type    = string
+  default = "idpay-ipzs-mock"
+}
+
 # ------------------------------------------------------------------------------
 # CosmosDB Mongo database.
 # ------------------------------------------------------------------------------
@@ -235,7 +240,7 @@ module "mock_idpay_ipzs_api" {
   # The Path for this API Management API, which is a relative URL which uniquely
   # identifies this API and all of its resource paths within the API Management
   # Service.
-  path = "idpay-ipzs-mock"
+  path = var.mock_idpay_ipzs_path
 
   display_name          = "mock-idpay-ipzs"
   content_format        = "openapi-link"

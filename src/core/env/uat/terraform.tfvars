@@ -27,7 +27,7 @@ integr_vnet_cidr       = "10.230.12.0/24" # 010.230.012.000 - 010.230.012.255
 apim_snet_cidr         = "10.230.12.0/27" # 010.230.012.000 - 010.230.012.031
 intern_vnet_cidr       = "10.231.0.0/16"  # 010.231.000.000 - 010.231.255.255
 appgw_snet_cidr        = "10.231.0.0/24"  # 010.231.000.000 - 010.231.000.255
-data_snet_cidr         = "10.231.1.0/24"  # 010.231.001.000 - 010.231.001.255
+#data_snet_cidr         = "10.231.1.0/24"  # 010.231.001.000 - 010.231.001.255
 app_snet_cidr          = "10.231.2.0/23"  # 010.231.002.000 - 010.231.003.255
 vpn_snet_cidr          = "10.231.4.0/24"  # 010.231.004.000 - 010.231.004.255
 dnsforwarder_snet_cidr = "10.231.5.0/29"  # 010.231.005.000 - 010.231.005.007
@@ -132,13 +132,12 @@ mil_auth_cryptoperiod                      = 86400000
 mil_auth_keysize                           = 4096
 mil_auth_access_duration                   = 900
 mil_auth_refresh_duration                  = 3600
-mil_auth_openapi_descriptor                = "https://raw.githubusercontent.com/pagopa/mil-auth/main/src/main/resources/META-INF/openapi.yaml"
-mil_auth_image                             = "ghcr.io/pagopa/mil-auth:1.10.0-RC"
+mil_auth_openapi_descriptor                = "https://raw.githubusercontent.com/pagopa/mil-auth/1.10.1/src/main/resources/META-INF/openapi.yaml"
+mil_auth_image                             = "ghcr.io/pagopa/mil-auth:latest"
 mil_auth_cpu                               = 1
 mil_auth_memory                            = "2Gi"
 mil_auth_max_replicas                      = 10
 mil_auth_min_replicas                      = 1
-mil_auth_azure_keyvault_api_version        = "7.4"
 
 #
 # mil-preset
@@ -174,7 +173,6 @@ mil_idpay_location_base_url              = "https://mil-u-apim.azure-api.net/mil
 mil_idpay_jwt_publickey_location         = "https://mil-u-apim.azure-api.net/mil-auth/.well-known/jwks.json"
 mil_idpay_idpay_rest_api_url             = "https://mil-d-apim.azure-api.net/idpay-ipzs-mock"
 mil_idpay_ipzs_rest_api_url              = "https://mil-d-apim.azure-api.net/idpay-ipzs-mock"
-mil_idpay_azuread_resp_api_url           = "https://login.microsoftonline.com"
 mil_idpay_cryptoperiod                   = 86400000
 mil_idpay_keysize                        = 4096
 
