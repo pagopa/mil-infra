@@ -3,14 +3,6 @@
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# Variables definition.
-# ------------------------------------------------------------------------------
-variable "armored_cosmosdb" {
-  description = "If true CosmosDB will be protected with private link."
-  type        = bool
-}
-
-# ------------------------------------------------------------------------------
 # CosmosDB account.
 # ------------------------------------------------------------------------------
 resource "azurerm_cosmosdb_account" "mil" {
@@ -20,7 +12,7 @@ resource "azurerm_cosmosdb_account" "mil" {
   kind                          = "MongoDB"
   offer_type                    = "Standard"
   tags                          = var.tags
-  public_network_access_enabled = var.armored_cosmosdb ? false : true
+  public_network_access_enabled = false
 
   capabilities {
     name = "EnableUniqueCompoundNestedDocs"
@@ -53,21 +45,18 @@ resource "azurerm_cosmosdb_mongo_database" "mil" {
 # Private endpoint from APP SUBNET (containing Container Apps) to CosmosDB.
 # ------------------------------------------------------------------------------
 resource "azurerm_private_dns_zone" "cosmos" {
-  count               = var.armored_cosmosdb ? 1 : 0
   name                = "privatelink.mongo.cosmos.azure.com"
   resource_group_name = azurerm_resource_group.network.name
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "cosmos" {
-  count                 = var.armored_cosmosdb ? 1 : 0
   name                  = azurerm_virtual_network.intern.name
   resource_group_name   = azurerm_resource_group.network.name
-  private_dns_zone_name = azurerm_private_dns_zone.cosmos[0].name
+  private_dns_zone_name = azurerm_private_dns_zone.cosmos.name
   virtual_network_id    = azurerm_virtual_network.intern.id
 }
 
-resource "azurerm_private_endpoint" "cosmos_pep" {
-  count               = var.armored_cosmosdb ? 1 : 0
+resource "azurerm_private_endpoint" "cosmos" {
   name                = "${local.project}-cosmos-pep"
   location            = azurerm_resource_group.network.location
   resource_group_name = azurerm_resource_group.network.name
@@ -77,7 +66,7 @@ resource "azurerm_private_endpoint" "cosmos_pep" {
 
   private_dns_zone_group {
     name                 = "${local.project}-cosmos-pdzg"
-    private_dns_zone_ids = [azurerm_private_dns_zone.cosmos[0].id]
+    private_dns_zone_ids = [azurerm_private_dns_zone.cosmos.id]
   }
 
   private_service_connection {

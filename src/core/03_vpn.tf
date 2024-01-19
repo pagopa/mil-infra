@@ -13,6 +13,10 @@ variable "vpn_pip_sku" {
   type = string
 }
 
+variable "vpn_client_address_space" {
+  type = string
+}
+
 # ------------------------------------------------------------------------------
 # VPN.
 # ------------------------------------------------------------------------------
@@ -30,10 +34,10 @@ resource "azurerm_public_ip" "vpn" {
   name                = "${local.project}-vpn-pip"
   location            = var.location
   resource_group_name = azurerm_resource_group.network.name
-  allocation_method = "Dynamic"
-  domain_name_label = "${lower(replace(local.project, "/[[:^alnum:]]/", ""))}vpn${random_string.dns.result}"
-  sku               = var.vpn_pip_sku
-  tags = var.tags
+  allocation_method   = "Dynamic"
+  domain_name_label   = "${lower(replace(local.project, "/[[:^alnum:]]/", ""))}vpn${random_string.dns.result}"
+  sku                 = var.vpn_pip_sku
+  tags                = var.tags
 }
 
 resource "azurerm_virtual_network_gateway" "vpn" {
@@ -55,36 +59,32 @@ resource "azurerm_virtual_network_gateway" "vpn" {
   }
 
   vpn_client_configuration {
-      aad_audience          = data.azuread_application.vpn_app.application_id
-      aad_issuer            = "https://sts.windows.net/${data.azurerm_subscription.current.tenant_id}/"
-      aad_tenant            = "https://login.microsoftonline.com/${data.azurerm_subscription.current.tenant_id}"
-      address_space         = ["172.16.1.0/24"]
-      vpn_client_protocols  = ["OpenVPN"]
+    aad_audience         = data.azuread_application.vpn_app.client_id
+    aad_issuer           = "https://sts.windows.net/${data.azurerm_subscription.current.tenant_id}/"
+    aad_tenant           = "https://login.microsoftonline.com/${data.azurerm_subscription.current.tenant_id}"
+    address_space        = [var.vpn_client_address_space]
+    vpn_client_protocols = ["OpenVPN"]
   }
 }
 
 # ------------------------------------------------------------------------------
 # DNS forwarder.
 # ------------------------------------------------------------------------------
-data "local_file" "corefile" {
-  filename = format("%s/Corefile", path.module)
-}
-
 resource "azurerm_container_group" "vpn_dns_forwarder" {
   name                = "${local.project}-vpn-dnsfrw"
   location            = var.location
   resource_group_name = azurerm_virtual_network.intern.resource_group_name
   ip_address_type     = "Private"
-  subnet_ids          = [azurerm_subnet.azurerm_subnet.dns_forwarder_snet.id]
+  subnet_ids          = [azurerm_subnet.dns_forwarder_snet.id]
   os_type             = "Linux"
-  tags = var.tags
+  tags                = var.tags
 
   container {
     name = "dns-forwarder"
     # from https://hub.docker.com/r/coredns/coredns
-    image  = "coredns/coredns:1.10.1@sha256:be7652ce0b43b1339f3d14d9b14af9f588578011092c1f7893bd55432d83a378"
-    cpu    = "0.5"
-    memory = "0.5"
+    image    = "coredns/coredns:1.10.1@sha256:be7652ce0b43b1339f3d14d9b14af9f588578011092c1f7893bd55432d83a378"
+    cpu      = "0.5"
+    memory   = "0.5"
     commands = ["/coredns", "-conf", "/app/conf/Corefile"]
 
     ports {
@@ -97,9 +97,20 @@ resource "azurerm_container_group" "vpn_dns_forwarder" {
       name       = "dns-forwarder-conf"
       read_only  = true
       secret = {
-        Corefile = base64encode(data.local_file.corefile.content)
+        Corefile = base64encode(
+          <<EOT
+          .:53 {
+            errors
+            ready
+            health
+            forward . 168.63.129.16
+            cache 30
+            loop
+            reload
+          }
+          EOT
+        )
       }
     }
   }
 }
-

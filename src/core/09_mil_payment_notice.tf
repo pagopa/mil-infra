@@ -1,16 +1,10 @@
 # ==============================================================================
 # This file contains stuff needed to run mil-payment-notice microservice.
-# The resources in this file are used by mil-payment-notice only.
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
 # Variables definition.
 # ------------------------------------------------------------------------------
-variable "mil_payment_notice_armored_redis" {
-  description = "If true Redis will be protected with a private link."
-  type        = bool
-}
-
 variable "mil_payment_notice_quarkus_log_level" {
   type    = string
   default = "ERROR"
@@ -139,7 +133,7 @@ resource "azurerm_cosmosdb_mongo_collection" "paymentTransactions" {
     unique = false
   }
 
-    index {
+  index {
     keys = [
       "paymentTransaction.insertTimestamp"
     ]
@@ -148,47 +142,60 @@ resource "azurerm_cosmosdb_mongo_collection" "paymentTransactions" {
 }
 
 # ------------------------------------------------------------------------------
+# Redis cache.
+# ------------------------------------------------------------------------------
+resource "azurerm_redis_cache" "mil" {
+  name                          = "${local.project}-redis"
+  location                      = azurerm_resource_group.data.location
+  resource_group_name           = azurerm_resource_group.data.name
+  capacity                      = 1
+  enable_non_ssl_port           = false
+  minimum_tls_version           = "1.2"
+  family                        = "C"
+  sku_name                      = "Basic"
+  public_network_access_enabled = false
+  redis_version                 = 6
+  tags                          = var.tags
+
+  redis_configuration {
+    enable_authentication = true
+  }
+}
+
+# ------------------------------------------------------------------------------
 # Private endpoint from APP SUBNET (containing Container Apps) to Redis.
 # ------------------------------------------------------------------------------
 resource "azurerm_private_dns_zone" "redis" {
-  count               = var.mil_payment_notice_armored_redis ? 1 : 0
   name                = "privatelink.redis.cache.windows.net"
   resource_group_name = azurerm_resource_group.network.name
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "redis" {
-  count                 = var.mil_payment_notice_armored_redis ? 1 : 0
   name                  = azurerm_virtual_network.intern.name
   resource_group_name   = azurerm_resource_group.network.name
-  private_dns_zone_name = azurerm_private_dns_zone.redis[0].name
+  private_dns_zone_name = azurerm_private_dns_zone.redis.name
   virtual_network_id    = azurerm_virtual_network.intern.id
 }
 
-# ------------------------------------------------------------------------------
-# Redis cache.
-# ------------------------------------------------------------------------------
-module "redis_cache" {
-  source                        = "git::https://github.com/pagopa/terraform-azurerm-v3.git//redis_cache?ref=v7.14.0"
-  name                          = "${local.project}-redis"
-  resource_group_name           = azurerm_resource_group.data.name
-  location                      = azurerm_resource_group.data.location
-  capacity                      = 1
-  enable_non_ssl_port           = false
-  family                        = "C"
-  sku_name                      = "Basic"
-  enable_authentication         = true
-  public_network_access_enabled = var.mil_payment_notice_armored_redis ? false : true
-  redis_version                 = 6
-  zones                         = null
+resource "azurerm_private_endpoint" "redis" {
+  name                = "${local.project}-redis-pep"
+  location            = azurerm_resource_group.network.location
+  resource_group_name = azurerm_resource_group.network.name
+  subnet_id           = azurerm_subnet.app.id
 
-  private_endpoint = {
-    enabled              = var.mil_payment_notice_armored_redis ? true : false
-    virtual_network_id   = var.mil_payment_notice_armored_redis ? azurerm_private_dns_zone_virtual_network_link.redis[0].virtual_network_id : "dontcare"
-    subnet_id            = azurerm_subnet.app.id
-    private_dns_zone_ids = [var.mil_payment_notice_armored_redis ? azurerm_private_dns_zone.redis[0].id : "dontcare"]
+  custom_network_interface_name = "${local.project}-redis-pep-nic"
+
+  private_dns_zone_group {
+    name                 = "${local.project}-redis-pdzg"
+    private_dns_zone_ids = [azurerm_private_dns_zone.redis.id]
   }
 
-  tags = var.tags
+  private_service_connection {
+    name                           = "${local.project}-redis-psc"
+    private_connection_resource_id = azurerm_redis_cache.mil.id
+    subresource_names              = ["redisCache"]
+    is_manual_connection           = false
+  }
 }
 
 # ------------------------------------------------------------------------------
@@ -196,7 +203,7 @@ module "redis_cache" {
 # ------------------------------------------------------------------------------
 data "azurerm_key_vault_secret" "node_soap_subscription_key" {
   name         = "node-soap-subscription-key"
-  key_vault_id = module.key_vault.id
+  key_vault_id = azurerm_key_vault.general.id
 }
 
 # ------------------------------------------------------------------------------
@@ -204,13 +211,13 @@ data "azurerm_key_vault_secret" "node_soap_subscription_key" {
 # ------------------------------------------------------------------------------
 data "azurerm_key_vault_secret" "node_rest_subscription_key" {
   name         = "node-rest-subscription-key"
-  key_vault_id = module.key_vault.id
+  key_vault_id = azurerm_key_vault.general.id
 }
 
 # ------------------------------------------------------------------------------
 # Container app.
 # ------------------------------------------------------------------------------
-resource "azurerm_container_app" "mil_payment_notice" {
+resource "azurerm_container_app" "payment_notice" {
   name                         = "${local.project}-payment-notice-ca"
   container_app_environment_id = azurerm_container_app_environment.mil.id
   resource_group_name          = azurerm_resource_group.app.name
@@ -255,7 +262,7 @@ resource "azurerm_container_app" "mil_payment_notice" {
 
       env {
         name  = "node.soap-service.url"
-        value = var.install_nodo_mock ? "${module.apim.gateway_url}/${var.mock_nodo_path}" : var.nodo_soap_url
+        value = var.install_nodo_mock ? "${azurerm_api_management.mil.gateway_url}/${var.mock_nodo_path}" : var.nodo_soap_url
       }
 
       env {
@@ -275,7 +282,7 @@ resource "azurerm_container_app" "mil_payment_notice" {
 
       env {
         name  = "node.rest-service.url"
-        value = var.install_nodo_mock ? "${module.apim.gateway_url}/${var.mock_nodo_path}" : var.nodo_rest_url
+        value = var.install_nodo_mock ? "${azurerm_api_management.mil.gateway_url}/${var.mock_nodo_path}" : var.nodo_rest_url
       }
 
       env {
@@ -330,7 +337,7 @@ resource "azurerm_container_app" "mil_payment_notice" {
 
       env {
         name  = "paymentnotice.closepayment.location.base-url"
-        value = "${module.apim.gateway_url}/${var.mil_payment_notice_path}"
+        value = "${azurerm_api_management.mil.gateway_url}/${var.mil_payment_notice_path}"
       }
 
       env {
@@ -355,7 +362,7 @@ resource "azurerm_container_app" "mil_payment_notice" {
 
       env {
         name  = "jwt-publickey-location"
-        value = "${module.apim.gateway_url}/${var.mil_auth_path}/.well-known/jwks.json"
+        value = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}/.well-known/jwks.json"
       }
     }
 
@@ -385,17 +392,17 @@ resource "azurerm_container_app" "mil_payment_notice" {
 
   secret {
     name  = "redis-connection-string"
-    value = "rediss://:${module.redis_cache.primary_access_key}@${module.redis_cache.hostname}:${module.redis_cache.ssl_port}"
+    value = "rediss://:${azurerm_redis_cache.mil.primary_access_key}@${azurerm_redis_cache.mil.hostname}:${azurerm_redis_cache.mil.ssl_port}"
   }
 
   secret {
     name  = "kafka-connection-string-1"
-    value = azurerm_eventhub_namespace.mil_evhns.default_primary_connection_string
+    value = azurerm_eventhub_namespace.mil.default_primary_connection_string
   }
 
   secret {
     name  = "kafka-connection-string-2"
-    value = azurerm_eventhub_namespace.mil_evhns.default_secondary_connection_string
+    value = azurerm_eventhub_namespace.mil.default_secondary_connection_string
   }
 
   identity {
@@ -418,6 +425,16 @@ resource "azurerm_container_app" "mil_payment_notice" {
 }
 
 # ------------------------------------------------------------------------------
+# Assignement of role "Storage Blob Data Reader" to system-managed identity of
+# container app, to use storage account.
+# ------------------------------------------------------------------------------
+resource "azurerm_role_assignment" "conf_storage_for_payment_notice" {
+  scope                = azurerm_storage_account.conf.id
+  role_definition_name = "Storage Blob Data Reader"
+  principal_id         = azurerm_container_app.payment_notice.identity[0].principal_id
+}
+
+# ------------------------------------------------------------------------------
 # Query for stdout/stdin of container app.
 # ------------------------------------------------------------------------------
 resource "azurerm_log_analytics_query_pack_query" "payment_notice_ca_console_logs" {
@@ -429,38 +446,40 @@ resource "azurerm_log_analytics_query_pack_query" "payment_notice_ca_console_log
 # ------------------------------------------------------------------------------
 # API definition.
 # ------------------------------------------------------------------------------
-module "payment_notice_api" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v7.14.0"
-  name                = "${local.project}-payment-notice"
-  api_management_name = module.apim.name
-  resource_group_name = module.apim.resource_group_name
-  description         = "Payment Notice Microservice for Multi-channel Integration Layer of SW Client Project"
-  protocols           = ["https"]
-
-  # Absolute URL of the backend service implementing this API.
-  service_url = "https://${azurerm_container_app.mil_payment_notice.ingress[0].fqdn}"
-
-  # The Path for this API Management API, which is a relative URL which uniquely
-  # identifies this API and all of its resource paths within the API Management
-  # Service.
-  path = var.mil_payment_notice_path
-
+resource "azurerm_api_management_api" "payment_notice" {
+  name                  = "${local.project}-payment-notice"
+  resource_group_name   = azurerm_api_management.mil.resource_group_name
+  api_management_name   = azurerm_api_management.mil.name
+  revision              = "1"
   display_name          = "payment notice"
-  content_format        = "openapi-link"
-  content_value         = var.mil_payment_notice_openapi_descriptor
-  product_ids           = [module.mil_product.product_id]
+  description           = "Payment Notice Microservice for Multi-channel Integration Layer of SW Client Project"
+  path                  = var.mil_payment_notice_path
+  protocols             = ["https"]
+  service_url           = "https://${azurerm_container_app.payment_notice.ingress[0].fqdn}"
   subscription_required = false
+
+  import {
+    content_format = "openapi-link"
+    content_value  = var.mil_payment_notice_openapi_descriptor
+  }
+}
+
+resource "azurerm_api_management_product_api" "payment_notice" {
+  product_id          = azurerm_api_management_product.mil.product_id
+  api_name            = azurerm_api_management_api.payment_notice.name
+  api_management_name = azurerm_api_management.mil.name
+  resource_group_name = azurerm_api_management.mil.resource_group_name
 }
 
 # ------------------------------------------------------------------------------
 # API diagnostic.
 # ------------------------------------------------------------------------------
-resource "azurerm_api_management_api_diagnostic" "payment_notice_api" {
+resource "azurerm_api_management_api_diagnostic" "payment_notice" {
   identifier               = "applicationinsights"
-  resource_group_name      = module.apim.resource_group_name
-  api_management_name      = module.apim.name
-  api_name                 = module.payment_notice_api.name
-  api_management_logger_id = module.apim.logger_id
+  resource_group_name      = azurerm_api_management.mil.resource_group_name
+  api_management_name      = azurerm_api_management.mil.name
+  api_name                 = azurerm_api_management_api.payment_notice.name
+  api_management_logger_id = azurerm_api_management_logger.mil.id
 
   sampling_percentage       = 100.0
   always_log_errors         = true

@@ -1,16 +1,10 @@
 # ==============================================================================
 # This file contains stuff needed to run mil-idpay microservice.
-# ADEGUARE A MIL-PAYMENT-NOTICE PER QUANTO RIGUARDA IL RECUPERO DELLE URL
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
 # Variables definition.
 # ------------------------------------------------------------------------------
-variable "mil_idpay_armored_key_vault" {
-  description = "If true the key vault will be protected with a private link."
-  type        = bool
-}
-
 variable "mil_idpay_image" {
   type = string
 }
@@ -74,15 +68,7 @@ variable "mil_idpay_transaction_retry_after" {
   default = 1
 }
 
-variable "mil_idpay_location_base_url" {
-  type = string
-}
-
 variable "mil_idpay_idpay_rest_api_url" {
-  type = string
-}
-
-variable "mil_idpay_jwt_publickey_location" {
   type = string
 }
 
@@ -103,6 +89,11 @@ variable "mil_idpay_keysize" {
 variable "mil_idpay_path" {
   type    = string
   default = "mil-idpay"
+}
+
+variable "mil_idpay_client_cert_name" {
+  type    = string
+  default = "idpay"
 }
 
 # ------------------------------------------------------------------------------
@@ -142,7 +133,7 @@ resource "azurerm_cosmosdb_mongo_collection" "idpayTransactions" {
 # ------------------------------------------------------------------------------
 # Key vault for cryptographics operations.
 # ------------------------------------------------------------------------------
-resource "azurerm_key_vault" "idpay_key_vault" {
+resource "azurerm_key_vault" "idpay" {
   name                          = "${local.project}-idpay-kv"
   location                      = azurerm_resource_group.sec.location
   resource_group_name           = azurerm_resource_group.sec.name
@@ -150,7 +141,7 @@ resource "azurerm_key_vault" "idpay_key_vault" {
   enabled_for_disk_encryption   = true
   purge_protection_enabled      = true
   sku_name                      = "premium"
-  public_network_access_enabled = var.mil_idpay_armored_key_vault ? false : true
+  public_network_access_enabled = false
   enable_rbac_authorization     = true
   tags                          = var.tags
 }
@@ -158,8 +149,7 @@ resource "azurerm_key_vault" "idpay_key_vault" {
 # ------------------------------------------------------------------------------
 # Private endpoint from APP SUBNET (containing Container Apps) to the key vault.
 # ------------------------------------------------------------------------------
-resource "azurerm_private_endpoint" "idpay_key_vault_pep" {
-  count               = var.mil_idpay_armored_key_vault ? 1 : 0
+resource "azurerm_private_endpoint" "idpay_key_vault" {
   name                = "${local.project}-idpay-kv-pep"
   location            = azurerm_resource_group.network.location
   resource_group_name = azurerm_resource_group.network.name
@@ -169,12 +159,12 @@ resource "azurerm_private_endpoint" "idpay_key_vault_pep" {
 
   private_dns_zone_group {
     name                 = "${local.project}-idpay-kv-pdzg"
-    private_dns_zone_ids = [azurerm_private_dns_zone.key_vault[0].id]
+    private_dns_zone_ids = [azurerm_private_dns_zone.key_vault.id]
   }
 
   private_service_connection {
     name                           = "${local.project}-idpay-kv-psc"
-    private_connection_resource_id = azurerm_key_vault.idpay_key_vault.id
+    private_connection_resource_id = azurerm_key_vault.idpay.id
     subresource_names              = ["vault"]
     is_manual_connection           = false
   }
@@ -185,23 +175,13 @@ resource "azurerm_private_endpoint" "idpay_key_vault_pep" {
 # ------------------------------------------------------------------------------
 data "azurerm_key_vault_secret" "idpay_subscription_key" {
   name         = "idpay-subscription-key"
-  key_vault_id = module.key_vault.id
-}
-
-# ------------------------------------------------------------------------------
-# Get password for keystore containing the client certificate for IDPay from key
-# vault.
-# ------------------------------------------------------------------------------
-data "azurerm_key_vault_secret" "idpay_client_keystore_pwd" {
-  name         = "idpay-client-keystore-pwd"
-  key_vault_id = module.key_vault.id
+  key_vault_id = azurerm_key_vault.general.id
 }
 
 # ------------------------------------------------------------------------------
 # Container app.
 # ------------------------------------------------------------------------------
-resource "azurerm_container_app" "mil_idpay" {
-  provider                     = myazurerm
+resource "azurerm_container_app" "idpay" {
   name                         = "${local.project}-idpay-ca"
   container_app_environment_id = azurerm_container_app_environment.mil.id
   resource_group_name          = azurerm_resource_group.app.name
@@ -246,7 +226,7 @@ resource "azurerm_container_app" "mil_idpay" {
 
       env {
         name  = "jwt-publickey-location"
-        value = "${module.apim.gateway_url}/${var.mil_auth_path}/.well-known/jwks.json"
+        value = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}/.well-known/jwks.json"
       }
 
       env {
@@ -261,12 +241,12 @@ resource "azurerm_container_app" "mil_idpay" {
 
       env {
         name  = "transaction.location.base-url"
-        value = "${module.apim.gateway_url}/${var.mil_idpay_path}"
+        value = "${azurerm_api_management.mil.gateway_url}/${var.mil_idpay_path}"
       }
 
       env {
         name  = "idpay-rest-api.url"
-        value = var.install_idpay_ipzs_mock ? "${module.apim.gateway_url}/${var.mock_idpay_ipzs_path}" : var.mil_idpay_idpay_rest_api_url
+        value = var.install_idpay_mock ? "${azurerm_api_management.mil.gateway_url}/${var.mock_idpay_ipzs_path}" : var.mil_idpay_idpay_rest_api_url
       }
 
       env {
@@ -285,7 +265,7 @@ resource "azurerm_container_app" "mil_idpay" {
 
       env {
         name  = "ipzs-rest-api.url"
-        value = var.install_idpay_ipzs_mock ? "${module.apim.gateway_url}/${var.mock_idpay_ipzs_path}" : var.mil_idpay_ipzs_rest_api_url
+        value = var.install_ipzs_mock ? "${azurerm_api_management.mil.gateway_url}/${var.mock_idpay_ipzs_path}" : var.mil_idpay_ipzs_rest_api_url
       }
 
       env {
@@ -299,28 +279,18 @@ resource "azurerm_container_app" "mil_idpay" {
       }
 
       env {
-        name = "CLIENT_KEYSTORE"
-        value = "/mnt/secrets/idpay-client.jks"
+        name  = "azurekv-rest-api.url"
+        value = azurerm_key_vault.idpay.vault_uri
       }
 
       env {
-        name        = "PSW_KEYSTORE"
-        secret_name = "idpay-client-keystore-pwd"
-      }
-
-      volume_mounts {
-        name = "secretsasfiles"
-        path = "/mnt/secrets"
+        name  = "azure-cert.name"
+        value = var.mil_idpay_client_cert_name
       }
     }
 
     max_replicas = var.mil_idpay_max_replicas
     min_replicas = var.mil_idpay_min_replicas
-
-    volume {
-      name = "secretsasfiles"
-      storage_type = "Secret"
-    }
   }
 
   identity {
@@ -354,11 +324,6 @@ resource "azurerm_container_app" "mil_idpay" {
     value = data.azurerm_key_vault_secret.idpay_subscription_key.value
   }
 
-  secret {
-    name  = "idpay-client-keystore-pwd"
-    value = data.azurerm_key_vault_secret.idpay_client_keystore_pwd.value
-  }
-
   tags = var.tags
 }
 
@@ -376,46 +341,68 @@ resource "azurerm_log_analytics_query_pack_query" "mil_idpay_ca_console_logs" {
 # container app, to use key vault.
 # ------------------------------------------------------------------------------
 resource "azurerm_role_assignment" "idpay_kv" {
-  scope                = azurerm_key_vault.idpay_key_vault.id
+  scope                = azurerm_key_vault.idpay.id
   role_definition_name = "Key Vault Crypto Officer"
-  principal_id         = azurerm_container_app.mil_idpay.identity[0].principal_id
+  principal_id         = azurerm_container_app.idpay.identity[0].principal_id
+}
+
+# ------------------------------------------------------------------------------
+# Assignement of role "Key Vault Certificates Officer" to system-managed
+# identity of container app, to use key vault.
+# ------------------------------------------------------------------------------
+resource "azurerm_role_assignment" "idpay_kv_to_read_certificates" {
+  scope                = azurerm_key_vault.idpay.id
+  role_definition_name = "Key Vault Certificates Officer"
+  principal_id         = azurerm_container_app.idpay.identity[0].principal_id
+}
+
+# ------------------------------------------------------------------------------
+# Assignement of role "Key Vault Secrets Officer" to system-managed identity of
+# container app, to use key vault.
+# ------------------------------------------------------------------------------
+resource "azurerm_role_assignment" "idpay_kv_to_read_secrets" {
+  scope                = azurerm_key_vault.idpay.id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = azurerm_container_app.idpay.identity[0].principal_id
 }
 
 # ------------------------------------------------------------------------------
 # API definition.
 # ------------------------------------------------------------------------------
-module "idpay_api" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v7.14.0"
-  name                = "${local.project}-idpay"
-  api_management_name = module.apim.name
-  resource_group_name = module.apim.resource_group_name
-  description         = "IDPay Microservice for Multi-channel Integration Layer of SW Client Project"
-  protocols           = ["https"]
-
-  # Absolute URL of the backend service implementing this API.
-  service_url = "https://${azurerm_container_app.mil_idpay.ingress[0].fqdn}"
-
-  # The Path for this API Management API, which is a relative URL which uniquely
-  # identifies this API and all of its resource paths within the API Management
-  # Service.
-  path = var.mil_idpay_path
-  
+resource "azurerm_api_management_api" "idpay" {
+  name                  = "${local.project}-idpay"
+  resource_group_name   = azurerm_api_management.mil.resource_group_name
+  api_management_name   = azurerm_api_management.mil.name
+  revision              = "1"
   display_name          = "idpay"
-  content_format        = "openapi-link"
-  content_value         = var.mil_idpay_openapi_descriptor
-  product_ids           = [module.mil_product.product_id]
+  description           = "IDPay Microservice for Multi-channel Integration Layer of SW Client Project"
+  path                  = var.mil_idpay_path
+  protocols             = ["https"]
+  service_url           = "https://${azurerm_container_app.idpay.ingress[0].fqdn}"
   subscription_required = false
+
+  import {
+    content_format = "openapi-link"
+    content_value  = var.mil_idpay_openapi_descriptor
+  }
+}
+
+resource "azurerm_api_management_product_api" "idpay" {
+  product_id          = azurerm_api_management_product.mil.product_id
+  api_name            = azurerm_api_management_api.idpay.name
+  api_management_name = azurerm_api_management.mil.name
+  resource_group_name = azurerm_api_management.mil.resource_group_name
 }
 
 # ------------------------------------------------------------------------------
 # API diagnostic.
 # ------------------------------------------------------------------------------
-resource "azurerm_api_management_api_diagnostic" "idpay_api" {
+resource "azurerm_api_management_api_diagnostic" "idpay" {
   identifier               = "applicationinsights"
-  resource_group_name      = module.apim.resource_group_name
-  api_management_name      = module.apim.name
-  api_name                 = module.idpay_api.name
-  api_management_logger_id = module.apim.logger_id
+  resource_group_name      = azurerm_api_management.mil.resource_group_name
+  api_management_name      = azurerm_api_management.mil.name
+  api_name                 = azurerm_api_management_api.idpay.name
+  api_management_logger_id = azurerm_api_management_logger.mil.id
 
   sampling_percentage       = 100.0
   always_log_errors         = true

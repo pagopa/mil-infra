@@ -122,7 +122,7 @@ resource "azurerm_cosmosdb_mongo_collection" "subscribers" {
 # ------------------------------------------------------------------------------
 # Container app.
 # ------------------------------------------------------------------------------
-resource "azurerm_container_app" "mil_preset" {
+resource "azurerm_container_app" "preset" {
   name                         = "${local.project}-preset-ca"
   container_app_environment_id = azurerm_container_app_environment.mil.id
   resource_group_name          = azurerm_resource_group.app.name
@@ -177,7 +177,7 @@ resource "azurerm_container_app" "mil_preset" {
 
       env {
         name  = "preset.location.base-url"
-        value = "${module.apim.gateway_url}/${var.mil_preset_path}"
+        value = "${azurerm_api_management.mil.gateway_url}/${var.mil_preset_path}"
       }
 
       env {
@@ -202,7 +202,7 @@ resource "azurerm_container_app" "mil_preset" {
 
       env {
         name  = "jwt-publickey-location"
-        value = "${module.apim.gateway_url}/${var.mil_auth_path}/.well-known/jwks.json"
+        value = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}/.well-known/jwks.json"
       }
     }
 
@@ -222,12 +222,12 @@ resource "azurerm_container_app" "mil_preset" {
 
   secret {
     name  = "kafka-connection-string-1"
-    value = azurerm_eventhub_namespace.mil_evhns.default_primary_connection_string
+    value = azurerm_eventhub_namespace.mil.default_primary_connection_string
   }
 
   secret {
     name  = "kafka-connection-string-2"
-    value = azurerm_eventhub_namespace.mil_evhns.default_secondary_connection_string
+    value = azurerm_eventhub_namespace.mil.default_secondary_connection_string
   }
 
   identity {
@@ -261,38 +261,40 @@ resource "azurerm_log_analytics_query_pack_query" "mil_preset_ca_console_logs" {
 # ------------------------------------------------------------------------------
 # API definition.
 # ------------------------------------------------------------------------------
-module "preset_api" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v7.14.0"
-  name                = "${local.project}-preset"
-  api_management_name = module.apim.name
-  resource_group_name = module.apim.resource_group_name
-  description         = "Preset Microservice for Multi-channel Integration Layer of SW Client Project"
-  protocols           = ["https"]
-
-  # Absolute URL of the backend service implementing this API.
-  service_url = "https://${azurerm_container_app.mil_preset.ingress[0].fqdn}"
-
-  # The Path for this API Management API, which is a relative URL which uniquely
-  # identifies this API and all of its resource paths within the API Management
-  # Service.
-  path = var.mil_preset_path
-
+resource "azurerm_api_management_api" "preset" {
+  name                  = "${local.project}-preset"
+  resource_group_name   = azurerm_api_management.mil.resource_group_name
+  api_management_name   = azurerm_api_management.mil.name
+  revision              = "1"
   display_name          = "preset"
-  content_format        = "openapi-link"
-  content_value         = var.mil_preset_openapi_descriptor
-  product_ids           = [module.mil_product.product_id]
+  description           = "Preset Microservice for Multi-channel Integration Layer of SW Client Project"
+  path                  = var.mil_preset_path
+  protocols             = ["https"]
+  service_url           = "https://${azurerm_container_app.preset.ingress[0].fqdn}"
   subscription_required = false
+
+  import {
+    content_format = "openapi-link"
+    content_value  = var.mil_preset_openapi_descriptor
+  }
+}
+
+resource "azurerm_api_management_product_api" "preset" {
+  product_id          = azurerm_api_management_product.mil.product_id
+  api_name            = azurerm_api_management_api.preset.name
+  api_management_name = azurerm_api_management.mil.name
+  resource_group_name = azurerm_api_management.mil.resource_group_name
 }
 
 # ------------------------------------------------------------------------------
 # API diagnostic.
 # ------------------------------------------------------------------------------
-resource "azurerm_api_management_api_diagnostic" "preset_api" {
+resource "azurerm_api_management_api_diagnostic" "preset" {
   identifier               = "applicationinsights"
-  resource_group_name      = module.apim.resource_group_name
-  api_management_name      = module.apim.name
-  api_name                 = module.preset_api.name
-  api_management_logger_id = module.apim.logger_id
+  resource_group_name      = azurerm_api_management.mil.resource_group_name
+  api_management_name      = azurerm_api_management.mil.name
+  api_name                 = azurerm_api_management_api.preset.name
+  api_management_logger_id = azurerm_api_management_logger.mil.id
 
   sampling_percentage       = 100.0
   always_log_errors         = true

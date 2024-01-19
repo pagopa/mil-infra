@@ -78,13 +78,13 @@ variable "mil_fee_calculator_path" {
 # ------------------------------------------------------------------------------
 data "azurerm_key_vault_secret" "gec_subscription_key" {
   name         = "gec-subscription-key"
-  key_vault_id = module.key_vault.id
+  key_vault_id = azurerm_key_vault.general.id
 }
 
 # ------------------------------------------------------------------------------
 # Container app.
 # ------------------------------------------------------------------------------
-resource "azurerm_container_app" "mil_fee_calculator" {
+resource "azurerm_container_app" "fee_calculator" {
   name                         = "${local.project}-fee-calculator-ca"
   container_app_environment_id = azurerm_container_app_environment.mil.id
   resource_group_name          = azurerm_resource_group.app.name
@@ -114,7 +114,7 @@ resource "azurerm_container_app" "mil_fee_calculator" {
 
       env {
         name  = "rest-client-fees-url"
-        value = var.install_nodo_mock ? "${module.apim.gateway_url}/${var.mock_nodo_path}" : var.gec_url
+        value = var.install_nodo_mock ? "${azurerm_api_management.mil.gateway_url}/${var.mock_nodo_path}" : var.gec_url
       }
 
       env {
@@ -149,7 +149,7 @@ resource "azurerm_container_app" "mil_fee_calculator" {
 
       env {
         name  = "jwt-publickey-location"
-        value = "${module.apim.gateway_url}/${var.mil_auth_path}/.well-known/jwks.json"
+        value = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}/.well-known/jwks.json"
       }
     }
 
@@ -182,6 +182,16 @@ resource "azurerm_container_app" "mil_fee_calculator" {
 }
 
 # ------------------------------------------------------------------------------
+# Assignement of role "Storage Blob Data Reader" to system-managed identity of
+# container app, to use storage account.
+# ------------------------------------------------------------------------------
+resource "azurerm_role_assignment" "conf_storage_for_fee_calculator" {
+  scope                = azurerm_storage_account.conf.id
+  role_definition_name = "Storage Blob Data Reader"
+  principal_id         = azurerm_container_app.fee_calculator.identity[0].principal_id
+}
+
+# ------------------------------------------------------------------------------
 # Query for stdout/stdin of container app.
 # ------------------------------------------------------------------------------
 resource "azurerm_log_analytics_query_pack_query" "fee_calculator_ca_console_logs" {
@@ -193,38 +203,40 @@ resource "azurerm_log_analytics_query_pack_query" "fee_calculator_ca_console_log
 # ------------------------------------------------------------------------------
 # API definition.
 # ------------------------------------------------------------------------------
-module "fee_calculator_api" {
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v7.14.0"
-  name                = "${local.project}-fee-calculator"
-  api_management_name = module.apim.name
-  resource_group_name = module.apim.resource_group_name
-  description         = "Fee Calculator Microservice for Multi-channel Integration Layer of SW Client Project"
-  protocols           = ["https"]
-
-  # Absolute URL of the backend service implementing this API.
-  service_url = "https://${azurerm_container_app.mil_fee_calculator.ingress[0].fqdn}"
-
-  # The Path for this API Management API, which is a relative URL which uniquely
-  # identifies this API and all of its resource paths within the API Management
-  # Service.
-  path = var.mil_fee_calculator_path
-
+resource "azurerm_api_management_api" "fee_calculator" {
+  name                  = "${local.project}-fee-calculator"
+  resource_group_name   = azurerm_api_management.mil.resource_group_name
+  api_management_name   = azurerm_api_management.mil.name
+  revision              = "1"
   display_name          = "fee calculator"
-  content_format        = "openapi-link"
-  content_value         = var.mil_fee_calculator_openapi_descriptor
-  product_ids           = [module.mil_product.product_id]
+  description           = "Fee Calculator Microservice for Multi-channel Integration Layer of SW Client Project"
+  path                  = var.mil_fee_calculator_path
+  protocols             = ["https"]
+  service_url           = "https://${azurerm_container_app.fee_calculator.ingress[0].fqdn}"
   subscription_required = false
+
+  import {
+    content_format = "openapi-link"
+    content_value  = var.mil_fee_calculator_openapi_descriptor
+  }
+}
+
+resource "azurerm_api_management_product_api" "fee_calculator" {
+  product_id          = azurerm_api_management_product.mil.product_id
+  api_name            = azurerm_api_management_api.fee_calculator.name
+  api_management_name = azurerm_api_management.mil.name
+  resource_group_name = azurerm_api_management.mil.resource_group_name
 }
 
 # ------------------------------------------------------------------------------
 # API diagnostic.
 # ------------------------------------------------------------------------------
-resource "azurerm_api_management_api_diagnostic" "fee_calculator_api" {
+resource "azurerm_api_management_api_diagnostic" "fee_calculator" {
   identifier               = "applicationinsights"
-  resource_group_name      = module.apim.resource_group_name
-  api_management_name      = module.apim.name
-  api_name                 = module.fee_calculator_api.name
-  api_management_logger_id = module.apim.logger_id
+  resource_group_name      = azurerm_api_management.mil.resource_group_name
+  api_management_name      = azurerm_api_management.mil.name
+  api_name                 = azurerm_api_management_api.fee_calculator.name
+  api_management_logger_id = azurerm_api_management_logger.mil.id
 
   sampling_percentage       = 100.0
   always_log_errors         = true

@@ -5,7 +5,13 @@
 # ------------------------------------------------------------------------------
 # Variables definition.
 # ------------------------------------------------------------------------------
-variable "install_idpay_ipzs_mock" {
+variable "install_idpay_mock" {
+  description = "If true the mock of the IDPay and IPZS will be installed."
+  type        = bool
+  default     = false
+}
+
+variable "install_ipzs_mock" {
   description = "If true the mock of the IDPay and IPZS will be installed."
   type        = bool
   default     = false
@@ -75,7 +81,7 @@ variable "mock_idpay_ipzs_path" {
 # CosmosDB Mongo database.
 # ------------------------------------------------------------------------------
 resource "azurerm_cosmosdb_mongo_database" "mock_idpay" {
-  count               = var.install_idpay_ipzs_mock ? 1 : 0
+  count               = (var.install_idpay_mock || var.install_ipzs_mock) ? 1 : 0
   account_name        = azurerm_cosmosdb_account.mil.name
   name                = "idpay"
   resource_group_name = azurerm_cosmosdb_account.mil.resource_group_name
@@ -85,7 +91,7 @@ resource "azurerm_cosmosdb_mongo_database" "mock_idpay" {
 # CosmosDB Mongo collections.
 # ------------------------------------------------------------------------------
 resource "azurerm_cosmosdb_mongo_collection" "initiatives" {
-  count               = var.install_idpay_ipzs_mock ? 1 : 0
+  count               = (var.install_idpay_mock || var.install_ipzs_mock) ? 1 : 0
   account_name        = azurerm_cosmosdb_mongo_database.mock_idpay[0].account_name
   database_name       = azurerm_cosmosdb_mongo_database.mock_idpay[0].name
   name                = "initiatives"
@@ -112,7 +118,7 @@ resource "azurerm_cosmosdb_mongo_collection" "initiatives" {
 }
 
 resource "azurerm_cosmosdb_mongo_collection" "idpayLocalTransactions" {
-  count               = var.install_idpay_ipzs_mock ? 1 : 0
+  count               = (var.install_idpay_mock || var.install_ipzs_mock) ? 1 : 0
   account_name        = azurerm_cosmosdb_mongo_database.mock_idpay[0].account_name
   database_name       = azurerm_cosmosdb_mongo_database.mock_idpay[0].name
   name                = "idpayLocalTransactions"
@@ -135,7 +141,7 @@ resource "azurerm_cosmosdb_mongo_collection" "idpayLocalTransactions" {
 # Container app.
 # ------------------------------------------------------------------------------
 resource "azurerm_container_app" "mock_idpay_ipzs" {
-  count                        = var.install_idpay_ipzs_mock ? 1 : 0
+  count                        = (var.install_idpay_mock || var.install_ipzs_mock) ? 1 : 0
   name                         = "${local.project}-mock-idpay-ipzs-ca"
   container_app_environment_id = azurerm_container_app_environment.mil.id
   resource_group_name          = azurerm_resource_group.app.name
@@ -225,26 +231,29 @@ resource "azurerm_container_app" "mock_idpay_ipzs" {
 # ------------------------------------------------------------------------------
 # API definition.
 # ------------------------------------------------------------------------------
-module "mock_idpay_ipzs_api" {
-  count               = var.install_idpay_ipzs_mock ? 1 : 0
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v7.14.0"
-  name                = "${local.project}-idpay-ipzs-mock-2"
-  api_management_name = module.apim.name
-  resource_group_name = module.apim.resource_group_name
-  description         = "IDPay and IPZS mock"
-  protocols           = ["https"]
-
-  # Absolute URL of the backend service implementing this API.
-  service_url = "https://${azurerm_container_app.mock_idpay_ipzs[0].ingress[0].fqdn}"
-
-  # The Path for this API Management API, which is a relative URL which uniquely
-  # identifies this API and all of its resource paths within the API Management
-  # Service.
-  path = var.mock_idpay_ipzs_path
-
+resource "azurerm_api_management_api" "mock_idpay_ipzs" {
+  count                 = (var.install_idpay_mock || var.install_ipzs_mock) ? 1 : 0
+  name                  = "${local.project}-idpay-ipzs-mock"
+  resource_group_name   = azurerm_api_management.mil.resource_group_name
+  api_management_name   = azurerm_api_management.mil.name
+  revision              = "1"
   display_name          = "mock-idpay-ipzs"
-  content_format        = "openapi-link"
-  content_value         = var.mock_idpay_ipzs_openapi_descriptor
-  product_ids           = [module.mil_product.product_id]
+  description           = "IDPay and IPZS mock"
+  path                  = var.mock_idpay_ipzs_path
+  protocols             = ["https"]
+  service_url           = "https://${azurerm_container_app.mock_idpay_ipzs[0].ingress[0].fqdn}"
   subscription_required = false
+
+  import {
+    content_format = "openapi-link"
+    content_value  = var.mock_idpay_ipzs_openapi_descriptor
+  }
+}
+
+resource "azurerm_api_management_product_api" "mock_idpay_ipzs" {
+  count               = (var.install_idpay_mock || var.install_ipzs_mock) ? 1 : 0
+  product_id          = azurerm_api_management_product.mil.product_id
+  api_name            = azurerm_api_management_api.mock_idpay_ipzs[0].name
+  api_management_name = azurerm_api_management.mil.name
+  resource_group_name = azurerm_api_management.mil.resource_group_name
 }

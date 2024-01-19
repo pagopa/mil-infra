@@ -1,21 +1,10 @@
 # ==============================================================================
 # This file contains stuff needed to run mil-auth microservice.
-# The resources in this file are used by mil-auth only.
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
 # Variables definition.
 # ------------------------------------------------------------------------------
-variable "mil_auth_armored_storage_account" {
-  description = "If true the storage account will be protected with a private link and the storage containers will be private."
-  type        = bool
-}
-
-variable "mil_auth_armored_key_vault" {
-  description = "If true the key vault will be protected with a private link."
-  type        = bool
-}
-
 variable "mil_auth_quarkus_log_level" {
   type    = string
   default = "ERROR"
@@ -95,7 +84,7 @@ resource "azurerm_storage_account" "auth" {
   account_tier                  = "Standard"
   account_replication_type      = "LRS"
   account_kind                  = "StorageV2"
-  public_network_access_enabled = var.mil_auth_armored_storage_account ? false : true
+  public_network_access_enabled = false
   tags                          = var.tags
 }
 
@@ -131,8 +120,7 @@ resource "azurerm_storage_account" "auth" {
 # Private endpoint from APP SUBNET (containing Container Apps) to the storage
 # account.
 # ------------------------------------------------------------------------------
-resource "azurerm_private_endpoint" "auth_storage_pep" {
-  count               = var.mil_auth_armored_storage_account ? 1 : 0
+resource "azurerm_private_endpoint" "auth_storage" {
   name                = "${local.project}-auth-storage-pep"
   location            = azurerm_resource_group.network.location
   resource_group_name = azurerm_resource_group.network.name
@@ -142,7 +130,7 @@ resource "azurerm_private_endpoint" "auth_storage_pep" {
 
   private_dns_zone_group {
     name                 = "${local.project}-auth-storage-pdzg"
-    private_dns_zone_ids = [azurerm_private_dns_zone.storage[0].id]
+    private_dns_zone_ids = [azurerm_private_dns_zone.storage.id]
   }
 
   private_service_connection {
@@ -156,7 +144,7 @@ resource "azurerm_private_endpoint" "auth_storage_pep" {
 # ------------------------------------------------------------------------------
 # Key vault for cryptographics operations.
 # ------------------------------------------------------------------------------
-resource "azurerm_key_vault" "auth_key_vault" {
+resource "azurerm_key_vault" "auth" {
   name                          = "${local.project}-auth-kv"
   location                      = azurerm_resource_group.sec.location
   resource_group_name           = azurerm_resource_group.sec.name
@@ -164,7 +152,7 @@ resource "azurerm_key_vault" "auth_key_vault" {
   enabled_for_disk_encryption   = true
   purge_protection_enabled      = true
   sku_name                      = "premium"
-  public_network_access_enabled = var.mil_auth_armored_key_vault ? false : true
+  public_network_access_enabled = false
   enable_rbac_authorization     = true
   tags                          = var.tags
 }
@@ -172,8 +160,7 @@ resource "azurerm_key_vault" "auth_key_vault" {
 # ------------------------------------------------------------------------------
 # Private endpoint from APP SUBNET (containing Container Apps) to the key vault.
 # ------------------------------------------------------------------------------
-resource "azurerm_private_endpoint" "auth_key_vault_pep" {
-  count               = var.mil_auth_armored_key_vault ? 1 : 0
+resource "azurerm_private_endpoint" "auth_key_vault" {
   name                = "${local.project}-auth-kv-pep"
   location            = azurerm_resource_group.network.location
   resource_group_name = azurerm_resource_group.network.name
@@ -183,12 +170,12 @@ resource "azurerm_private_endpoint" "auth_key_vault_pep" {
 
   private_dns_zone_group {
     name                 = "${local.project}-auth-kv-pdzg"
-    private_dns_zone_ids = [azurerm_private_dns_zone.key_vault[0].id]
+    private_dns_zone_ids = [azurerm_private_dns_zone.key_vault.id]
   }
 
   private_service_connection {
     name                           = "${local.project}-auth-kv-psc"
-    private_connection_resource_id = azurerm_key_vault.auth_key_vault.id
+    private_connection_resource_id = azurerm_key_vault.auth.id
     subresource_names              = ["vault"]
     is_manual_connection           = false
   }
@@ -197,7 +184,7 @@ resource "azurerm_private_endpoint" "auth_key_vault_pep" {
 # ------------------------------------------------------------------------------
 # Container app.
 # ------------------------------------------------------------------------------
-resource "azurerm_container_app" "mil_auth" {
+resource "azurerm_container_app" "auth" {
   name                         = "${local.project}-auth-ca"
   container_app_environment_id = azurerm_container_app_environment.mil.id
   resource_group_name          = azurerm_resource_group.app.name
@@ -257,12 +244,12 @@ resource "azurerm_container_app" "mil_auth" {
 
       env {
         name  = "auth.keyvault.url"
-        value = azurerm_key_vault.auth_key_vault.vault_uri
+        value = azurerm_key_vault.auth.vault_uri
       }
 
       env {
         name  = "auth.base-url"
-        value = "${module.apim.gateway_url}/${var.mil_auth_path}"
+        value = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}"
       }
     }
 
@@ -294,9 +281,29 @@ resource "azurerm_container_app" "mil_auth" {
 # container app, to use key vault.
 # ------------------------------------------------------------------------------
 resource "azurerm_role_assignment" "auth_kv" {
-  scope                = azurerm_key_vault.auth_key_vault.id
+  scope                = azurerm_key_vault.auth.id
   role_definition_name = "Key Vault Crypto Officer"
-  principal_id         = azurerm_container_app.mil_auth.identity[0].principal_id
+  principal_id         = azurerm_container_app.auth.identity[0].principal_id
+}
+
+# ------------------------------------------------------------------------------
+# Assignement of role "Key Vault Certificates Officer" to system-managed
+# identity of container app, to use key vault.
+# ------------------------------------------------------------------------------
+resource "azurerm_role_assignment" "auth_kv_to_read_certificates" {
+  scope                = azurerm_key_vault.auth.id
+  role_definition_name = "Key Vault Certificates Officer"
+  principal_id         = azurerm_container_app.auth.identity[0].principal_id
+}
+
+# ------------------------------------------------------------------------------
+# Assignement of role "Key Vault Secrets Officer" to system-managed identity of
+# container app, to use key vault.
+# ------------------------------------------------------------------------------
+resource "azurerm_role_assignment" "auth_kv_to_read_secrets" {
+  scope                = azurerm_key_vault.auth.id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = azurerm_container_app.auth.identity[0].principal_id
 }
 
 # ------------------------------------------------------------------------------
@@ -306,7 +313,7 @@ resource "azurerm_role_assignment" "auth_kv" {
 resource "azurerm_role_assignment" "auth_storage" {
   scope                = azurerm_storage_account.auth.id
   role_definition_name = "Storage Blob Data Reader"
-  principal_id         = azurerm_container_app.mil_auth.identity[0].principal_id
+  principal_id         = azurerm_container_app.auth.identity[0].principal_id
 }
 
 # ------------------------------------------------------------------------------
@@ -330,7 +337,7 @@ resource "azurerm_api_management_api" "auth" {
   description           = "Authorization Microservice for Multi-channel Integration Layer of SW Client Project"
   path                  = var.mil_auth_path
   protocols             = ["https"]
-  service_url           = "https://${azurerm_container_app.mil_auth.ingress[0].fqdn}"
+  service_url           = "https://${azurerm_container_app.auth.ingress[0].fqdn}"
   subscription_required = false
 
   import {
@@ -350,11 +357,11 @@ resource "azurerm_api_management_product_api" "auth" {
 # API diagnostic.
 # ------------------------------------------------------------------------------
 resource "azurerm_api_management_api_diagnostic" "auth" {
-  identifier               = "applicationinsights"
-  resource_group_name      = azurerm_api_management.mil.resource_group_name
-  api_management_name      = azurerm_api_management.mil.name
-  api_name                 = azurerm_api_management_api.auth.name
-  api_management_logger_id = azurerm_api_management_logger.mil.id
+  identifier                = "applicationinsights"
+  resource_group_name       = azurerm_api_management.mil.resource_group_name
+  api_management_name       = azurerm_api_management.mil.name
+  api_name                  = azurerm_api_management_api.auth.name
+  api_management_logger_id  = azurerm_api_management_logger.mil.id
   sampling_percentage       = 100.0
   always_log_errors         = true
   log_client_ip             = true

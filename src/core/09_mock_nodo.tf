@@ -154,7 +154,7 @@ resource "azurerm_storage_blob" "stub_gec" {
 # ------------------------------------------------------------------------------
 data "azurerm_key_vault_secret" "client_id_mock_nodo" {
   name         = "client-id-mock-nodo"
-  key_vault_id = module.key_vault.id
+  key_vault_id = azurerm_key_vault.general.id
 }
 
 # ------------------------------------------------------------------------------
@@ -162,59 +162,74 @@ data "azurerm_key_vault_secret" "client_id_mock_nodo" {
 # ------------------------------------------------------------------------------
 data "azurerm_key_vault_secret" "client_secret_mock_nodo" {
   name         = "client-secret-mock-nodo"
-  key_vault_id = module.key_vault.id
+  key_vault_id = azurerm_key_vault.general.id
 }
 
 # ------------------------------------------------------------------------------
 # Mock API definition.
 # ------------------------------------------------------------------------------
-module "mock_nodo_api" {
-  count               = var.install_nodo_mock ? 1 : 0
-  source              = "git::https://github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v7.14.0"
-  name                = "${local.project}-mock-nodo"
-  api_management_name = module.apim.name
-  resource_group_name = module.apim.resource_group_name
-  description         = "Nodo and GEC mock"
-  protocols           = ["https"]
-
-  # Absolute URL of the backend service implementing this API.
-  service_url = var.nodo_rest_url
-
-  # The Path for this API Management API, which is a relative URL which uniquely
-  # identifies this API and all of its resource paths within the API Management
-  # Service.
-  path = var.mock_nodo_path
-
-  display_name          = "MockNodo"
-  content_format        = "openapi"
-  content_value         = file("${path.module}/mock-nodo/mock-nodo-openapi.yaml")
-  product_ids           = [module.mil_product.product_id]
+resource "azurerm_api_management_api" "mock_nodo" {
+  count                 = var.install_nodo_mock ? 1 : 0
+  name                  = "${local.project}-mock-nodo"
+  resource_group_name   = azurerm_api_management.mil.resource_group_name
+  api_management_name   = azurerm_api_management.mil.name
+  revision              = "1"
+  display_name          = "mocknodo"
+  description           = "Nodo and GEC mock"
+  path                  = var.mock_nodo_path
+  protocols             = ["https"]
+  service_url           = var.nodo_rest_url
   subscription_required = false
 
-  api_operation_policies = [
-    {
-      operation_id = "mockSoap"
-      xml_content = templatefile("policies/mil-mock-nodo-soap.xml", {
-        mock_nodo_st  = azurerm_storage_account.mock[0].primary_blob_endpoint,
-        nodo_soap_url = var.nodo_soap_url
-      })
-    },
-    {
-      operation_id = "mockRest"
-      xml_content = templatefile("policies/mil-mock-nodo-rest.xml", {
-        mock_nodo_st           = azurerm_storage_account.mock[0].primary_blob_endpoint,
-        mil_auth_url           = "${module.apim.gateway_url}/${var.mil_auth_path}",
-        mil_payment_notice_url = "${module.apim.gateway_url}/${var.mil_payment_notice_path}",
-        client_id              = data.azurerm_key_vault_secret.client_id_mock_nodo.value,
-        client_secret          = data.azurerm_key_vault_secret.client_secret_mock_nodo.value
-      })
-    },
-    {
-      operation_id = "mockGec"
-      xml_content = templatefile("policies/mil-mock-nodo-gec.xml", {
-        mock_nodo_st = azurerm_storage_account.mock[0].primary_blob_endpoint,
-        gec_url      = var.gec_url
-      })
-    }
-  ]
+  import {
+    content_format = "openapi"
+    content_value  = file("${path.module}/mock-nodo/mock-nodo-openapi.yaml")
+  }
+}
+
+resource "azurerm_api_management_product_api" "mock_nodo" {
+  count               = var.install_nodo_mock ? 1 : 0
+  product_id          = azurerm_api_management_product.mil.product_id
+  api_name            = azurerm_api_management_api.mock_nodo[0].name
+  api_management_name = azurerm_api_management.mil.name
+  resource_group_name = azurerm_api_management.mil.resource_group_name
+}
+
+resource "azurerm_api_management_api_operation_policy" "mock_nodo_soap" {
+  count               = var.install_nodo_mock ? 1 : 0
+  api_name            = azurerm_api_management_api.mock_nodo[0].name
+  api_management_name = azurerm_api_management.mil.name
+  resource_group_name = azurerm_api_management.mil.resource_group_name
+  operation_id        = "mockSoap"
+  xml_content = templatefile("policies/mil-mock-nodo-soap.xml", {
+    mock_nodo_st  = azurerm_storage_account.mock[0].primary_blob_endpoint,
+    nodo_soap_url = var.nodo_soap_url
+  })
+}
+
+resource "azurerm_api_management_api_operation_policy" "mock_nodo_rest" {
+  count               = var.install_nodo_mock ? 1 : 0
+  api_name            = azurerm_api_management_api.mock_nodo[0].name
+  api_management_name = azurerm_api_management.mil.name
+  resource_group_name = azurerm_api_management.mil.resource_group_name
+  operation_id        = "mockRest"
+  xml_content = templatefile("policies/mil-mock-nodo-rest.xml", {
+    mock_nodo_st           = azurerm_storage_account.mock[0].primary_blob_endpoint,
+    mil_auth_url           = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}",
+    mil_payment_notice_url = "${azurerm_api_management.mil.gateway_url}/${var.mil_payment_notice_path}",
+    client_id              = data.azurerm_key_vault_secret.client_id_mock_nodo.value,
+    client_secret          = data.azurerm_key_vault_secret.client_secret_mock_nodo.value
+  })
+}
+
+resource "azurerm_api_management_api_operation_policy" "mock_gec" {
+  count               = var.install_nodo_mock ? 1 : 0
+  api_name            = azurerm_api_management_api.mock_nodo[0].name
+  api_management_name = azurerm_api_management.mil.name
+  resource_group_name = azurerm_api_management.mil.resource_group_name
+  operation_id        = "mockGec"
+  xml_content = templatefile("policies/mil-mock-nodo-gec.xml", {
+    mock_nodo_st = azurerm_storage_account.mock[0].primary_blob_endpoint,
+    gec_url      = var.gec_url
+  })
 }

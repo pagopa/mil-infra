@@ -68,10 +68,10 @@ resource "azurerm_api_management_logger" "mil" {
 # ------------------------------------------------------------------------------
 # APIM diagnostic.
 # ------------------------------------------------------------------------------
-resource "azurerm_api_management_diagnostic" "this" {
+resource "azurerm_api_management_diagnostic" "mil" {
   identifier                = "applicationinsights"
   resource_group_name       = azurerm_resource_group.integration.name
-  api_management_name       = azurerm_api_management.this.name
+  api_management_name       = azurerm_api_management.mil.name
   api_management_logger_id  = azurerm_api_management_logger.mil.id
   sampling_percentage       = 5
   always_log_errors         = true
@@ -86,8 +86,8 @@ resource "azurerm_api_management_diagnostic" "this" {
 # ------------------------------------------------------------------------------
 resource "azurerm_api_management_subscription" "tracing" {
   count               = var.env_short == "p" ? 0 : 1
-  api_management_name = module.apim.name
-  resource_group_name = module.apim.resource_group_name
+  api_management_name = azurerm_api_management.mil.name
+  resource_group_name = azurerm_api_management.mil.resource_group_name
   display_name        = "Tracing"
   state               = "active"
   allow_tracing       = true

@@ -5,14 +5,6 @@
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# Variables definition.
-# ------------------------------------------------------------------------------
-variable "armored_storage_account_for_acquirers_conf" {
-  description = "If true the storage account will be protected with a private link and the storage containers will be private."
-  type        = bool
-}
-
-# ------------------------------------------------------------------------------
 # Storage account.
 # ------------------------------------------------------------------------------
 resource "azurerm_storage_account" "conf" {
@@ -22,7 +14,7 @@ resource "azurerm_storage_account" "conf" {
   account_tier                  = "Standard"
   account_replication_type      = "LRS"
   account_kind                  = "StorageV2"
-  public_network_access_enabled = var.armored_storage_account_for_acquirers_conf ? false : true
+  public_network_access_enabled = false
   tags                          = var.tags
 }
 
@@ -39,22 +31,7 @@ resource "azurerm_storage_account" "conf" {
 # Private endpoint from APP SUBNET (containing Container Apps) to the storage
 # account.
 # ------------------------------------------------------------------------------
-resource "azurerm_private_dns_zone" "conf_storage" {
-  count               = var.armored_storage_account_for_acquirers_conf ? 1 : 0
-  name                = "privatelink.blob.core.windows.net"
-  resource_group_name = azurerm_resource_group.network.name
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "conf_storage" {
-  count                 = var.armored_storage_account_for_acquirers_conf ? 1 : 0
-  name                  = azurerm_virtual_network.intern.name
-  resource_group_name   = azurerm_resource_group.network.name
-  private_dns_zone_name = azurerm_private_dns_zone.conf_storage[0].name
-  virtual_network_id    = azurerm_virtual_network.intern.id
-}
-
 resource "azurerm_private_endpoint" "conf_storage_pep" {
-  count               = var.armored_storage_account_for_acquirers_conf ? 1 : 0
   name                = "${local.project}-conf-storage-pep"
   location            = azurerm_resource_group.network.location
   resource_group_name = azurerm_resource_group.network.name
@@ -64,7 +41,7 @@ resource "azurerm_private_endpoint" "conf_storage_pep" {
 
   private_dns_zone_group {
     name                 = "${local.project}-conf-storage-pdzg"
-    private_dns_zone_ids = [azurerm_private_dns_zone.conf_storage[0].id]
+    private_dns_zone_ids = [azurerm_private_dns_zone.storage.id]
   }
 
   private_service_connection {

@@ -124,19 +124,17 @@ resource "azurerm_subnet" "dns_forwarder_snet" {
 
 # ------------------------------------------------------------------------------
 # Private DNS for private endpoint from APP SUBNET (containing Container Apps)
-# to the key vaultd.
+# to the key vault.
 # ------------------------------------------------------------------------------
 resource "azurerm_private_dns_zone" "key_vault" {
-  count               = (var.mil_auth_armored_key_vault || var.mil_idpay_armored_key_vault) ? 1 : 0
   name                = "privatelink.vaultcore.azure.net"
   resource_group_name = azurerm_resource_group.network.name
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "key_vault" {
-  count                 = (var.mil_auth_armored_key_vault || var.mil_idpay_armored_key_vault) ? 1 : 0
   name                  = azurerm_virtual_network.intern.name
   resource_group_name   = azurerm_resource_group.network.name
-  private_dns_zone_name = azurerm_private_dns_zone.key_vault[0].name
+  private_dns_zone_name = azurerm_private_dns_zone.key_vault.name
   virtual_network_id    = azurerm_virtual_network.intern.id
 }
 
@@ -145,15 +143,13 @@ resource "azurerm_private_dns_zone_virtual_network_link" "key_vault" {
 # to the storage account.
 # ------------------------------------------------------------------------------
 resource "azurerm_private_dns_zone" "storage" {
-  count               = (var.armored_storage_account_for_acquirers_conf || var.mil_auth_armored_storage_account) ? 1 : 0
   name                = "privatelink.blob.core.windows.net"
   resource_group_name = azurerm_resource_group.network.name
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "storage" {
-  count                 = (var.armored_storage_account_for_acquirers_conf || var.mil_auth_armored_storage_account) ? 1 : 0
   name                  = azurerm_virtual_network.intern.name
   resource_group_name   = azurerm_resource_group.network.name
-  private_dns_zone_name = azurerm_private_dns_zone.storage[0].name
+  private_dns_zone_name = azurerm_private_dns_zone.storage.name
   virtual_network_id    = azurerm_virtual_network.intern.id
 }
