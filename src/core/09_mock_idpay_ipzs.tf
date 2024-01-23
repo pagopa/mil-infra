@@ -77,6 +77,10 @@ variable "mock_idpay_ipzs_path" {
   default = "idpay-ipzs-mock"
 }
 
+variable "mock_idpay_rest_api_url" {
+  type = string
+}
+
 # ------------------------------------------------------------------------------
 # CosmosDB Mongo database.
 # ------------------------------------------------------------------------------
@@ -138,6 +142,14 @@ resource "azurerm_cosmosdb_mongo_collection" "idpayLocalTransactions" {
 }
 
 # ------------------------------------------------------------------------------
+# Get API key for IDPay from key vault.
+# ------------------------------------------------------------------------------
+data "azurerm_key_vault_secret" "idpay_subscription_key_for_ipzs" {
+  name         = "idpay-subscription-key-ipzs"
+  key_vault_id = azurerm_key_vault.general.id
+}
+
+# ------------------------------------------------------------------------------
 # Container app.
 # ------------------------------------------------------------------------------
 resource "azurerm_container_app" "mock_idpay_ipzs" {
@@ -193,6 +205,16 @@ resource "azurerm_container_app" "mock_idpay_ipzs" {
         name        = "mongo-connection-string-2"
         secret_name = "mongo-connection-string-2"
       }
+
+      env {
+        name  = "idpay-rest-api.url"
+        value = var.mock_idpay_rest_api_url
+      }
+
+      env {
+        name        = "idpay-rest-api.subscription-key"
+        secret_name = "idpay-subscription-key"
+      }
     }
 
     max_replicas = var.mil_payment_notice_max_replicas
@@ -207,6 +229,11 @@ resource "azurerm_container_app" "mock_idpay_ipzs" {
   secret {
     name  = "mongo-connection-string-2"
     value = azurerm_cosmosdb_account.mil.connection_strings[1]
+  }
+
+  secret {
+    name  = "idpay-subscription-key"
+    value = data.azurerm_key_vault_secret.idpay_subscription_key_for_ipzs.value
   }
 
   identity {

@@ -172,6 +172,7 @@ mock_idpay_ipzs_cpu                            = 1
 mock_idpay_ipzs_memory                         = "2Gi"
 mock_idpay_ipzs_max_replicas                   = 5
 mock_idpay_ipzs_min_replicas                   = 1
+mock_idpay_rest_api_url                        = "https://api-io.uat.cstar.pagopa.it"
 
 #
 # APIM
