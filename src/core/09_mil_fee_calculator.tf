@@ -196,7 +196,7 @@ resource "azurerm_role_assignment" "conf_storage_for_fee_calculator" {
 # ------------------------------------------------------------------------------
 resource "azurerm_log_analytics_query_pack_query" "fee_calculator_ca_console_logs" {
   query_pack_id = azurerm_log_analytics_query_pack.query_pack.id
-  body          = "ContainerAppConsoleLogs_CL | where ContainerName_s == 'mil-fee-calculator' | where time_t > ago(60m) | sort by time_t asc | extend local_time = substring(Log_s, 0, 23) | extend request_id = extract('\\[(.*?)\\]', 1, Log_s) | extend log_level = extract('\\[(TRACE|DEBUG|INFO|WARN|ERROR|FATAL)\\]', 1, Log_s) | project local_time, request_id, log_level, Log_s"
+  body          = "ContainerAppConsoleLogs_CL | where ContainerName_s == 'mil-fee-calculator' | where time_t > ago(60m) | sort by time_t asc | extend local_time = substring(Log_s, 0, 23) | extend request_id = extract('\\\\[(.*?)\\\\]', 1, Log_s) | extend log_level = extract('\\\\[(TRACE|DEBUG|INFO|WARN|ERROR|FATAL)\\\\]', 1, Log_s) | project local_time, request_id, log_level, Log_s"
   display_name  = "*** mil-fee-calculator - last hour logs ***"
 }
 
