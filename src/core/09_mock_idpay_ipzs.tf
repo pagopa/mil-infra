@@ -81,6 +81,11 @@ variable "mock_idpay_rest_api_url" {
   type = string
 }
 
+variable "mock_ipzs_call_idpay_to_link_user_to_trx" {
+  type    = string
+  default = "no"
+}
+
 # ------------------------------------------------------------------------------
 # CosmosDB Mongo database.
 # ------------------------------------------------------------------------------
@@ -182,27 +187,27 @@ resource "azurerm_container_app" "mock_idpay_ipzs" {
       }
 
       env {
-        name  = "mongo-connect-timeout"
+        name  = "mongo.connect-timeout"
         value = var.mock_idpay_ipzs_mongo_connect_timeout
       }
 
       env {
-        name  = "mongo-read-timeout"
+        name  = "mongo.read-timeout"
         value = var.mock_idpay_ipzs_mongo_read_timeout
       }
 
       env {
-        name  = "mongo-server-selection-timeout"
+        name  = "mongo.server-selection-timeout"
         value = var.mock_idpay_ipzs_mongo_server_selection_timeout
       }
 
       env {
-        name        = "mongo-connection-string-1"
+        name        = "mongo.connection-string-1"
         secret_name = "mongo-connection-string-1"
       }
 
       env {
-        name        = "mongo-connection-string-2"
+        name        = "mongo.connection-string-2"
         secret_name = "mongo-connection-string-2"
       }
 
@@ -214,6 +219,11 @@ resource "azurerm_container_app" "mock_idpay_ipzs" {
       env {
         name        = "idpay-rest-api.subscription-key"
         secret_name = "idpay-subscription-key"
+      }
+
+      env {
+        name  = "ipzs-call-idpay"
+        value = var.mock_ipzs_call_idpay_to_link_user_to_trx
       }
     }
 

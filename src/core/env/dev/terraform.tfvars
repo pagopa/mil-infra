@@ -147,8 +147,8 @@ mil_idpay_app_log_level                  = "DEBUG"
 mil_idpay_mongo_connect_timeout          = "5s"
 mil_idpay_mongo_read_timeout             = "10s"
 mil_idpay_mongo_server_selection_timeout = "5s"
-mil_idpay_image                          = "ghcr.io/pagopa/mil-idpay:refs_heads_sprint_24"
-mil_idpay_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/mil-idpay/sprint_24/src/main/resources/META-INF/openapi.yaml"
+mil_idpay_image                          = "ghcr.io/pagopa/mil-idpay:latest"
+mil_idpay_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/mil-idpay/main/src/main/resources/META-INF/openapi.yaml"
 mil_idpay_cpu                            = 1
 mil_idpay_memory                         = "2Gi"
 mil_idpay_max_replicas                   = 10
@@ -157,6 +157,8 @@ mil_idpay_idpay_rest_api_url             = "https://api.uat.cstar.pagopa.it"
 mil_idpay_ipzs_rest_api_url              = "https://mil-d-apim.azure-api.net/idpay-ipzs-mock"
 mil_idpay_cryptoperiod                   = 86400000
 mil_idpay_keysize                        = 4096
+mil_idpay_transaction_max_retry          = 10
+mil_idpay_transaction_retry_after        = 5
 
 #
 # mock-idpay-ipzs
@@ -173,6 +175,7 @@ mock_idpay_ipzs_memory                         = "2Gi"
 mock_idpay_ipzs_max_replicas                   = 5
 mock_idpay_ipzs_min_replicas                   = 1
 mock_idpay_rest_api_url                        = "https://api-io.uat.cstar.pagopa.it"
+mock_ipzs_call_idpay_to_link_user_to_trx       = "yes"
 
 #
 # APIM
