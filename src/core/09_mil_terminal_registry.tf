@@ -76,6 +76,29 @@ resource "azurerm_key_vault" "terminal_registry" {
 }
 
 # ------------------------------------------------------------------------------
+# Private endpoint from APP SUBNET (containing Container Apps) to the key vault.
+# ------------------------------------------------------------------------------
+resource "azurerm_private_endpoint" "terminal_registry_key_vault" {
+  name                = "${local.project}-terminal-registry-kv-pep"
+  location            = azurerm_resource_group.network.location
+  resource_group_name = azurerm_resource_group.network.name
+  subnet_id           = azurerm_subnet.app.id
+
+  custom_network_interface_name = "${local.project}-terminal-registry-kv-pep-nic"
+
+  private_dns_zone_group {
+    name                 = "${local.project}-terminal-registry-kv-pdzg"
+    private_dns_zone_ids = [azurerm_private_dns_zone.key_vault.id]
+  }
+
+  private_service_connection {
+    name                           = "${local.project}-terminal-registry-kv-psc"
+    private_connection_resource_id = azurerm_key_vault.terminal_registry.id
+    subresource_names              = ["vault"]
+    is_manual_connection           = false
+  }
+}
+# ------------------------------------------------------------------------------
 # Container app.
 # ------------------------------------------------------------------------------
 resource "azurerm_container_app" "terminal_registry" {
