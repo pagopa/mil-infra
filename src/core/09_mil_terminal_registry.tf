@@ -29,10 +29,6 @@ variable "mil_terminal_registry_min_replicas" {
   default = 1
 }
 
-variable "mil_terminal_registry_openapi_descriptor" {
-  type = string
-}
-
 variable "mil_terminal_registry_quarkus_log_level" {
   type    = string
   default = "ERROR"
@@ -63,7 +59,7 @@ variable "mil_terminal_registry_mongo_server_selection_timeout" {
 # Key vault for cryptographics operations.
 # ------------------------------------------------------------------------------
 resource "azurerm_key_vault" "terminal_registry" {
-  name                          = "${local.project}-terminal-registry-kv"
+  name                          = "${local.project}-tr-kv"
   location                      = azurerm_resource_group.sec.location
   resource_group_name           = azurerm_resource_group.sec.name
   tenant_id                     = data.azurerm_client_config.current.tenant_id
