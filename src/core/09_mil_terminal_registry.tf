@@ -54,46 +54,6 @@ variable "mil_terminal_registry_mongo_server_selection_timeout" {
   default = "5s"
 }
 
-
-# ------------------------------------------------------------------------------
-# Key vault for cryptographics operations.
-# ------------------------------------------------------------------------------
-resource "azurerm_key_vault" "terminal_registry" {
-  name                          = "${local.project}-tr-kv"
-  location                      = azurerm_resource_group.sec.location
-  resource_group_name           = azurerm_resource_group.sec.name
-  tenant_id                     = data.azurerm_client_config.current.tenant_id
-  enabled_for_disk_encryption   = true
-  purge_protection_enabled      = true
-  sku_name                      = "premium"
-  public_network_access_enabled = false
-  enable_rbac_authorization     = true
-  tags                          = var.tags
-}
-
-# ------------------------------------------------------------------------------
-# Private endpoint from APP SUBNET (containing Container Apps) to the key vault.
-# ------------------------------------------------------------------------------
-resource "azurerm_private_endpoint" "terminal_registry_key_vault" {
-  name                = "${local.project}-terminal-registry-kv-pep"
-  location            = azurerm_resource_group.network.location
-  resource_group_name = azurerm_resource_group.network.name
-  subnet_id           = azurerm_subnet.app.id
-
-  custom_network_interface_name = "${local.project}-terminal-registry-kv-pep-nic"
-
-  private_dns_zone_group {
-    name                 = "${local.project}-terminal-registry-kv-pdzg"
-    private_dns_zone_ids = [azurerm_private_dns_zone.key_vault.id]
-  }
-
-  private_service_connection {
-    name                           = "${local.project}-terminal-registry-kv-psc"
-    private_connection_resource_id = azurerm_key_vault.terminal_registry.id
-    subresource_names              = ["vault"]
-    is_manual_connection           = false
-  }
-}
 # ------------------------------------------------------------------------------
 # Container app.
 # ------------------------------------------------------------------------------
