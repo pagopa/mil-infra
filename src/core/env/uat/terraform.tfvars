@@ -140,6 +140,20 @@ mil_preset_max_replicas                   = 10
 mil_preset_min_replicas                   = 1
 
 #
+# mil-terminal-registry
+#
+mil_terminal_registry_quarkus_log_level              = "ERROR"
+mil_terminal_registry_app_log_level                  = "DEBUG"
+mil_terminal_registry_mongo_connect_timeout          = "5s"
+mil_terminal_registry_mongo_read_timeout             = "10s"
+mil_terminal_registry_mongo_server_selection_timeout = "5s"
+mil_terminal_registry_image                          = "ghcr.io/pagopa/mil-terminal-registry:latest"
+mil_terminal_registry_cpu                            = 1
+mil_terminal_registry_memory                         = "2Gi"
+mil_terminal_registry_max_replicas                   = 10
+mil_terminal_registry_min_replicas                   = 1
+
+#
 # mil-idpay
 #
 mil_idpay_quarkus_log_level              = "ERROR"
