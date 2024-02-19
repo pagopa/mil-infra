@@ -5,19 +5,19 @@ Github action to login with Azure CLI by using a managed identity.
 locals {
   repositories = [
     {
-      repository: "mil-terminal-registry"
-      subject: var.env
+      repository : "mil-terminal-registry"
+      subject : var.env
     }
   ]
 
   resource_groups_roles_cd = [
     {
-      resource_group_id: azurerm_resource_group.sec.id,
-      role: "Key Vault Reader"
+      resource_group_id : azurerm_resource_group.sec.id,
+      role : "Key Vault Reader"
     },
     {
-      resource_group_id: azurerm_resource_group.app.id,
-      role: "Contributor"
+      resource_group_id : azurerm_resource_group.app.id,
+      role : "Contributor"
     }
   ]
 }
