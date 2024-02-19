@@ -1,0 +1,129 @@
+#
+# App Gateway
+#
+variable "app_gateway" {
+  type = object({
+    min_capacity = number
+    max_capacity = number
+    waf_enabled  = bool
+    sku_name     = string
+    sku_tier     = string
+  })
+  description = "Application Gateway configuration"
+}
+
+#
+# User assigned identity
+#
+resource "azurerm_user_assigned_identity" "appgw" {
+  resource_group_name = azurerm_resource_group.network.name
+  location            = azurerm_resource_group.network.location
+  name                = "${local.project}-agw-id"
+  tags                = var.tags
+}
+
+resource "azurerm_role_assignment" "appgw_id_api-dev-mil" {
+  scope                = "${module.key_vault.id}/certificates/api-dev-mil"
+  role_definition_name = "Key Vault Reader"
+  principal_id         = azurerm_user_assigned_identity.appgw.principal_id
+}
+
+# resource "azurerm_role_assignment" "appgw_id_api-dev-mil_secret" {
+#   scope                = "${module.key_vault.id}/secrets/api-dev-mil"
+#   role_definition_name = "Key Vault Reader"
+#   principal_id         = azurerm_user_assigned_identity.appgw.principal_id
+# }
+
+data "azurerm_key_vault_certificate" "api-dev-mil" {
+  name         = "api-dev-mil"
+  key_vault_id = module.key_vault.id
+}
+
+#
+# Public IP
+#
+resource "azurerm_public_ip" "appgw" {
+  name                = "${local.project}-agw-pip"
+  resource_group_name = azurerm_resource_group.network.name
+  location            = azurerm_resource_group.network.location
+  sku                 = "Standard"
+  allocation_method   = "Static"
+  zones               = [1, 2, 3]
+  tags                = var.tags
+}
+
+#
+# Application Gateway
+#
+module "app_gw" {
+  depends_on = [
+    azurerm_role_assignment.appgw_id_api-dev-mil
+  ]
+
+  source = "git::https://github.com/pagopa/terraform-azurerm-v3.git//app_gateway?ref=v7.14.0"
+
+  resource_group_name = azurerm_resource_group.network.name
+  location            = azurerm_resource_group.network.location
+  name                = "${local.project}-agw"
+
+  sku_name = var.app_gateway.sku_name
+  sku_tier = var.app_gateway.sku_tier
+
+  waf_enabled = var.app_gateway.waf_enabled
+
+  zones = [1, 2, 3]
+
+  app_gateway_min_capacity = var.app_gateway.min_capacity
+  app_gateway_max_capacity = var.app_gateway.max_capacity
+
+  # Networking
+  subnet_id    = azurerm_subnet.appgw.id
+  public_ip_id = azurerm_public_ip.appgw.id
+
+  # Backends
+  backends = {
+    apim = {
+      protocol                    = "Https"
+      host                        = module.apim.gateway_hostname
+      port                        = 443
+      ip_addresses                = null # with null value use fqdns
+      fqdns                       = [module.apim.gateway_hostname]
+      probe                       = "/status-0123456789abcdef"
+      probe_name                  = "probe-apim"
+      request_timeout             = 30
+      pick_host_name_from_backend = false
+    }
+  }
+
+  # Listeners
+  listeners = {
+    api = {
+      protocol           = "Https"
+      host               = "api.${var.dns_zone_mil_prefix}.${var.dns_external_domain}"
+      port               = 443
+      firewall_policy_id = null
+      certificate = {
+        name = "api-dev-mil"
+        id   = data.azurerm_key_vault_certificate.api-dev-mil.versionless_secret_id
+      }
+      ssl_profile_name = null
+    }
+  }
+
+  # Maps listener-to-backend
+  routes = {
+    api = {
+      listener              = "api"
+      backend               = "apim"
+      rewrite_rule_set_name = null
+      priority              = 1
+    }
+  }
+
+  #rewrite_rule_sets = []
+
+  trusted_client_certificates = []
+  identity_ids                = [azurerm_user_assigned_identity.appgw.id]
+
+  tags = var.tags
+}

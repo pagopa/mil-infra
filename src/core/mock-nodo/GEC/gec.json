@@ -1,0 +1,20 @@
+{
+	"belowThreshold": false,
+	"bundleOptions": [
+		{
+			"taxPayerFee": 50,
+			"primaryCiIncurredFee": 0,
+			"paymentMethod": "ANY",
+			"touchpoint": "POS",
+			"idBundle": "a4bcc637-07b1-4543-84e6-6e3f3cbe3500",
+			"bundleName": "test-sw-03",
+			"bundleDescription": "pacchetto di test",
+			"idCiBundle": null,
+			"idPsp": "AGID_01",
+			"idChannel": "97735020584_07",
+			"idBrokerPsp": "00000000201",
+			"onUs": false,
+			"abi": "AgID"
+		}
+	]
+}

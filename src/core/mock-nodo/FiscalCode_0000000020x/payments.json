@@ -1,0 +1,15 @@
+{
+  "outcome": "OK",
+  "paymentDate": "2022-11-12T08:53:55",
+  "payments": [
+    {
+      "paymentToken": "<pt>",
+      "description": "Health ticket for chest x-ray",
+      "creditorReferenceId": "4839d50603fssfW5X",
+      "fiscalCode": "15376371009",
+      "company": "ASL Roma",
+      "office": "Ufficio di Roma",
+      "debtor": "Mario Rossi"
+    }
+  ]
+}

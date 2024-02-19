@@ -1,0 +1,37 @@
+resource "azurerm_resource_group" "app_it" {
+  name     = "${local.project}-app-it-rg"
+  location = "italynorth"
+  tags     = var.tags
+}
+
+resource "azurerm_resource_group" "network_it" {
+  name     = "${local.project}-network-it-rg"
+  location = "italynorth"
+  tags     = var.tags
+}
+
+resource "azurerm_virtual_network" "intern_it" {
+  name                = "${local.project}-intern-it_vnet"
+  location            = azurerm_resource_group.network_it.location
+  resource_group_name = azurerm_resource_group.network_it.name
+  address_space       = ["10.232.0.0/16"]
+  tags                = var.tags
+}
+
+resource "azurerm_subnet" "app_it" {
+  name                 = "${local.project}-app-it-snet"
+  resource_group_name  = azurerm_virtual_network.intern_it.resource_group_name
+  virtual_network_name = azurerm_virtual_network.intern_it.name
+  address_prefixes     = ["10.232.2.0/23"]
+}
+
+resource "azurerm_container_app_environment" "mil_nit" {
+  name                           = "${local.project}-cae-nit"
+  location                       = azurerm_resource_group.app_it.location
+  resource_group_name            = azurerm_resource_group.app_it.name
+  #log_analytics_workspace_id     = azurerm_log_analytics_workspace.log_analytics_workspace.id
+  internal_load_balancer_enabled = false
+  infrastructure_subnet_id       = azurerm_subnet.app_it.id
+  tags                           = var.tags
+  zone_redundancy_enabled        = false
+}
