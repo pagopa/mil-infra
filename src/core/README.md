@@ -15,6 +15,9 @@
 | <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 2.31.0 |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.36.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | 3.6.0 |
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 2.46.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.82.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.5.1 |
 
 ## Modules
 
