@@ -39,20 +39,6 @@ variable "mil_terminal_registry_app_log_level" {
   default = "DEBUG"
 }
 
-variable "mil_terminal_registry_mongo_connect_timeout" {
-  type    = string
-  default = "5s"
-}
-
-variable "mil_terminal_registry_mongo_read_timeout" {
-  type    = string
-  default = "10s"
-}
-
-variable "mil_terminal_registry_mongo_server_selection_timeout" {
-  type    = string
-  default = "5s"
-}
 
 # ------------------------------------------------------------------------------
 # Container app.
@@ -89,22 +75,6 @@ resource "azurerm_container_app" "terminal_registry" {
         name  = "app-log-level"
         value = var.mil_terminal_registry_app_log_level
       }
-
-      env {
-        name  = "mongo.connect-timeout"
-        value = var.mil_terminal_registry_mongo_connect_timeout
-      }
-
-      env {
-        name  = "mongo.read-timeout"
-        value = var.mil_terminal_registry_mongo_read_timeout
-      }
-
-      env {
-        name  = "mongo.server-selection-timeout"
-        value = var.mil_terminal_registry_mongo_server_selection_timeout
-      }
-
     }
 
     max_replicas = var.mil_terminal_registry_max_replicas
