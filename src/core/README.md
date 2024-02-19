@@ -12,6 +12,9 @@
 
 | Name | Version |
 |------|---------|
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 2.31.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.36.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.6.0 |
 | <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 2.46.0 |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.82.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | 3.6.0 |
@@ -76,6 +79,7 @@ No modules.
 | [azurerm_dns_zone.mil](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/dns_zone) | resource |
 | [azurerm_eventhub.presets](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/eventhub) | resource |
 | [azurerm_eventhub_namespace.mil](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/eventhub_namespace) | resource |
+| [azurerm_federated_identity_credential.identity_credentials_cd](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/federated_identity_credential) | resource |
 | [azurerm_key_vault.auth](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/key_vault) | resource |
 | [azurerm_key_vault.general](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/key_vault) | resource |
 | [azurerm_key_vault.idpay](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/key_vault) | resource |
@@ -111,6 +115,7 @@ No modules.
 | [azurerm_resource_group.app](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/resource_group) | resource |
 | [azurerm_resource_group.data](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/resource_group) | resource |
 | [azurerm_resource_group.integration](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/resource_group) | resource |
+| [azurerm_resource_group.managed_identities_rg](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/resource_group) | resource |
 | [azurerm_resource_group.monitor](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/resource_group) | resource |
 | [azurerm_resource_group.network](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/resource_group) | resource |
 | [azurerm_resource_group.sec](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/resource_group) | resource |
@@ -120,6 +125,8 @@ No modules.
 | [azurerm_role_assignment.auth_storage](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.conf_storage_for_fee_calculator](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.conf_storage_for_payment_notice](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/role_assignment) | resource |
+| [azurerm_role_assignment.identity_rg_role_assignment_cd](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/role_assignment) | resource |
+| [azurerm_role_assignment.identity_subscription_role_assignment_cd](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.idpay_kv](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.idpay_kv_to_read_certificates](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.idpay_kv_to_read_secrets](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/role_assignment) | resource |
@@ -136,6 +143,7 @@ No modules.
 | [azurerm_subnet.appgw](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/subnet) | resource |
 | [azurerm_subnet.dns_forwarder_snet](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/subnet) | resource |
 | [azurerm_subnet.vpn](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/subnet) | resource |
+| [azurerm_user_assigned_identity.identity_cd](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/user_assigned_identity) | resource |
 | [azurerm_virtual_network.integr](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/virtual_network) | resource |
 | [azurerm_virtual_network.intern](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/virtual_network) | resource |
 | [azurerm_virtual_network_gateway.vpn](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/virtual_network_gateway) | resource |
