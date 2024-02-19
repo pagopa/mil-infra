@@ -139,7 +139,6 @@ mil_preset_memory                         = "2Gi"
 mil_preset_max_replicas                   = 10
 mil_preset_min_replicas                   = 1
 
-
 #
 # mil-terminal-registry
 #
@@ -153,7 +152,6 @@ mil_terminal_registry_cpu                            = 1
 mil_terminal_registry_memory                         = "2Gi"
 mil_terminal_registry_max_replicas                   = 10
 mil_terminal_registry_min_replicas                   = 1
-
 
 #
 # mil-idpay
