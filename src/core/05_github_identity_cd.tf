@@ -51,5 +51,5 @@ resource "azurerm_federated_identity_credential" "identity_credentials_cd" {
   audience            = ["api://AzureADTokenExchange"]
   issuer              = "https://token.actions.githubusercontent.com"
   parent_id           = azurerm_user_assigned_identity.identity_cd.id
-  subject             = "repo:pagopa/${each.value.repository}:environment:${each.value.subject}"
+  subject             = "repo:pagopa/${each.value.repository}:environment:${each.value.subject}-cd"
 }
