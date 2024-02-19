@@ -39,6 +39,21 @@ variable "mil_terminal_registry_app_log_level" {
   default = "DEBUG"
 }
 
+variable "mil_terminal_registry_mongo_connect_timeout" {
+  type    = string
+  default = "5s"
+}
+
+variable "mil_terminal_registry_mongo_read_timeout" {
+  type    = string
+  default = "10s"
+}
+
+variable "mil_terminal_registry_mongo_server_selection_timeout" {
+  type    = string
+  default = "5s"
+}
+
 
 # ------------------------------------------------------------------------------
 # Container app.
@@ -75,6 +90,22 @@ resource "azurerm_container_app" "terminal_registry" {
         name  = "app-log-level"
         value = var.mil_terminal_registry_app_log_level
       }
+
+      env {
+        name  = "mongo.connect-timeout"
+        value = var.mil_terminal_registry_mongo_connect_timeout
+      }
+
+      env {
+        name  = "mongo.read-timeout"
+        value = var.mil_terminal_registry_mongo_read_timeout
+      }
+      
+      env {
+        name  = "mongo.server-selection-timeout"
+        value = var.mil_terminal_registry_mongo_server_selection_timeout
+      }
+
     }
 
     max_replicas = var.mil_terminal_registry_max_replicas
@@ -112,4 +143,19 @@ resource "azurerm_log_analytics_query_pack_query" "mil_terminal_registry_ca_cons
   query_pack_id = azurerm_log_analytics_query_pack.query_pack.id
   body          = "ContainerAppConsoleLogs_CL | where ContainerName_s == 'mil-terminal-registry' | where time_t > ago(60m) | sort by time_t asc | extend local_time = substring(Log_s, 0, 23) | extend request_id = extract('\\\\[(.*?)\\\\]', 1, Log_s) | extend log_level = extract('\\\\[(TRACE|DEBUG|INFO|WARN|ERROR|FATAL)\\\\]', 1, Log_s) | project local_time, request_id, log_level, Log_s"
   display_name  = "*** mil-terminal_registry - last hour logs ***"
+}
+
+# ------------------------------------------------------------------------------
+# CosmosDB Mongo collection.
+# ------------------------------------------------------------------------------
+resource "azurerm_cosmosdb_mongo_collection" "terminal_registry" {
+  account_name        = azurerm_cosmosdb_mongo_database.mil.account_name
+  database_name       = azurerm_cosmosdb_mongo_database.mil.name
+  name                = "terminal_registry"
+  resource_group_name = azurerm_cosmosdb_mongo_database.mil.resource_group_name
+
+  index {
+    keys   = ["_id"]
+  }
+
 }
