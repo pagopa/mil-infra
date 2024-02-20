@@ -100,7 +100,7 @@ resource "azurerm_container_app" "terminal_registry" {
         name  = "mongo.read-timeout"
         value = var.mil_terminal_registry_mongo_read_timeout
       }
-      
+
       env {
         name  = "mongo.server-selection-timeout"
         value = var.mil_terminal_registry_mongo_server_selection_timeout
