@@ -39,7 +39,7 @@ install_nodo_mock = true
 #
 # If true the mock of the IDPay and IPZS will be installed.
 #
-install_idpay_mock = false
+install_idpay_mock = true
 
 #
 # If true the mock of the IDPay and IPZS will be installed.
@@ -188,7 +188,7 @@ mock_idpay_ipzs_memory                         = "2Gi"
 mock_idpay_ipzs_max_replicas                   = 5
 mock_idpay_ipzs_min_replicas                   = 1
 mock_idpay_rest_api_url                        = "https://api-io.uat.cstar.pagopa.it"
-mock_ipzs_call_idpay_to_link_user_to_trx       = "yes"
+mock_ipzs_call_idpay_to_link_user_to_trx       = "no"
 
 #
 # APIM
