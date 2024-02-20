@@ -156,6 +156,7 @@ resource "azurerm_cosmosdb_mongo_collection" "terminal_registry" {
 
   index {
     keys   = ["_id"]
+    unique = true
   }
 
 }
