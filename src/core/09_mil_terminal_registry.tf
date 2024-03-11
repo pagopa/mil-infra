@@ -82,6 +82,11 @@ resource "azurerm_container_app" "terminal_registry" {
       }
 
       env {
+        name        = "mongo.connection-string-2"
+        secret_name = "mongo-connection-string-2"
+      }
+
+      env {
         name  = "quarkus-log-level"
         value = var.mil_terminal_registry_quarkus_log_level
       }
@@ -132,6 +137,12 @@ resource "azurerm_container_app" "terminal_registry" {
     name  = "mongo-connection-string-1"
     value = azurerm_cosmosdb_account.mil.connection_strings[0]
   }
+
+  secret {
+    name  = "mongo-connection-string-2"
+    value = azurerm_cosmosdb_account.mil.connection_strings[1]
+  }
+
 
   tags = var.tags
 }
