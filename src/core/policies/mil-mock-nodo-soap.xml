@@ -18,8 +18,11 @@
             <when condition="@(((string)context.Variables["soapAction"]).Contains("verifyPaymentNotice"))">
                 <set-variable name="filePrefix" value="verifyPaymentNotice_" />
             </when>
-            <otherwise>
+            <when condition="@(((string)context.Variables["soapAction"]).Contains("activatePaymentNoticeV2"))">
                 <set-variable name="filePrefix" value="activatePaymentNotice_" />
+            </when>
+            <otherwise>
+                <set-variable name="filePrefix" value="sendPaymentOutcome_" />
             </otherwise>
         </choose>
         <!-- Retrieve the fiscalCode passed in the request body -->
