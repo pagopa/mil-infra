@@ -1,0 +1,14 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:nod="http://pagopa-api.pagopa.gov.it/node/nodeForPsp.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <nod:sendPaymentOutcomeV2Response>
+         <outcome>KO</outcome>
+         <fault>
+            <faultCode>PPT_PSP_SCONOSCIUTO</faultCode>
+            <faultString>Errore di sintassi extra XSD.</faultString>
+            <id>NodoDeiPagamentiSPC</id>
+            <description>Errore validazione XML [Envelope/Body/verifyPaymentNoticeReq/qrCode/noticeNumber] - cvc-pattern-valid: il valore &quot;30205&quot; non è valido come facet rispetto al pattern &quot;[0-9]{18}&quot; per il tipo 'stNoticeNumber'.</description>
+        </fault>
+      </nod:sendPaymentOutcomeV2Response>
+   </soapenv:Body>
+</soapenv:Envelope>

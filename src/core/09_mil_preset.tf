@@ -286,6 +286,14 @@ resource "azurerm_api_management_product_api" "preset" {
   resource_group_name = azurerm_api_management.mil.resource_group_name
 }
 
+resource "azurerm_api_management_api_policy" "preset" {
+  count               = var.env_short == "p" ? 0 : 1
+  api_name            = azurerm_api_management_api.preset.name
+  api_management_name = azurerm_api_management_api.preset.api_management_name
+  resource_group_name = azurerm_api_management_api.preset.resource_group_name
+  xml_content = file("policies/mil-preset.xml")
+}
+
 # ------------------------------------------------------------------------------
 # API diagnostic.
 # ------------------------------------------------------------------------------
