@@ -291,7 +291,7 @@ resource "azurerm_api_management_api_policy" "preset" {
   api_name            = azurerm_api_management_api.preset.name
   api_management_name = azurerm_api_management_api.preset.api_management_name
   resource_group_name = azurerm_api_management_api.preset.resource_group_name
-  xml_content = file("policies/mil-preset.xml")
+  xml_content         = file("policies/mil-preset.xml")
 }
 
 # ------------------------------------------------------------------------------

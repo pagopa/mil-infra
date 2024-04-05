@@ -32,6 +32,7 @@ No modules.
 | [azurerm_api_management_api.mock_nodo](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_api) | resource |
 | [azurerm_api_management_api.payment_notice](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_api) | resource |
 | [azurerm_api_management_api.preset](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_api) | resource |
+| [azurerm_api_management_api.terminal_registry](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_api) | resource |
 | [azurerm_api_management_api_diagnostic.auth](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.fee_calculator](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.idpay](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_api_diagnostic) | resource |
@@ -40,6 +41,7 @@ No modules.
 | [azurerm_api_management_api_operation_policy.mock_gec](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_api_operation_policy) | resource |
 | [azurerm_api_management_api_operation_policy.mock_nodo_rest](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_api_operation_policy) | resource |
 | [azurerm_api_management_api_operation_policy.mock_nodo_soap](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_api_operation_policy) | resource |
+| [azurerm_api_management_api_policy.preset](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_api_policy) | resource |
 | [azurerm_api_management_diagnostic.mil](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_diagnostic) | resource |
 | [azurerm_api_management_logger.mil](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_logger) | resource |
 | [azurerm_api_management_product.mil](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_product) | resource |
@@ -50,6 +52,7 @@ No modules.
 | [azurerm_api_management_product_api.mock_nodo](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_product_api) | resource |
 | [azurerm_api_management_product_api.payment_notice](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_product_api) | resource |
 | [azurerm_api_management_product_api.preset](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_product_api) | resource |
+| [azurerm_api_management_product_api.terminal_registry](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_product_api) | resource |
 | [azurerm_api_management_subscription.tracing](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/api_management_subscription) | resource |
 | [azurerm_application_insights.mil](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/application_insights) | resource |
 | [azurerm_container_app.auth](https://registry.terraform.io/providers/hashicorp/azurerm/3.82.0/docs/resources/container_app) | resource |
@@ -272,6 +275,8 @@ No modules.
 | <a name="input_mil_terminal_registry_mongo_connect_timeout"></a> [mil\_terminal\_registry\_mongo\_connect\_timeout](#input\_mil\_terminal\_registry\_mongo\_connect\_timeout) | n/a | `string` | `"5s"` | no |
 | <a name="input_mil_terminal_registry_mongo_read_timeout"></a> [mil\_terminal\_registry\_mongo\_read\_timeout](#input\_mil\_terminal\_registry\_mongo\_read\_timeout) | n/a | `string` | `"10s"` | no |
 | <a name="input_mil_terminal_registry_mongo_server_selection_timeout"></a> [mil\_terminal\_registry\_mongo\_server\_selection\_timeout](#input\_mil\_terminal\_registry\_mongo\_server\_selection\_timeout) | n/a | `string` | `"5s"` | no |
+| <a name="input_mil_terminal_registry_openapi_descriptor"></a> [mil\_terminal\_registry\_openapi\_descriptor](#input\_mil\_terminal\_registry\_openapi\_descriptor) | n/a | `string` | n/a | yes |
+| <a name="input_mil_terminal_registry_path"></a> [mil\_terminal\_registry\_path](#input\_mil\_terminal\_registry\_path) | n/a | `string` | `"mil-terminal-registry"` | no |
 | <a name="input_mil_terminal_registry_quarkus_log_level"></a> [mil\_terminal\_registry\_quarkus\_log\_level](#input\_mil\_terminal\_registry\_quarkus\_log\_level) | n/a | `string` | `"ERROR"` | no |
 | <a name="input_mock_idpay_ipzs_app_log_level"></a> [mock\_idpay\_ipzs\_app\_log\_level](#input\_mock\_idpay\_ipzs\_app\_log\_level) | n/a | `string` | `"DEBUG"` | no |
 | <a name="input_mock_idpay_ipzs_cpu"></a> [mock\_idpay\_ipzs\_cpu](#input\_mock\_idpay\_ipzs\_cpu) | n/a | `number` | `1` | no |
