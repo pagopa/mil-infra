@@ -152,6 +152,7 @@ mil_terminal_registry_min_replicas                   = 1
 mil_terminal_registry_mongo_connect_timeout          = "5s"
 mil_terminal_registry_mongo_read_timeout             = "10s"
 mil_terminal_registry_mongo_server_selection_timeout = "5s"
+mil_terminal_registry_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/mil-terminal-registry/main/src/main/resources/META-INF/openapi.yaml"
 
 #
 # mil-idpay

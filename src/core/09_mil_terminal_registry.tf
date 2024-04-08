@@ -54,6 +54,15 @@ variable "mil_terminal_registry_mongo_server_selection_timeout" {
   default = "5s"
 }
 
+variable "mil_terminal_registry_path" {
+  type    = string
+  default = "mil-terminal-registry"
+}
+
+variable "mil_terminal_registry_openapi_descriptor" {
+  type = string
+}
+
 
 # ------------------------------------------------------------------------------
 # Container app.
@@ -170,4 +179,32 @@ resource "azurerm_cosmosdb_mongo_collection" "terminal_registry" {
     unique = true
   }
 
+}
+
+# ------------------------------------------------------------------------------
+# API definition.
+# ------------------------------------------------------------------------------
+resource "azurerm_api_management_api" "terminal_registry" {
+  name                  = "${local.project}-terminal-registry"
+  resource_group_name   = azurerm_api_management.mil.resource_group_name
+  api_management_name   = azurerm_api_management.mil.name
+  revision              = "1"
+  display_name          = "terminal-registry"
+  description           = "IDPay Microservice for managing terminals anagraphics on Multi-channel Integration Layer of SW Client Project"
+  path                  = var.mil_terminal_registry_path
+  protocols             = ["https"]
+  service_url           = "https://${azurerm_container_app.terminal_registry.ingress[0].fqdn}"
+  subscription_required = false
+
+  import {
+    content_format = "openapi-link"
+    content_value  = var.mil_terminal_registry_openapi_descriptor
+  }
+}
+
+resource "azurerm_api_management_product_api" "terminal_registry" {
+  product_id          = azurerm_api_management_product.mil.product_id
+  api_name            = azurerm_api_management_api.terminal_registry.name
+  api_management_name = azurerm_api_management.mil.name
+  resource_group_name = azurerm_api_management.mil.resource_group_name
 }
