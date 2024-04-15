@@ -50,6 +50,11 @@ variable "mil_payment_notice_node_soap_client_read_timeout" {
   default = 2000
 }
 
+variable "mil_payment_notice_node_logging_enabled" {
+  type    = string
+  default = "false"
+}
+
 variable "mil_payment_notice_rest_client_connect_timeout" {
   type    = number
   default = 2000
@@ -278,6 +283,11 @@ resource "azurerm_container_app" "payment_notice" {
       env {
         name        = "node.soap-client.apim-subscription-key"
         secret_name = "node-soap-subscription-key"
+      }
+      
+      env {
+        name  = "node.logging.enabled"
+        value = var.mil_payment_notice_node_logging_enabled      
       }
 
       env {

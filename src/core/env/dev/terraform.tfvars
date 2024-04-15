@@ -52,7 +52,7 @@ install_ipzs_mock = true
 #   1) https://api.uat.platform.pagopa.it/nodo-auth/node-for-psp/v1
 #   2) https://api.uat.platform.pagopa.it/nodo/node-for-psp/v1
 #
-nodo_soap_url = "https://api.uat.platform.pagopa.it/nodo/node-for-psp/v1"
+nodo_soap_url = "https://api.uat.platform.pagopa.it/nodo-auth/node-for-psp/v1"
 
 #
 # URL of the REST endpoint (close payment) of the real Nodo.
@@ -81,6 +81,7 @@ mil_payment_notice_mongo_read_timeout               = "10s"
 mil_payment_notice_mongo_server_selection_timeout   = "5s"
 mil_payment_notice_node_soap_client_connect_timeout = 2000
 mil_payment_notice_node_soap_client_read_timeout    = 2000
+mil_payment_notice_node_logging_enabled             = pretty
 mil_payment_notice_rest_client_connect_timeout      = 2000
 mil_payment_notice_rest_client_read_timeout         = 2000
 mil_payment_notice_closepayment_max_retry           = 10
