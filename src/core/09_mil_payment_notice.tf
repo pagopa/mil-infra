@@ -50,9 +50,16 @@ variable "mil_payment_notice_node_soap_client_read_timeout" {
   default = 2000
 }
 
-variable "mil_payment_notice_node_logging_enabled" {
-  type    = string
-  default = "false"
+variable "mil_payment_notice_node_soap_client_req_resp_log_level" {
+  description = "Set to INFO to log requests and responses of SOAP client for communicating with Nodo."
+  type        = string
+  default     = "ERROR"
+}
+
+variable "mil_payment_notice_rest_client_req_resp_log_level" {
+description = "Set to DEBUG to log requests and responses of all REST clients."
+  type      = string
+  default   = "ERROR"
 }
 
 variable "mil_payment_notice_rest_client_connect_timeout" {
@@ -286,8 +293,13 @@ resource "azurerm_container_app" "payment_notice" {
       }
       
       env {
-        name  = "node.logging.enabled"
-        value = var.mil_payment_notice_node_logging_enabled      
+        name  = "node.soap-client.req-resp.log-level"
+        value = var.mil_payment_notice_node_soap_client_req_resp_log_level      
+      }
+      
+      env {
+        name  = "rest-client.req-resp.log-level"
+        value = var.mil_payment_notice_rest_client_req_resp_log_level      
       }
 
       env {

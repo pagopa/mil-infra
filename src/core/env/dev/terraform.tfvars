@@ -74,25 +74,26 @@ gec_url = "https://api.uat.platform.pagopa.it/afm/node/calculator-service/v1"
 #
 # mil-payment-notice
 #
-mil_payment_notice_quarkus_log_level                = "ERROR"
-mil_payment_notice_app_log_level                    = "DEBUG"
-mil_payment_notice_mongo_connect_timeout            = "5s"
-mil_payment_notice_mongo_read_timeout               = "10s"
-mil_payment_notice_mongo_server_selection_timeout   = "5s"
-mil_payment_notice_node_soap_client_connect_timeout = 2000
-mil_payment_notice_node_soap_client_read_timeout    = 2000
-mil_payment_notice_node_logging_enabled             = "pretty"
-mil_payment_notice_rest_client_connect_timeout      = 2000
-mil_payment_notice_rest_client_read_timeout         = 2000
-mil_payment_notice_closepayment_max_retry           = 10
-mil_payment_notice_closepayment_retry_after         = 1
-mil_payment_notice_activatepayment_expiration_time  = 30000
-mil_payment_notice_image                            = "ghcr.io/pagopa/mil-payment-notice:latest"
-mil_payment_notice_openapi_descriptor               = "https://raw.githubusercontent.com/pagopa/mil-payment-notice/main/src/main/resources/META-INF/openapi.yaml"
-mil_payment_notice_cpu                              = 1
-mil_payment_notice_memory                           = "2Gi"
-mil_payment_notice_max_replicas                     = 10
-mil_payment_notice_min_replicas                     = 1
+mil_payment_notice_quarkus_log_level                   = "ERROR"
+mil_payment_notice_app_log_level                       = "DEBUG"
+mil_payment_notice_mongo_connect_timeout               = "5s"
+mil_payment_notice_mongo_read_timeout                  = "10s"
+mil_payment_notice_mongo_server_selection_timeout      = "5s"
+mil_payment_notice_node_soap_client_connect_timeout    = 2000
+mil_payment_notice_node_soap_client_read_timeout       = 2000
+mil_payment_notice_node_soap_client_req_resp_log_level = "INFO"
+mil_payment_notice_rest_client_req_resp_log_level      = "DEBUG"
+mil_payment_notice_rest_client_connect_timeout         = 2000
+mil_payment_notice_rest_client_read_timeout            = 2000
+mil_payment_notice_closepayment_max_retry              = 10
+mil_payment_notice_closepayment_retry_after            = 1
+mil_payment_notice_activatepayment_expiration_time     = 30000
+mil_payment_notice_image                               = "ghcr.io/pagopa/mil-payment-notice:latest"
+mil_payment_notice_openapi_descriptor                  = "https://raw.githubusercontent.com/pagopa/mil-payment-notice/main/src/main/resources/META-INF/openapi.yaml"
+mil_payment_notice_cpu                                 = 1
+mil_payment_notice_memory                              = "2Gi"
+mil_payment_notice_max_replicas                        = 10
+mil_payment_notice_min_replicas                        = 1
 
 #
 # mil-fee-calculator
