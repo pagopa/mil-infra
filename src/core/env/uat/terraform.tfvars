@@ -34,7 +34,7 @@ dnsforwarder_snet_cidr = "10.231.5.0/29"  # 010.231.005.000 - 010.231.005.007
 #
 # If true the mock of the Nodo and GEC will be installed.
 #
-install_nodo_mock = true
+install_nodo_mock = false
 
 #
 # If true the mock of the IDPay and IPZS will be installed.
