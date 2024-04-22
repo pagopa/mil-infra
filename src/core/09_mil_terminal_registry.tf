@@ -71,7 +71,7 @@ resource "azurerm_container_app" "terminal_registry" {
   name                         = "${local.project}-terminal-registry-ca"
   container_app_environment_id = azurerm_container_app_environment.mil.id
   resource_group_name          = azurerm_resource_group.app.name
-  revision_mode                = "Multiple"
+  revision_mode                = "Single"
 
   template {
     container {
@@ -120,6 +120,10 @@ resource "azurerm_container_app" "terminal_registry" {
         value = var.mil_terminal_registry_mongo_server_selection_timeout
       }
 
+      env {
+        name  = "jwt-publickey-location"
+        value = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}/.well-known/jwks.json"
+      }
     }
 
     max_replicas = var.mil_terminal_registry_max_replicas
