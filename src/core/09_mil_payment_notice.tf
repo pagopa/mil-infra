@@ -57,9 +57,9 @@ variable "mil_payment_notice_node_soap_client_req_resp_log_level" {
 }
 
 variable "mil_payment_notice_rest_client_req_resp_log_level" {
-description = "Set to DEBUG to log requests and responses of all REST clients."
-  type      = string
-  default   = "ERROR"
+  description = "Set to DEBUG to log requests and responses of all REST clients."
+  type        = string
+  default     = "ERROR"
 }
 
 variable "mil_payment_notice_rest_client_connect_timeout" {
@@ -291,15 +291,15 @@ resource "azurerm_container_app" "payment_notice" {
         name        = "node.soap-client.apim-subscription-key"
         secret_name = "node-soap-subscription-key"
       }
-      
+
       env {
         name  = "node.soap-client.req-resp.log-level"
-        value = var.mil_payment_notice_node_soap_client_req_resp_log_level      
+        value = var.mil_payment_notice_node_soap_client_req_resp_log_level
       }
-      
+
       env {
         name  = "rest-client.req-resp.log-level"
-        value = var.mil_payment_notice_rest_client_req_resp_log_level      
+        value = var.mil_payment_notice_rest_client_req_resp_log_level
       }
 
       env {
