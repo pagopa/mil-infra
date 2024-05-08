@@ -4,8 +4,8 @@
 env_short      = "d"
 env            = "dev"
 prefix         = "mil"
-location       = "westeurope"
-location_short = "weu"
+location       = "westeurope" # this will be "italynorth"
+location_short = "weu"        # this will be "itn"
 
 tags = {
   CreatedBy   = "Terraform"
@@ -99,7 +99,7 @@ mil_payment_notice_min_replicas                        = 1
 # mil-fee-calculator
 #
 mil_fee_calculator_image               = "ghcr.io/pagopa/mil-fee-calculator:latest"
-mil_fee_calculator_openapi_descriptor  = "https://raw.githubusercontent.com/pagopa/mil-apis/main/openapi-mono/fee.yaml"
+mil_fee_calculator_openapi_descriptor  = "https://raw.githubusercontent.com/pagopa/mil-fee-calculator/main/src/main/resources/META-INF/openapi.yaml"
 mil_fee_calculator_quarkus_log_level   = "ERROR"
 mil_fee_calculator_app_log_level       = "DEBUG"
 mil_fee_calculator_gec_connect_timeout = 2000

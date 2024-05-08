@@ -188,7 +188,7 @@ resource "azurerm_container_app" "auth" {
   name                         = "${local.project}-auth-ca"
   container_app_environment_id = azurerm_container_app_environment.mil.id
   resource_group_name          = azurerm_resource_group.app.name
-  revision_mode                = "Multiple"
+  revision_mode                = "Single"
 
   template {
     container {
@@ -250,6 +250,11 @@ resource "azurerm_container_app" "auth" {
       env {
         name  = "auth.base-url"
         value = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}"
+      }
+      
+      env {
+        name  = "application-insights.connection-string"
+        value = azurerm_application_insights.mil.connection_string
       }
     }
 
@@ -323,6 +328,12 @@ resource "azurerm_log_analytics_query_pack_query" "auth_ca_console_logs" {
   query_pack_id = azurerm_log_analytics_query_pack.query_pack.id
   body          = "ContainerAppConsoleLogs_CL | where ContainerName_s == 'mil-auth' | where time_t > ago(60m) | sort by time_t asc | extend local_time = substring(Log_s, 0, 23) | extend request_id = extract('\\\\[(.*?)\\\\]', 1, Log_s) | extend log_level = extract('\\\\[(TRACE|DEBUG|INFO|WARN|ERROR|FATAL)\\\\]', 1, Log_s) | project local_time, request_id, log_level, Log_s"
   display_name  = "*** mil-auth - last hour logs ***"
+}
+
+resource "azurerm_log_analytics_query_pack_query" "auth_ca_json_logs" {
+  query_pack_id = azurerm_log_analytics_query_pack.query_pack.id
+  body          = "ContainerAppConsoleLogs_CL\n| where ContainerName_s == 'mil-auth'\n| where time_t > ago(60m)\n| sort by time_t asc\n| extend ParsedJSON = parse_json(Log_s)\n| project \n    app_timestamp=ParsedJSON.timestamp,\n    app_sequence=ParsedJSON.sequence,\n    app_loggerClassName=ParsedJSON.loggerClassName,\n    app_loggerName=ParsedJSON.loggerName,\n    app_level=ParsedJSON.level,\n    app_message=ParsedJSON.message,\n    app_threadName=ParsedJSON.threadName,\n    app_threadId=ParsedJSON.threadId,\n    app_mdc=ParsedJSON.mdc,\n    app_requestId=ParsedJSON.mdc.requestId,\n    app_ndc=ParsedJSON.ndc,\n    app_hostName=ParsedJSON.hostName,\n    app_processId=ParsedJSON.processId"
+  display_name  = "*** mil-auth - last hour json logs ***"
 }
 
 # ------------------------------------------------------------------------------

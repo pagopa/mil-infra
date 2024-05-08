@@ -124,6 +124,11 @@ resource "azurerm_container_app" "terminal_registry" {
         name  = "jwt-publickey-location"
         value = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}/.well-known/jwks.json"
       }
+      
+      env {
+        name  = "application-insights.connection-string"
+        value = azurerm_application_insights.mil.connection_string
+      }
     }
 
     max_replicas = var.mil_terminal_registry_max_replicas
@@ -167,6 +172,12 @@ resource "azurerm_log_analytics_query_pack_query" "mil_terminal_registry_ca_cons
   query_pack_id = azurerm_log_analytics_query_pack.query_pack.id
   body          = "ContainerAppConsoleLogs_CL | where ContainerName_s == 'mil-terminal-registry' | where time_t > ago(60m) | sort by time_t asc | extend local_time = substring(Log_s, 0, 23) | extend request_id = extract('\\\\[(.*?)\\\\]', 1, Log_s) | extend log_level = extract('\\\\[(TRACE|DEBUG|INFO|WARN|ERROR|FATAL)\\\\]', 1, Log_s) | project local_time, request_id, log_level, Log_s"
   display_name  = "*** mil-terminal_registry - last hour logs ***"
+}
+
+resource "azurerm_log_analytics_query_pack_query" "mil_terminal_registry_ca_json_logs" {
+  query_pack_id = azurerm_log_analytics_query_pack.query_pack.id
+  body          = "ContainerAppConsoleLogs_CL\n| where ContainerName_s == 'mil-terminal-registry'\n| where time_t > ago(60m)\n| sort by time_t asc\n| extend ParsedJSON = parse_json(Log_s)\n| project \n    app_timestamp=ParsedJSON.timestamp,\n    app_sequence=ParsedJSON.sequence,\n    app_loggerClassName=ParsedJSON.loggerClassName,\n    app_loggerName=ParsedJSON.loggerName,\n    app_level=ParsedJSON.level,\n    app_message=ParsedJSON.message,\n    app_threadName=ParsedJSON.threadName,\n    app_threadId=ParsedJSON.threadId,\n    app_mdc=ParsedJSON.mdc,\n    app_requestId=ParsedJSON.mdc.requestId,\n    app_ndc=ParsedJSON.ndc,\n    app_hostName=ParsedJSON.hostName,\n    app_processId=ParsedJSON.processId"
+  display_name  = "*** mil-terminal-registry - last hour json logs ***"
 }
 
 # ------------------------------------------------------------------------------

@@ -88,7 +88,7 @@ mil_payment_notice_rest_client_read_timeout            = 2000
 mil_payment_notice_closepayment_max_retry              = 10
 mil_payment_notice_closepayment_retry_after            = 1
 mil_payment_notice_activatepayment_expiration_time     = 30000
-mil_payment_notice_image                               = "ghcr.io/pagopa/mil-payment-notice:3.0.0-RC"
+mil_payment_notice_image                               = "ghcr.io/pagopa/mil-payment-notice:latest"
 mil_payment_notice_openapi_descriptor                  = "https://raw.githubusercontent.com/pagopa/mil-payment-notice/main/src/main/resources/META-INF/openapi.yaml"
 mil_payment_notice_cpu                                 = 1
 mil_payment_notice_memory                              = "2Gi"
@@ -99,7 +99,7 @@ mil_payment_notice_min_replicas                        = 1
 # mil-fee-calculator
 #
 mil_fee_calculator_image               = "ghcr.io/pagopa/mil-fee-calculator:latest"
-mil_fee_calculator_openapi_descriptor  = "https://raw.githubusercontent.com/pagopa/mil-apis/main/openapi-mono/fee.yaml"
+mil_fee_calculator_openapi_descriptor  = "https://raw.githubusercontent.com/pagopa/mil-fee-calculator/main/src/main/resources/META-INF/openapi.yaml"
 mil_fee_calculator_quarkus_log_level   = "ERROR"
 mil_fee_calculator_app_log_level       = "DEBUG"
 mil_fee_calculator_gec_connect_timeout = 2000

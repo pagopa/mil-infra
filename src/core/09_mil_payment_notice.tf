@@ -386,6 +386,11 @@ resource "azurerm_container_app" "payment_notice" {
         name  = "jwt-publickey-location"
         value = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}/.well-known/jwks.json"
       }
+      
+      env {
+        name  = "application-insights.connection-string"
+        value = azurerm_application_insights.mil.connection_string
+      }
     }
 
     max_replicas = var.mil_payment_notice_max_replicas
