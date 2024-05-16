@@ -74,6 +74,10 @@ variable "mil_auth_path" {
   default = "mil-auth"
 }
 
+variable "mil_auth_pdv_url" {
+  type    = string
+}
+
 # ------------------------------------------------------------------------------
 # Storage account containing configuration files.
 # ------------------------------------------------------------------------------
@@ -182,6 +186,14 @@ resource "azurerm_private_endpoint" "auth_key_vault" {
 }
 
 # ------------------------------------------------------------------------------
+# Get API key of PDV from key vault.
+# ------------------------------------------------------------------------------
+data "azurerm_key_vault_secret" "pdv_api_key" {
+  name         = "pdv-api-key"
+  key_vault_id = azurerm_key_vault.general.id
+}
+
+# ------------------------------------------------------------------------------
 # Container app.
 # ------------------------------------------------------------------------------
 resource "azurerm_container_app" "auth" {
@@ -256,10 +268,25 @@ resource "azurerm_container_app" "auth" {
         name  = "application-insights.connection-string"
         value = azurerm_application_insights.mil.connection_string
       }
+      
+      env {
+        name  = "pdv.url"
+        value = var.mil_auth_pdv_url
+      }
+      
+      env {
+        name        = "pdv.api-key"
+        secret_name = "pdv-api-key"
+      }
     }
 
     max_replicas = var.mil_auth_max_replicas
     min_replicas = var.mil_auth_min_replicas
+  }
+  
+  secret {
+    name  = "pdv-api-key"
+    value = data.azurerm_key_vault_secret.pdv_api_key.value
   }
 
   identity {

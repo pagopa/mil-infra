@@ -125,6 +125,7 @@ mil_auth_cpu                               = 1
 mil_auth_memory                            = "2Gi"
 mil_auth_max_replicas                      = 10
 mil_auth_min_replicas                      = 1
+mil_auth_pdv_url                           = "https://api.uat.tokenizer.pdv.pagopa.it/tokenizer/v1/tokens"
 
 #
 # mil-preset
