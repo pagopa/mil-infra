@@ -4,8 +4,8 @@
 env_short      = "u"
 env            = "uat"
 prefix         = "mil"
-location       = "westeurope"
-location_short = "weu"
+location       = "westeurope" # this will be "italynorth"
+location_short = "weu"        # this will be "itn"
 
 tags = {
   CreatedBy   = "Terraform"
@@ -114,6 +114,7 @@ mil_fee_calculator_min_replicas        = 1
 #
 mil_auth_quarkus_log_level                 = "ERROR"
 mil_auth_app_log_level                     = "DEBUG"
+mil_auth_json_log                          = true
 mil_auth_quarkus_rest_client_logging_scope = "all"
 mil_auth_cryptoperiod                      = 86400000
 mil_auth_keysize                           = 4096
@@ -125,7 +126,7 @@ mil_auth_cpu                               = 1
 mil_auth_memory                            = "2Gi"
 mil_auth_max_replicas                      = 10
 mil_auth_min_replicas                      = 1
-mil_auth_pdv_url                           = "https://api.uat.tokenizer.pdv.pagopa.it/tokenizer/v1/tokens"
+mil_auth_keyvault_maxresults               = 20
 
 #
 # mil-preset
@@ -215,5 +216,5 @@ app_gateway = {
 # VPN
 #
 vpn_sku                  = "VpnGw2"
-vpn_pip_sku              = "Basic"
+vpn_pip_sku              = "Standard"
 vpn_client_address_space = "172.16.1.0/24" # 172.016.001.000 - 172.016.001.255
