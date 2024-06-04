@@ -36,12 +36,14 @@ resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
 # Application insight.
 # ------------------------------------------------------------------------------
 resource "azurerm_application_insights" "mil" {
-  name                = "${local.project}-appi"
-  location            = azurerm_resource_group.monitor.location
-  resource_group_name = azurerm_resource_group.monitor.name
-  workspace_id        = azurerm_log_analytics_workspace.log_analytics_workspace.id
-  application_type    = "other"
-  tags                = var.tags
+  name                       = "${local.project}-appi"
+  location                   = azurerm_resource_group.monitor.location
+  resource_group_name        = azurerm_resource_group.monitor.name
+  workspace_id               = azurerm_log_analytics_workspace.log_analytics_workspace.id
+  application_type           = "other"
+  tags                       = var.tags
+  internet_ingestion_enabled = false
+  internet_query_enabled     = false
 }
 
 # ------------------------------------------------------------------------------
