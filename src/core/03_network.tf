@@ -153,3 +153,114 @@ resource "azurerm_private_dns_zone_virtual_network_link" "storage" {
   private_dns_zone_name = azurerm_private_dns_zone.storage.name
   virtual_network_id    = azurerm_virtual_network.intern.id
 }
+
+# ------------------------------------------------------------------------------
+# Network security group for APIM.
+# ------------------------------------------------------------------------------
+resource "azurerm_network_security_group" "apim" {
+  name                = "${local.project}-apim-nsg"
+  location            = azurerm_resource_group.network.location
+  resource_group_name = azurerm_resource_group.network.name
+  tags                = var.tags
+
+  security_rule {
+    name                       = "Internet-VirtualNetwork"
+    priority                   = 100
+    access                     = "Allow"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    direction                  = "Inbound"
+    protocol                   = "Tcp"
+    source_address_prefix      = "Internet"
+    destination_address_prefix = "VirtualNetwork" 
+  }
+
+  security_rule {
+    name                       = "ApiManagement-VirtualNetwork"
+    priority                   = 101
+    access                     = "Allow"
+    source_port_range          = "*"
+    destination_port_range     = "3443"
+    direction                  = "Inbound"
+    protocol                   = "Tcp"
+    source_address_prefix      = "ApiManagement"
+    destination_address_prefix = "VirtualNetwork" 
+  }
+
+  security_rule {
+    name                       = "AzureLoadBalancer-VirtualNetwork"
+    priority                   = 102
+    access                     = "Allow"
+    source_port_range          = "*"
+    destination_port_range     = "6390"
+    direction                  = "Inbound"
+    protocol                   = "Tcp"
+    source_address_prefix      = "AzureLoadBalancer"
+    destination_address_prefix = "VirtualNetwork" 
+  }
+
+  security_rule {
+    name                       = "AzureTrafficManager-VirtualNetwork"
+    priority                   = 103
+    access                     = "Allow"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    direction                  = "Inbound"
+    protocol                   = "Tcp"
+    source_address_prefix      = "AzureTrafficManager"
+    destination_address_prefix = "VirtualNetwork" 
+  }
+
+  security_rule {
+    name                       = "VirtualNetwork-Storage"
+    priority                   = 104
+    access                     = "Allow"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    direction                  = "Outbound"
+    protocol                   = "Tcp"
+    source_address_prefix      = "VirtualNetwork"
+    destination_address_prefix = "Storage" 
+  }
+
+  security_rule {
+    name                       = "VirtualNetwork-SQL"
+    priority                   = 105
+    access                     = "Allow"
+    source_port_range          = "*"
+    destination_port_range     = "1443"
+    direction                  = "Outbound"
+    protocol                   = "Tcp"
+    source_address_prefix      = "VirtualNetwork"
+    destination_address_prefix = "SQL" 
+  }
+
+  security_rule {
+    name                       = "VirtualNetwork-AzureKeyVault"
+    priority                   = 106
+    access                     = "Allow"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    direction                  = "Outbound"
+    protocol                   = "Tcp"
+    source_address_prefix      = "VirtualNetwork"
+    destination_address_prefix = "AzureKeyVault" 
+  }
+
+  security_rule {
+    name                       = "VirtualNetwork-AzureMonitor"
+    priority                   = 107
+    access                     = "Allow"
+    source_port_range          = "*"
+    destination_port_ranges    = ["1886", "443"]
+    direction                  = "Outbound"
+    protocol                   = "Tcp"
+    source_address_prefix      = "VirtualNetwork"
+    destination_address_prefix = "AzureMonitor" 
+  }
+}
+
+resource "azurerm_subnet_network_security_group_association" "apim" {
+  subnet_id                 = azurerm_subnet.apim.id
+  network_security_group_id = azurerm_network_security_group.apim.id
+}
