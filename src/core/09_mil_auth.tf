@@ -279,7 +279,7 @@ resource "azurerm_container_app" "auth" {
 
       env {
         name  = "jwt-publickey-location"
-        value = "https://${azurerm_container_app.auth.ingress[0].fqdn}/.well-known/jwks.json"
+        value = "http://127.0.0.1:8080/.well-known/jwks.json"
       }
     }
 
