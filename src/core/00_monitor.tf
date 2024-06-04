@@ -42,8 +42,8 @@ resource "azurerm_application_insights" "mil" {
   workspace_id               = azurerm_log_analytics_workspace.log_analytics_workspace.id
   application_type           = "other"
   tags                       = var.tags
-  internet_ingestion_enabled = false
-  internet_query_enabled     = false
+  internet_ingestion_enabled = true
+  internet_query_enabled     = true
 }
 
 # ------------------------------------------------------------------------------
