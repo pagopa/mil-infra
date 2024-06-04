@@ -34,7 +34,7 @@ resource "azurerm_public_ip" "vpn" {
   name                = "${local.project}-vpn-pip"
   location            = var.location
   resource_group_name = azurerm_resource_group.network.name
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
   domain_name_label   = "${lower(replace(local.project, "/[[:^alnum:]]/", ""))}vpn${random_string.dns.result}"
   sku                 = var.vpn_pip_sku
   tags                = var.tags
