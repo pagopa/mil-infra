@@ -84,6 +84,11 @@ variable "mil_auth_keyvault_maxresults" {
   default = 20
 }
 
+variable "mil_auth_keyvault_backoff_num_of_attempts" {
+  type    = number
+  default = 3
+}
+
 # ------------------------------------------------------------------------------
 # Storage account containing configuration files.
 # ------------------------------------------------------------------------------
@@ -275,6 +280,11 @@ resource "azurerm_container_app" "auth" {
       env {
         name  = "auth.keyvault.maxresults"
         value = var.mil_auth_keyvault_maxresults
+      }
+
+      env {
+        name  = "auth.keyvault.backoff.number-of-attempts"
+        value = var.mil_auth_keyvault_backoff_num_of_attempts
       }
 
       env {
