@@ -7,6 +7,26 @@ locals {
     {
       repository : "mil-terminal-registry"
       subject : var.env
+    },
+    {
+      repository : "mil-papos"
+      subject : var.env
+    },
+    {
+      repository : "mil-auth"
+      subject : var.env
+    },
+    {
+      repository : "mil-payment-notice"
+      subject : var.env
+    },
+    {
+      repository : "mil-fee-calculator"
+      subject : var.env
+    },
+    {
+      repository : "mil-idpay"
+      subject : var.env
     }
   ]
 
