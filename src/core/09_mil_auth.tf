@@ -89,6 +89,21 @@ variable "mil_auth_keyvault_backoff_num_of_attempts" {
   default = 3
 }
 
+variable "mil_auth_mongodb_connect_timeout" {
+  type    = string
+  default = "5s"
+}
+
+variable "mil_auth_mongodb_read_timeout" {
+  type    = string
+  default = "10s"
+}
+
+variable "mil_auth_mongodb_server_selection_timeout" {
+  type    = string
+  default = "5s"
+}
+
 # ------------------------------------------------------------------------------
 # Storage account containing configuration files.
 # ------------------------------------------------------------------------------
@@ -153,6 +168,54 @@ resource "azurerm_private_endpoint" "auth_storage" {
     private_connection_resource_id = azurerm_storage_account.auth.id
     subresource_names              = ["blob"]
     is_manual_connection           = false
+  }
+}
+
+# ------------------------------------------------------------------------------
+# CosmosDB Mongo collection.
+# ------------------------------------------------------------------------------
+resource "azurerm_cosmosdb_mongo_collection" "clients" {
+  account_name        = azurerm_cosmosdb_mongo_database.mil.account_name
+  database_name       = azurerm_cosmosdb_mongo_database.mil.name
+  name                = "clients"
+  resource_group_name = azurerm_cosmosdb_mongo_database.mil.resource_group_name
+
+  index {
+    keys   = ["_id"]
+    unique = true
+  }
+
+  index {
+    keys = [
+      "clientId"
+    ]
+    unique = true
+  }
+}
+
+# ------------------------------------------------------------------------------
+# CosmosDB Mongo collection.
+# ------------------------------------------------------------------------------
+resource "azurerm_cosmosdb_mongo_collection" "roles" {
+  account_name        = azurerm_cosmosdb_mongo_database.mil.account_name
+  database_name       = azurerm_cosmosdb_mongo_database.mil.name
+  name                = "roles"
+  resource_group_name = azurerm_cosmosdb_mongo_database.mil.resource_group_name
+
+  index {
+    keys   = ["_id"]
+    unique = true
+  }
+
+  index {
+    keys = [
+      "acquirerId",
+      "channel",
+      "clientId",
+      "merchantId",
+      "terminalId"
+    ]
+    unique = true
   }
 }
 
@@ -291,10 +354,45 @@ resource "azurerm_container_app" "auth" {
         name  = "jwt-publickey-location"
         value = "http://127.0.0.1:8080/.well-known/jwks.json"
       }
+
+      env {
+        name  = "mongodb.connect-timeout"
+        value = var.mil_auth_mongodb_connect_timeout
+      }
+
+      env {
+        name  = "mongodb.read-timeout"
+        value = var.mil_auth_mongodb_read_timeout
+      }
+
+      env {
+        name  = "mongodb.server-selection-timeout"
+        value = var.mil_auth_mongodb_server_selection_timeout
+      }
+
+      env {
+        name        = "mongodb.connection-string-1"
+        secret_name = "mongodb-connection-string-1"
+      }
+
+      env {
+        name        = "mongodb.connection-string-2"
+        secret_name = "mongodb-connection-string-2"
+      }
     }
 
     max_replicas = var.mil_auth_max_replicas
     min_replicas = var.mil_auth_min_replicas
+  }
+
+  secret {
+    name  = "mongodb-connection-string-1"
+    value = azurerm_cosmosdb_account.mil.primary_mongodb_connection_string
+  }
+
+  secret {
+    name  = "mongodb-connection-string-2"
+    value = azurerm_cosmosdb_account.mil.secondary_mongodb_connection_string
   }
 
   identity {
