@@ -27,6 +27,10 @@ locals {
     {
       repository : "mil-idpay"
       subject : var.env
+    },
+    {
+      repository : "mil-preset"
+      subject : var.env
     }
   ]
 
