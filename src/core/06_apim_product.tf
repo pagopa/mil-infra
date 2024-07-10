@@ -14,8 +14,8 @@ resource "azurerm_api_management_product" "mil" {
 # ------------------------------------------------------------------------------
 # CORS Policy.
 # ------------------------------------------------------------------------------
-resource "azurerm_api_management_product_policy" "example" {
-  count               = var.env_short != "p" ? 1 : 0
+resource "azurerm_api_management_product_policy" "cors" {
+  count               = 0 #var.env_short == "d" ? 1 : 0
   product_id          = azurerm_api_management_product.mil.product_id
   api_management_name = azurerm_api_management_product.mil.api_management_name
   resource_group_name = azurerm_api_management_product.mil.resource_group_name
