@@ -218,12 +218,12 @@ resource "azurerm_container_app" "preset" {
 
   secret {
     name  = "mongo-connection-string-1"
-    value = azurerm_cosmosdb_account.mil.connection_strings[0]
+    value = azurerm_cosmosdb_account.mil.primary_mongodb_connection_string
   }
 
   secret {
     name  = "mongo-connection-string-2"
-    value = azurerm_cosmosdb_account.mil.connection_strings[1]
+    value = azurerm_cosmosdb_account.mil.secondary_mongodb_connection_string
   }
 
   secret {
