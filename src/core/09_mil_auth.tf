@@ -119,34 +119,6 @@ resource "azurerm_storage_account" "auth" {
 }
 
 # ------------------------------------------------------------------------------
-# Storage container containing files to configure clients.
-# ------------------------------------------------------------------------------
-#resource "azurerm_storage_container" "clients" {
-#  name                  = "clients"
-#  storage_account_name  = azurerm_storage_account.auth.name
-#  container_access_type = var.mil_auth_armored_storage_account ? "private" : "blob"
-#}
-
-# ------------------------------------------------------------------------------
-# Storage container containing files to configure roles.
-# ------------------------------------------------------------------------------
-#resource "azurerm_storage_container" "roles" {
-#  name                  = "roles"
-#  storage_account_name  = azurerm_storage_account.auth.name
-#  container_access_type = var.mil_auth_armored_storage_account ? "private" : "blob"
-#}
-
-# ------------------------------------------------------------------------------
-# Storage container containing files to configure users (this is a temporary
-# solution).
-# ------------------------------------------------------------------------------
-#resource "azurerm_storage_container" "users" {
-#  name                  = "users"
-#  storage_account_name  = azurerm_storage_account.auth.name
-#  container_access_type = var.mil_auth_armored_storage_account ? "private" : "blob"
-#}
-
-# ------------------------------------------------------------------------------
 # Private endpoint from APP SUBNET (containing Container Apps) to the storage
 # account.
 # ------------------------------------------------------------------------------
