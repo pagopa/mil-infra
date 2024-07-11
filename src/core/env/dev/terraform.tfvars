@@ -121,7 +121,7 @@ mil_auth_keysize                           = 2048
 mil_auth_access_duration                   = 900
 mil_auth_refresh_duration                  = 3600
 mil_auth_openapi_descriptor                = "https://raw.githubusercontent.com/pagopa/mil-auth/main/src/main/resources/META-INF/openapi.yaml"
-mil_auth_image                             = "ghcr.io/pagopa/mil-auth:2.7.0-RC"
+mil_auth_image                             = "ghcr.io/pagopa/mil-auth:latest"
 mil_auth_cpu                               = 1
 mil_auth_memory                            = "2Gi"
 mil_auth_max_replicas                      = 5
@@ -146,6 +146,21 @@ mil_preset_cpu                            = 1
 mil_preset_memory                         = "2Gi"
 mil_preset_max_replicas                   = 5
 mil_preset_min_replicas                   = 0
+
+#
+# mil-papos
+#
+mil_papos_quarkus_log_level              = "ERROR"
+mil_papos_app_log_level                  = "DEBUG"
+mil_papos_mongo_connect_timeout          = "5s"
+mil_papos_mongo_read_timeout             = "10s"
+mil_papos_mongo_server_selection_timeout = "5s"
+mil_papos_image                          = "ghcr.io/pagopa/mil-papos:1.0.0-rc"
+mil_papos_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/mil-papos/main/src/main/resources/META-INF/openapi.yaml"
+mil_papos_cpu                            = 1
+mil_papos_memory                         = "2Gi"
+mil_papos_max_replicas                   = 5
+mil_papos_min_replicas                   = 0
 
 #
 # mil-terminal-registry
