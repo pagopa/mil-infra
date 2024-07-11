@@ -19,15 +19,6 @@ resource "azurerm_storage_account" "conf" {
 }
 
 # ------------------------------------------------------------------------------
-# Storage container.
-# ------------------------------------------------------------------------------
-#resource "azurerm_storage_container" "acquirers" {
-#  name                  = "acquirers"
-#  storage_account_name  = azurerm_storage_account.conf.name
-#  container_access_type = var.armored_storage_account_for_acquirers_conf ? "private" : "blob"
-#}
-
-# ------------------------------------------------------------------------------
 # Private endpoint from APP SUBNET (containing Container Apps) to the storage
 # account.
 # ------------------------------------------------------------------------------
