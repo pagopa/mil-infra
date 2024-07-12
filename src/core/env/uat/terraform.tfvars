@@ -116,7 +116,7 @@ mil_auth_quarkus_log_level                 = "ERROR"
 mil_auth_app_log_level                     = "DEBUG"
 mil_auth_json_log                          = true
 mil_auth_quarkus_rest_client_logging_scope = "all"
-mil_auth_cryptoperiod                      = 86400
+mil_auth_cryptoperiod                      = 43200
 mil_auth_keysize                           = 2048
 mil_auth_access_duration                   = 900
 mil_auth_refresh_duration                  = 3600
@@ -160,7 +160,7 @@ mil_papos_openapi_descriptor             = "https://raw.githubusercontent.com/pa
 mil_papos_cpu                            = 1
 mil_papos_memory                         = "2Gi"
 mil_papos_max_replicas                   = 5
-mil_papos_min_replicas                   = 0
+mil_papos_min_replicas                   = 1
 
 #
 # mil-terminal-registry
