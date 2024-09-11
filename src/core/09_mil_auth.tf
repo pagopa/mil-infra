@@ -180,10 +180,15 @@ resource "azurerm_cosmosdb_mongo_collection" "roles" {
   }
 
   index {
+    keys   = ["id"]
+    unique = true
+  }
+
+  index {
     keys = [
+      "clientId",
       "acquirerId",
       "channel",
-      "clientId",
       "merchantId",
       "terminalId"
     ]
