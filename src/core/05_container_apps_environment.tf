@@ -13,32 +13,28 @@ resource "azurerm_container_app_environment" "mil" {
 }
 
 # ------------------------------------------------------------------------------
-# Private DNS to resolve Container Apps IP.
+# Network security grop for ACA.
 # ------------------------------------------------------------------------------
-#resource "azurerm_private_dns_zone" "mil_cae" {
-#  name                = azurerm_container_app_environment.mil.default_domain
-#  resource_group_name = azurerm_resource_group.network.name
-#}
+resource "azurerm_network_security_group" "cae" {
+  name                = "${local.project}-cae-nsg"
+  location            = azurerm_resource_group.network.location
+  resource_group_name = azurerm_resource_group.network.name
+  tags                = var.tags
 
-#resource "azurerm_private_dns_zone_virtual_network_link" "mil_cae" {
-#  name                  = azurerm_virtual_network.intern.name
-#  resource_group_name   = azurerm_resource_group.network.name
-#  private_dns_zone_name = azurerm_private_dns_zone.mil_cae.name
-#  virtual_network_id    = azurerm_virtual_network.intern.id
-#}
+  security_rule {
+    name                       = "allow-apim-to-aca"
+    priority                   = 100
+    access                     = "Allow"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    direction                  = "Inbound"
+    protocol                   = "*"
+    source_address_prefix      = "ApiManagement"
+    destination_address_prefix = "VirtualNetwork"
+  }
+}
 
-#resource "azurerm_private_dns_zone_virtual_network_link" "apim" {
-#  name                  = azurerm_virtual_network.integr.name
-#  resource_group_name   = azurerm_resource_group.network.name
-#  private_dns_zone_name = azurerm_private_dns_zone.mil_cae.name
-#  virtual_network_id    = azurerm_virtual_network.integr.id
-#}
-
-#resource "azurerm_private_dns_a_record" "mil_cae" {
-#  name                = "*"
-#  zone_name           = azurerm_private_dns_zone.mil_cae.name
-#  resource_group_name = azurerm_resource_group.network.name
-#  ttl                 = 300
-#  records             = [azurerm_container_app_environment.mil.static_ip_address]
-#}
-
+resource "azurerm_subnet_network_security_group_association" "cae" {
+  subnet_id                 = azurerm_subnet.app.id
+  network_security_group_id = azurerm_network_security_group.cae.id
+}
