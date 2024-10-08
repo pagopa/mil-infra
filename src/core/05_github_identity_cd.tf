@@ -31,6 +31,10 @@ locals {
     {
       repository : "mil-preset"
       subject : var.env
+    },
+    {
+      repository : "mil-debt-position"
+      subject : var.env
     }
   ]
 

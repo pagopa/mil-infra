@@ -155,8 +155,8 @@ mil_papos_app_log_level                  = "DEBUG"
 mil_papos_mongo_connect_timeout          = "5s"
 mil_papos_mongo_read_timeout             = "10s"
 mil_papos_mongo_server_selection_timeout = "5s"
-mil_papos_image                          = "ghcr.io/pagopa/mil-papos:1.0.3"
-mil_papos_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/mil-papos/860d32f3d09dd6e8aacbce0be7e8ba018eb20bb1/src/main/resources/META-INF/openapi.yaml"
+mil_papos_image                          = "ghcr.io/pagopa/mil-papos:latest"
+mil_papos_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/mil-papos/main/src/main/resources/META-INF/openapi.yaml"
 mil_papos_cpu                            = 1
 mil_papos_memory                         = "2Gi"
 mil_papos_max_replicas                   = 5
@@ -214,6 +214,22 @@ mock_idpay_ipzs_max_replicas                   = 5
 mock_idpay_ipzs_min_replicas                   = 1
 mock_idpay_rest_api_url                        = "https://api-io.uat.cstar.pagopa.it"
 mock_ipzs_call_idpay_to_link_user_to_trx       = "yes"
+
+
+#
+# mil-debt-position
+#
+mil_debt_position_quarkus_log_level                 = "ERROR"
+mil_debt_position_app_log_level                     = "DEBUG"
+mil_debt_position_json_log                          = true
+mil_debt_position_quarkus_rest_client_logging_scope = "all"
+mil_debt_position_openapi_descriptor                = "https://raw.githubusercontent.com/pagopa/mil-debt-position/refs/heads/main/src/main/resources/META-INF/openapi.yaml"
+mil_debt_position_image                             = "ghcr.io/pagopa/mil-auth:latest"
+mil_debt_position_cpu                               = 1
+mil_debt_position_memory                            = "2Gi"
+mil_debt_position_max_replicas                      = 5
+mil_debt_position_min_replicas                      = 1
+mil_debt_position_backoff_num_of_attempts           = 5
 
 #
 # APIM

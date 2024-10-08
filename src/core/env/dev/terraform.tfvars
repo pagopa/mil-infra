@@ -216,6 +216,21 @@ mock_idpay_rest_api_url                        = "https://api-io.uat.cstar.pagop
 mock_ipzs_call_idpay_to_link_user_to_trx       = "no"
 
 #
+# mil-debt-position
+#
+mil_debt_position_quarkus_log_level                 = "ERROR"
+mil_debt_position_app_log_level                     = "DEBUG"
+mil_debt_position_json_log                          = true
+mil_debt_position_quarkus_rest_client_logging_scope = "all"
+mil_debt_position_openapi_descriptor                = "https://raw.githubusercontent.com/pagopa/mil-debt-position/refs/heads/main/src/main/resources/META-INF/openapi.yaml"
+mil_debt_position_image                             = "ghcr.io/pagopa/mil-auth:latest"
+mil_debt_position_cpu                               = 1
+mil_debt_position_memory                            = "2Gi"
+mil_debt_position_max_replicas                      = 5
+mil_debt_position_min_replicas                      = 1
+mil_debt_position_backoff_num_of_attempts           = 5
+
+#
 # APIM
 #
 apim_sku = "Developer_1"
