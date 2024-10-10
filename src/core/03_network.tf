@@ -264,3 +264,20 @@ resource "azurerm_subnet_network_security_group_association" "apim" {
   subnet_id                 = azurerm_subnet.apim.id
   network_security_group_id = azurerm_network_security_group.apim.id
 }
+
+#
+# Peering
+#
+resource "azurerm_virtual_network_peering" "intern_integr" {
+  name                      = "intern_2_integr"
+  resource_group_name       = azurerm_resource_group.network.name
+  virtual_network_name      = azurerm_virtual_network.intern.name
+  remote_virtual_network_id = azurerm_virtual_network.integr.id
+}
+
+resource "azurerm_virtual_network_peering" "integr_intern" {
+  name                      = "integr_2_intern"
+  resource_group_name       = azurerm_resource_group.network.name
+  virtual_network_name      = azurerm_virtual_network.integr.name
+  remote_virtual_network_id = azurerm_virtual_network.intern.id
+}
