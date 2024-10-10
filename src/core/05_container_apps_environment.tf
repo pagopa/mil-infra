@@ -6,35 +6,40 @@ resource "azurerm_container_app_environment" "mil" {
   location                       = azurerm_resource_group.app.location
   resource_group_name            = azurerm_resource_group.app.name
   log_analytics_workspace_id     = azurerm_log_analytics_workspace.log_analytics_workspace.id
-  internal_load_balancer_enabled = false # true
+  internal_load_balancer_enabled = true
   infrastructure_subnet_id       = azurerm_subnet.app.id
   tags                           = var.tags
   zone_redundancy_enabled        = false
 }
 
 # ------------------------------------------------------------------------------
-# Network security grop for ACA.
+# Private DNS for private endpoint from APP SUBNET (containing Container Apps)
+# to the key vault.
 # ------------------------------------------------------------------------------
-resource "azurerm_network_security_group" "cae" {
-  name                = "${local.project}-cae-nsg"
-  location            = azurerm_resource_group.network.location
+resource "azurerm_private_dns_zone" "mil_cae" {
+  name                = azurerm_container_app_environment.mil.default_domain
   resource_group_name = azurerm_resource_group.network.name
-  tags                = var.tags
-
-  security_rule {
-    name                       = "allow-apim-to-aca"
-    priority                   = 100
-    access                     = "Allow"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    direction                  = "Inbound"
-    protocol                   = "*"
-    source_address_prefix      = "ApiManagement"
-    destination_address_prefix = "VirtualNetwork"
-  }
 }
 
-resource "azurerm_subnet_network_security_group_association" "cae" {
-  subnet_id                 = azurerm_subnet.app.id
-  network_security_group_id = azurerm_network_security_group.cae.id
+resource "azurerm_private_dns_zone_virtual_network_link" "mil_cae_dns_zone_link_to_intern_vnet" {
+  name                  = azurerm_virtual_network.intern.name
+  resource_group_name   = azurerm_resource_group.network.name
+  private_dns_zone_name = azurerm_private_dns_zone.mil_cae.name
+  virtual_network_id    = azurerm_virtual_network.intern.id
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "mil_cae_dns_zone_link_to_integr_vnet" {
+  name                  = azurerm_virtual_network.integr.name
+  resource_group_name   = azurerm_resource_group.network.name
+  private_dns_zone_name = azurerm_private_dns_zone.mil_cae.name
+  virtual_network_id    = azurerm_virtual_network.integr.id
+}
+
+resource "azurerm_private_dns_a_record" "mil_cae" {
+  name                = "*"
+  zone_name           = azurerm_private_dns_zone.mil_cae.name
+  resource_group_name = azurerm_resource_group.network.name
+  ttl                 = var.dns_default_ttl
+  tags                = var.tags
+  records             = [azurerm_container_app_environment.mil.static_ip_address]
 }
