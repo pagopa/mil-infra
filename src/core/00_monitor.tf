@@ -33,7 +33,7 @@ resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
 }
 
 # ------------------------------------------------------------------------------
-# Application insight.
+# Application insights.
 # ------------------------------------------------------------------------------
 resource "azurerm_application_insights" "mil" {
   name                       = "${local.project}-appi"
@@ -44,6 +44,15 @@ resource "azurerm_application_insights" "mil" {
   tags                       = var.tags
   internet_ingestion_enabled = true
   internet_query_enabled     = true
+}
+
+# ------------------------------------------------------------------------------
+# Storing Application Insights connection strings in the general key vault.
+# ------------------------------------------------------------------------------
+resource "azurerm_key_vault_secret" "mil_application_insights_connection_string" {
+  name         = "milappinsigthsconstr"
+  value        = azurerm_application_insights.mil.connection_string
+  key_vault_id = azurerm_key_vault.general.id
 }
 
 # ------------------------------------------------------------------------------

@@ -144,6 +144,15 @@ resource "azurerm_private_endpoint" "auth_storage" {
 }
 
 # ------------------------------------------------------------------------------
+# Storing storage account blob endpoint in the general key vault.
+# ------------------------------------------------------------------------------
+resource "azurerm_key_vault_secret" "auth_storage_endpoint" {
+  name         = "authstorageendpoint"
+  value        = azurerm_storage_account.auth.primary_blob_endpoint
+  key_vault_id = azurerm_key_vault.general.id
+}
+
+# ------------------------------------------------------------------------------
 # CosmosDB Mongo collection.
 # ------------------------------------------------------------------------------
 resource "azurerm_cosmosdb_mongo_collection" "clients" {
@@ -237,6 +246,15 @@ resource "azurerm_private_endpoint" "auth_key_vault" {
 }
 
 # ------------------------------------------------------------------------------
+# Storing auth key vault URL in the general key vault.
+# ------------------------------------------------------------------------------
+resource "azurerm_key_vault_secret" "auth_key_vault_url" {
+  name         = "authkeyvaulturl"
+  value        = azurerm_key_vault.auth.vault_uri
+  key_vault_id = azurerm_key_vault.general.id
+}
+
+# ------------------------------------------------------------------------------
 # Container app.
 # ------------------------------------------------------------------------------
 resource "azurerm_container_app" "auth" {
@@ -293,30 +311,30 @@ resource "azurerm_container_app" "auth" {
       }
 
       env {
-        name  = "auth.data.url"
-        value = azurerm_storage_account.auth.primary_blob_endpoint
+        name        = "auth.data.url"
+        secret_name = "auth-storage-endpoint"
       }
 
       env {
-        name  = "auth.keyvault.url"
-        value = azurerm_key_vault.auth.vault_uri
+        name        = "auth.keyvault.url"
+        secret_name = "auth-key-vault-url"
       }
 
       env {
-        name  = "auth.base-url"
-        value = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}"
+        name        = "auth.base-url"
+        secret_name = "auth-ext-url"
       }
-      
+
       env {
-        name  = "application-insights.connection-string"
-        value = azurerm_application_insights.mil.connection_string
+        name        = "application-insights.connection-string"
+        secret_name = "app-insights-connection-string"
       }
 
       env {
         name  = "auth.json-log"
         value = var.mil_auth_json_log
       }
-      
+
       env {
         name  = "auth.keyvault.maxresults"
         value = var.mil_auth_keyvault_maxresults
@@ -363,13 +381,39 @@ resource "azurerm_container_app" "auth" {
   }
 
   secret {
-    name  = "mongodb-connection-string-1"
-    value = azurerm_cosmosdb_account.mil.primary_mongodb_connection_string
+    name                = "mongodb-connection-string-1"
+    key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/milmongodbconstr1"
+    identity            = "System"
   }
 
   secret {
-    name  = "mongodb-connection-string-2"
-    value = azurerm_cosmosdb_account.mil.secondary_mongodb_connection_string
+    name                = "mongodb-connection-string-2"
+    key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/milmongodbconstr2"
+    identity            = "System"
+  }
+
+  secret {
+    name                = "auth-storage-endpoint"
+    key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/authstorageendpoint"
+    identity            = "System"
+  }
+
+  secret {
+    name                = "auth-key-vault-url"
+    key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/authkeyvaulturl"
+    identity            = "System"
+  }
+
+  secret {
+    name                = "app-insights-connection-string"
+    key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/milappinsigthsconstr"
+    identity            = "System"
+  }
+
+  secret {
+    name                = "auth-ext-url"
+    key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/authexturl"
+    identity            = "System"
   }
 
   identity {
@@ -418,6 +462,12 @@ resource "azurerm_role_assignment" "auth_kv_to_read_certificates" {
 resource "azurerm_role_assignment" "auth_kv_to_read_secrets" {
   scope                = azurerm_key_vault.auth.id
   role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = azurerm_container_app.auth.identity[0].principal_id
+}
+
+resource "azurerm_role_assignment" "general_kv_to_read_secrets" {
+  scope                = azurerm_key_vault.general.id
+  role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_container_app.auth.identity[0].principal_id
 }
 
@@ -472,6 +522,15 @@ resource "azurerm_api_management_product_api" "auth" {
   api_name            = azurerm_api_management_api.auth.name
   api_management_name = azurerm_api_management.mil.name
   resource_group_name = azurerm_api_management.mil.resource_group_name
+}
+
+# ------------------------------------------------------------------------------
+# Storing external URL in the general key vault.
+# ------------------------------------------------------------------------------
+resource "azurerm_key_vault_secret" "auth_ext_url" {
+  name         = "authexturl"
+  value        = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}"
+  key_vault_id = azurerm_key_vault.general.id
 }
 
 # ------------------------------------------------------------------------------

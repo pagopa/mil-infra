@@ -172,7 +172,7 @@ resource "azurerm_network_security_group" "apim" {
     direction                  = "Inbound"
     protocol                   = "Tcp"
     source_address_prefix      = "Internet"
-    destination_address_prefix = "VirtualNetwork" 
+    destination_address_prefix = "VirtualNetwork"
   }
 
   security_rule {
@@ -184,7 +184,7 @@ resource "azurerm_network_security_group" "apim" {
     direction                  = "Inbound"
     protocol                   = "Tcp"
     source_address_prefix      = "ApiManagement"
-    destination_address_prefix = "VirtualNetwork" 
+    destination_address_prefix = "VirtualNetwork"
   }
 
   security_rule {
@@ -196,7 +196,7 @@ resource "azurerm_network_security_group" "apim" {
     direction                  = "Inbound"
     protocol                   = "Tcp"
     source_address_prefix      = "AzureLoadBalancer"
-    destination_address_prefix = "VirtualNetwork" 
+    destination_address_prefix = "VirtualNetwork"
   }
 
   security_rule {
@@ -208,7 +208,7 @@ resource "azurerm_network_security_group" "apim" {
     direction                  = "Inbound"
     protocol                   = "Tcp"
     source_address_prefix      = "AzureTrafficManager"
-    destination_address_prefix = "VirtualNetwork" 
+    destination_address_prefix = "VirtualNetwork"
   }
 
   security_rule {
@@ -220,7 +220,7 @@ resource "azurerm_network_security_group" "apim" {
     direction                  = "Outbound"
     protocol                   = "Tcp"
     source_address_prefix      = "VirtualNetwork"
-    destination_address_prefix = "Storage" 
+    destination_address_prefix = "Storage"
   }
 
   security_rule {
@@ -232,7 +232,7 @@ resource "azurerm_network_security_group" "apim" {
     direction                  = "Outbound"
     protocol                   = "Tcp"
     source_address_prefix      = "VirtualNetwork"
-    destination_address_prefix = "SQL" 
+    destination_address_prefix = "SQL"
   }
 
   security_rule {
@@ -244,7 +244,7 @@ resource "azurerm_network_security_group" "apim" {
     direction                  = "Outbound"
     protocol                   = "Tcp"
     source_address_prefix      = "VirtualNetwork"
-    destination_address_prefix = "AzureKeyVault" 
+    destination_address_prefix = "AzureKeyVault"
   }
 
   security_rule {
@@ -256,7 +256,7 @@ resource "azurerm_network_security_group" "apim" {
     direction                  = "Outbound"
     protocol                   = "Tcp"
     source_address_prefix      = "VirtualNetwork"
-    destination_address_prefix = "AzureMonitor" 
+    destination_address_prefix = "AzureMonitor"
   }
 }
 

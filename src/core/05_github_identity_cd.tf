@@ -40,7 +40,7 @@ locals {
 
   resource_groups_roles_cd = [
     {
-      resource_group_id : azurerm_resource_group.sec.id,
+      resource_group_id : azurerm_key_vault.auth.id # azurerm_resource_group.sec.id
       role : "Key Vault Reader"
     },
     {

@@ -42,6 +42,21 @@ resource "azurerm_cosmosdb_mongo_database" "mil" {
 }
 
 # ------------------------------------------------------------------------------
+# Storing CosmosDB connection strings in the general key vault.
+# ------------------------------------------------------------------------------
+resource "azurerm_key_vault_secret" "primary_mil_mongodb_connection_string" {
+  name         = "milmongodbconstr1"
+  value        = azurerm_cosmosdb_account.mil.primary_mongodb_connection_string
+  key_vault_id = azurerm_key_vault.general.id
+}
+
+resource "azurerm_key_vault_secret" "secondary_mil_mongodb_connection_string" {
+  name         = "milmongodbconstr2"
+  value        = azurerm_cosmosdb_account.mil.secondary_mongodb_connection_string
+  key_vault_id = azurerm_key_vault.general.id
+}
+
+# ------------------------------------------------------------------------------
 # Private endpoint from APP SUBNET (containing Container Apps) to CosmosDB.
 # ------------------------------------------------------------------------------
 resource "azurerm_private_dns_zone" "cosmos" {

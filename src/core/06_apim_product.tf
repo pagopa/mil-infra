@@ -19,7 +19,7 @@ resource "azurerm_api_management_product_policy" "cors" {
   product_id          = azurerm_api_management_product.mil.product_id
   api_management_name = azurerm_api_management_product.mil.api_management_name
   resource_group_name = azurerm_api_management_product.mil.resource_group_name
-  xml_content = <<XML
+  xml_content         = <<XML
     <policies>
       <inbound>
         <cors allow-credentials="false">

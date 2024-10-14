@@ -383,11 +383,11 @@ resource "azurerm_container_app" "payment_notice" {
       }
 
       env {
-        name  = "jwt-publickey-location"
+        name = "jwt-publickey-location"
         #value = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}/.well-known/jwks.json"
         value = "https://${azurerm_container_app.auth.ingress[0].fqdn}/.well-known/jwks.json"
       }
-      
+
       env {
         name  = "application-insights.connection-string"
         value = azurerm_application_insights.mil.connection_string
