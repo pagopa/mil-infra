@@ -44,14 +44,14 @@ resource "azurerm_cosmosdb_mongo_database" "mil" {
 # ------------------------------------------------------------------------------
 # Storing CosmosDB connection strings in the general key vault.
 # ------------------------------------------------------------------------------
-resource "azurerm_key_vault_secret" "primary_mil_mongodb_connection_string" {
-  name         = "milmongodbconstr1"
+resource "azurerm_key_vault_secret" "cosmosdb_account_mil_primary_mongodb_connection_string" {
+  name         = "cosmosdb-account-mil-primary-mongodb-connection-string"
   value        = azurerm_cosmosdb_account.mil.primary_mongodb_connection_string
   key_vault_id = azurerm_key_vault.general.id
 }
 
-resource "azurerm_key_vault_secret" "secondary_mil_mongodb_connection_string" {
-  name         = "milmongodbconstr2"
+resource "azurerm_key_vault_secret" "cosmosdb_account_mil_secondary_mongodb_connection_string" {
+  name         = "cosmosdb-account-mil-secondary-mongodb-connection-string"
   value        = azurerm_cosmosdb_account.mil.secondary_mongodb_connection_string
   key_vault_id = azurerm_key_vault.general.id
 }

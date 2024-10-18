@@ -49,8 +49,8 @@ resource "azurerm_application_insights" "mil" {
 # ------------------------------------------------------------------------------
 # Storing Application Insights connection strings in the general key vault.
 # ------------------------------------------------------------------------------
-resource "azurerm_key_vault_secret" "mil_application_insights_connection_string" {
-  name         = "milappinsigthsconstr"
+resource "azurerm_key_vault_secret" "application_insigths_mil_connection_string" {
+  name         = "application-insigths-mil-connection-string"
   value        = azurerm_application_insights.mil.connection_string
   key_vault_id = azurerm_key_vault.general.id
 }
