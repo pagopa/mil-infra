@@ -13,8 +13,7 @@ resource "azurerm_container_app_environment" "mil" {
 }
 
 # ------------------------------------------------------------------------------
-# Private DNS for private endpoint from APP SUBNET (containing Container Apps)
-# to the key vault.
+# Private DNS zone container apps env domain.
 # ------------------------------------------------------------------------------
 resource "azurerm_private_dns_zone" "mil_cae" {
   name                = azurerm_container_app_environment.mil.default_domain
