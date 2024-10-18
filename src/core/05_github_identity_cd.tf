@@ -1,7 +1,7 @@
-/**
-This terraform file handle github identity federation with Azure, allowing
-Github action to login with Azure CLI by using a managed identity.
-*/
+#
+# This terraform file handle github identity federation with Azure, allowing
+# Github action to login with Azure CLI by using a managed identity.
+#
 locals {
   repositories = [
     {
@@ -40,7 +40,7 @@ locals {
 
   resource_groups_roles_cd = [
     {
-      resource_group_id : azurerm_key_vault.auth.id # azurerm_resource_group.sec.id
+      resource_group_id : azurerm_resource_group.sec.id
       role : "Key Vault Reader"
     },
     {
@@ -80,4 +80,37 @@ resource "azurerm_federated_identity_credential" "identity_credentials_cd" {
   issuer              = "https://token.actions.githubusercontent.com"
   parent_id           = azurerm_user_assigned_identity.identity_cd.id
   subject             = "repo:pagopa/${each.value.repository}:environment:${each.value.subject}-cd"
+}
+
+#
+# Create secret with Tenant ID in each repository
+#
+resource "github_actions_environment_secret" "azure_cd_tenant_id" {
+  for_each        = { for x in local.repositories : x.repository => x }
+  repository      = each.value.repository
+  environment     = "${var.env}-cd"
+  secret_name     = "AZURE_TENANT_ID"
+  plaintext_value = data.azurerm_client_config.current.tenant_id
+}
+
+#
+# Create secret with Subscription ID in each repository
+#
+resource "github_actions_environment_secret" "azure_cd_subscription_id" {
+  for_each        = { for x in local.repositories : x.repository => x }
+  repository      = each.value.repository
+  environment     = "${var.env}-cd"
+  secret_name     = "AZURE_SUBSCRIPTION_ID"
+  plaintext_value = data.azurerm_subscription.current.subscription_id
+}
+
+#
+# Create secret with Client ID in each repository
+#
+resource "github_actions_environment_secret" "azure_cd_client_id" {
+  for_each        = { for x in local.repositories : x.repository => x }
+  repository      = each.value.repository
+  environment     = "${var.env}-cd"
+  secret_name     = "AZURE_CLIENT_ID"
+  plaintext_value = azurerm_user_assigned_identity.identity_cd.client_id
 }
