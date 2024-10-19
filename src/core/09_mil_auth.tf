@@ -438,13 +438,8 @@ resource "azurerm_container_app" "auth" {
       }
 
       env {
-        name        = "USER_MANAGED_IDENTITY_CLIENT_ID"
+        name        = "IDENTITY_CLIENT_ID"
         secret_name = "identity-client-id"
-      }
-
-      env {
-        name  = "USER_MANAGED_IDENTITY_ENDPOINT"
-        value = var.user_managed_identity_endpoint
       }
     }
 
@@ -455,36 +450,36 @@ resource "azurerm_container_app" "auth" {
   secret {
     name                = "cosmosdb-account-mil-primary-mongodb-connection-string"
     key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/cosmosdb-account-mil-primary-mongodb-connection-string"
-    identity            = "System"
-    #identity            = azurerm_user_assigned_identity.auth.id
+    #identity            = "System"
+    identity            = azurerm_user_assigned_identity.auth.id
   }
 
   secret {
     name                = "cosmosdb-account-mil-secondary-mongodb-connection-string"
     key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/cosmosdb-account-mil-secondary-mongodb-connection-string"
-    identity            = "System"
-    #identity            = azurerm_user_assigned_identity.auth.id
+    #identity            = "System"
+    identity            = azurerm_user_assigned_identity.auth.id
   }
 
   secret {
     name                = "storage-account-auth-primary-blob-endpoint"
     key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/storage-account-auth-primary-blob-endpoint"
-    identity            = "System"
-    #identity            = azurerm_user_assigned_identity.auth.id
+    #identity            = "System"
+    identity            = azurerm_user_assigned_identity.auth.id
   }
 
   secret {
     name                = "key-vault-auth-vault-uri"
     key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/key-vault-auth-vault-uri"
-    identity            = "System"
-    #identity            = azurerm_user_assigned_identity.auth.id
+    #identity            = "System"
+    identity            = azurerm_user_assigned_identity.auth.id
   }
 
   secret {
     name                = "application-insigths-mil-connection-string"
     key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/application-insigths-mil-connection-string"
-    identity            = "System"
-    #identity            = azurerm_user_assigned_identity.auth.id
+    #identity            = "System"
+    identity            = azurerm_user_assigned_identity.auth.id
   }
 
   secret {
@@ -492,13 +487,13 @@ resource "azurerm_container_app" "auth" {
     value = "${azurerm_user_assigned_identity.auth.client_id}"
   }
 
-  identity {
-    type = "SystemAssigned"
-  }
   #identity {
-  #  type = "UserAssigned"
-  #  identity_ids = [azurerm_user_assigned_identity.auth.id]
+  #  type = "SystemAssigned"
   #}
+  identity {
+    type = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.auth.id]
+  }
 
   ingress {
     external_enabled = true
@@ -519,52 +514,47 @@ resource "azurerm_container_app" "auth" {
 # Assignement of role "Key Vault Crypto Officer" to system-managed identity of
 # container app, to use key vault.
 # ------------------------------------------------------------------------------
-resource "azurerm_role_assignment" "auth_kv" {
-  scope                = azurerm_key_vault.auth.id
-  role_definition_name = "Key Vault Crypto Officer"
-  principal_id         = azurerm_container_app.auth.identity[0].principal_id
-  #principal_id         = azurerm_user_assigned_identity.auth.principal_id
-}
+#resource "azurerm_role_assignment" "auth_kv" {
+#  scope                = azurerm_key_vault.auth.id
+#  role_definition_name = "Key Vault Crypto Officer"
+#  principal_id         = azurerm_container_app.auth.identity[0].principal_id
+#}
 
 # ------------------------------------------------------------------------------
 # Assignement of role "Key Vault Certificates Officer" to system-managed
 # identity of container app, to use key vault.
 # ------------------------------------------------------------------------------
-resource "azurerm_role_assignment" "auth_kv_to_read_certificates" {
-  scope                = azurerm_key_vault.auth.id
-  role_definition_name = "Key Vault Certificates Officer"
-  principal_id         = azurerm_container_app.auth.identity[0].principal_id
-  #principal_id         = azurerm_user_assigned_identity.auth.principal_id
-}
+#resource "azurerm_role_assignment" "auth_kv_to_read_certificates" {
+#  scope                = azurerm_key_vault.auth.id
+#  role_definition_name = "Key Vault Certificates Officer"
+#  principal_id         = azurerm_container_app.auth.identity[0].principal_id
+#}
 
 # ------------------------------------------------------------------------------
 # Assignement of role "Key Vault Secrets Officer" to system-managed identity of
 # container app, to use key vault.
 # ------------------------------------------------------------------------------
-resource "azurerm_role_assignment" "auth_kv_to_read_secrets" {
-  scope                = azurerm_key_vault.auth.id
-  role_definition_name = "Key Vault Secrets Officer"
-  principal_id         = azurerm_container_app.auth.identity[0].principal_id
-  #principal_id         = azurerm_user_assigned_identity.auth.principal_id
-}
+#resource "azurerm_role_assignment" "auth_kv_to_read_secrets" {
+#  scope                = azurerm_key_vault.auth.id
+#  role_definition_name = "Key Vault Secrets Officer"
+#  principal_id         = azurerm_container_app.auth.identity[0].principal_id
+#}
 
-resource "azurerm_role_assignment" "general_kv_to_read_secrets" {
-  scope                = azurerm_key_vault.general.id
-  role_definition_name = "Key Vault Secrets User"
-  principal_id         = azurerm_container_app.auth.identity[0].principal_id
-  #principal_id         = azurerm_user_assigned_identity.auth.principal_id
-}
+#resource "azurerm_role_assignment" "general_kv_to_read_secrets" {
+#  scope                = azurerm_key_vault.general.id
+#  role_definition_name = "Key Vault Secrets User"
+#  principal_id         = azurerm_container_app.auth.identity[0].principal_id
+#}
 
 # ------------------------------------------------------------------------------
 # Assignement of role "Storage Blob Data Reader" to system-managed identity of
 # container app, to use storage account.
 # ------------------------------------------------------------------------------
-resource "azurerm_role_assignment" "auth_storage" {
-  scope                = azurerm_storage_account.auth.id
-  role_definition_name = "Storage Blob Data Reader"
-  principal_id         = azurerm_container_app.auth.identity[0].principal_id
-  #principal_id         = azurerm_user_assigned_identity.auth.principal_id
-}
+#resource "azurerm_role_assignment" "auth_storage" {
+#  scope                = azurerm_storage_account.auth.id
+#  role_definition_name = "Storage Blob Data Reader"
+#  principal_id         = azurerm_container_app.auth.identity[0].principal_id
+#}
 
 # ------------------------------------------------------------------------------
 # Query for stdout/stdin of container app.
