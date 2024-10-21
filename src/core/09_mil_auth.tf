@@ -5,103 +5,13 @@
 # ------------------------------------------------------------------------------
 # Variables definition.
 # ------------------------------------------------------------------------------
-variable "mil_auth_quarkus_log_level" {
-  type    = string
-  default = "ERROR"
-}
-
-variable "mil_auth_app_log_level" {
-  type    = string
-  default = "DEBUG"
-}
-
-variable "mil_auth_json_log" {
-  type    = bool
-  default = true
-}
-
-variable "mil_auth_quarkus_rest_client_logging_scope" {
-  description = "Scope for Quarkus REST client logging. Allowed values are: all, request-response, none."
-  type        = string
-  default     = "all"
-}
-
-variable "mil_auth_cryptoperiod" {
-  type    = number
-  default = 86400000
-}
-
-variable "mil_auth_keysize" {
-  type    = number
-  default = 4096
-}
-
-variable "mil_auth_access_duration" {
-  type    = number
-  default = 900
-}
-
-variable "mil_auth_refresh_duration" {
-  type    = number
-  default = 3600
-}
-
 variable "mil_auth_openapi_descriptor" {
   type = string
-}
-
-variable "mil_auth_image" {
-  type = string
-}
-
-variable "mil_auth_cpu" {
-  type    = number
-  default = 1
-}
-
-variable "mil_auth_memory" {
-  type    = string
-  default = "2Gi"
-}
-
-variable "mil_auth_max_replicas" {
-  type    = number
-  default = 10
-}
-
-variable "mil_auth_min_replicas" {
-  type    = number
-  default = 1
 }
 
 variable "mil_auth_path" {
   type    = string
   default = "mil-auth"
-}
-
-variable "mil_auth_keyvault_maxresults" {
-  type    = number
-  default = 20
-}
-
-variable "mil_auth_keyvault_backoff_num_of_attempts" {
-  type    = number
-  default = 3
-}
-
-variable "mil_auth_mongodb_connect_timeout" {
-  type    = string
-  default = "5s"
-}
-
-variable "mil_auth_mongodb_read_timeout" {
-  type    = string
-  default = "10s"
-}
-
-variable "mil_auth_mongodb_server_selection_timeout" {
-  type    = string
-  default = "5s"
 }
 
 # ------------------------------------------------------------------------------
@@ -254,17 +164,14 @@ resource "azurerm_key_vault_secret" "key_vault_auth_vault_uri" {
   key_vault_id = azurerm_key_vault.general.id
 }
 
-
-
-
-#
+# ------------------------------------------------------------------------------
 # Identity for container app.
-#
+# ------------------------------------------------------------------------------
 resource "azurerm_user_assigned_identity" "auth" {
   resource_group_name = azurerm_resource_group.managed_identities_rg.name
   location            = azurerm_resource_group.managed_identities_rg.location
   name                = "${var.prefix}-${var.env_short}-auth-identity"
-  tags = var.tags
+  tags                = var.tags
 }
 
 # ------------------------------------------------------------------------------
@@ -313,249 +220,6 @@ resource "azurerm_role_assignment" "auth_storage_for_auth_identity" {
   principal_id         = azurerm_user_assigned_identity.auth.principal_id
 }
 
-
-
-
-# ------------------------------------------------------------------------------
-# Container app.
-# ------------------------------------------------------------------------------
-resource "azurerm_container_app" "auth" {
-  name                         = "${local.project}-auth-ca"
-  container_app_environment_id = azurerm_container_app_environment.mil.id
-  resource_group_name          = azurerm_resource_group.app.name
-  revision_mode                = "Single"
-
-  template {
-    container {
-      name   = "mil-auth"
-      image  = var.mil_auth_image
-      cpu    = var.mil_auth_cpu
-      memory = var.mil_auth_memory
-
-      env {
-        name  = "TZ"
-        value = "Europe/Rome"
-      }
-
-      env {
-        name  = "auth.quarkus-log-level"
-        value = var.mil_auth_quarkus_log_level
-      }
-
-      env {
-        name  = "auth.quarkus-rest-client-logging-scope"
-        value = var.mil_auth_quarkus_rest_client_logging_scope
-      }
-
-      env {
-        name  = "auth.app-log-level"
-        value = var.mil_auth_app_log_level
-      }
-
-      env {
-        name  = "auth.cryptoperiod"
-        value = var.mil_auth_cryptoperiod
-      }
-
-      env {
-        name  = "auth.keysize"
-        value = var.mil_auth_keysize
-      }
-
-      env {
-        name  = "auth.access.duration"
-        value = var.mil_auth_access_duration
-      }
-
-      env {
-        name  = "auth.refresh.duration"
-        value = var.mil_auth_refresh_duration
-      }
-
-      env {
-        name        = "auth.data.url"
-        secret_name = "storage-account-auth-primary-blob-endpoint"
-      }
-
-      env {
-        name        = "auth.keyvault.url"
-        secret_name = "key-vault-auth-vault-uri"
-      }
-
-      env {
-        name  = "auth.base-url"
-        value = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}"
-      }
-
-      env {
-        name        = "application-insights.connection-string"
-        secret_name = "application-insigths-mil-connection-string"
-      }
-
-      env {
-        name  = "auth.json-log"
-        value = var.mil_auth_json_log
-      }
-
-      env {
-        name  = "auth.keyvault.maxresults"
-        value = var.mil_auth_keyvault_maxresults
-      }
-
-      env {
-        name  = "auth.keyvault.backoff.number-of-attempts"
-        value = var.mil_auth_keyvault_backoff_num_of_attempts
-      }
-
-      env {
-        name  = "jwt-publickey-location"
-        value = "http://127.0.0.1:8080/.well-known/jwks.json"
-      }
-
-      env {
-        name  = "mongodb.connect-timeout"
-        value = var.mil_auth_mongodb_connect_timeout
-      }
-
-      env {
-        name  = "mongodb.read-timeout"
-        value = var.mil_auth_mongodb_read_timeout
-      }
-
-      env {
-        name  = "mongodb.server-selection-timeout"
-        value = var.mil_auth_mongodb_server_selection_timeout
-      }
-
-      env {
-        name        = "mongodb.connection-string-1"
-        secret_name = "cosmosdb-account-mil-primary-mongodb-connection-string"
-      }
-
-      env {
-        name        = "mongodb.connection-string-2"
-        secret_name = "cosmosdb-account-mil-secondary-mongodb-connection-string"
-      }
-
-      env {
-        name        = "IDENTITY_CLIENT_ID"
-        secret_name = "identity-client-id"
-      }
-    }
-
-    max_replicas = var.mil_auth_max_replicas
-    min_replicas = var.mil_auth_min_replicas
-  }
-
-  secret {
-    name                = "cosmosdb-account-mil-primary-mongodb-connection-string"
-    key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/cosmosdb-account-mil-primary-mongodb-connection-string"
-    #identity            = "System"
-    identity            = azurerm_user_assigned_identity.auth.id
-  }
-
-  secret {
-    name                = "cosmosdb-account-mil-secondary-mongodb-connection-string"
-    key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/cosmosdb-account-mil-secondary-mongodb-connection-string"
-    #identity            = "System"
-    identity            = azurerm_user_assigned_identity.auth.id
-  }
-
-  secret {
-    name                = "storage-account-auth-primary-blob-endpoint"
-    key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/storage-account-auth-primary-blob-endpoint"
-    #identity            = "System"
-    identity            = azurerm_user_assigned_identity.auth.id
-  }
-
-  secret {
-    name                = "key-vault-auth-vault-uri"
-    key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/key-vault-auth-vault-uri"
-    #identity            = "System"
-    identity            = azurerm_user_assigned_identity.auth.id
-  }
-
-  secret {
-    name                = "application-insigths-mil-connection-string"
-    key_vault_secret_id = "${azurerm_key_vault.general.vault_uri}secrets/application-insigths-mil-connection-string"
-    #identity            = "System"
-    identity            = azurerm_user_assigned_identity.auth.id
-  }
-
-  secret {
-    name  = "identity-client-id"
-    value = "${azurerm_user_assigned_identity.auth.client_id}"
-  }
-
-  #identity {
-  #  type = "SystemAssigned"
-  #}
-  identity {
-    type = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.auth.id]
-  }
-
-  ingress {
-    external_enabled = true
-    target_port      = 8080
-    transport        = "http"
-
-    traffic_weight {
-      latest_revision = true
-      percentage      = 100
-      #revision_suffix = formatdate("YYYYMMDDhhmmssZZZZ", timestamp())
-    }
-  }
-
-  tags = var.tags
-}
-
-# ------------------------------------------------------------------------------
-# Assignement of role "Key Vault Crypto Officer" to system-managed identity of
-# container app, to use key vault.
-# ------------------------------------------------------------------------------
-#resource "azurerm_role_assignment" "auth_kv" {
-#  scope                = azurerm_key_vault.auth.id
-#  role_definition_name = "Key Vault Crypto Officer"
-#  principal_id         = azurerm_container_app.auth.identity[0].principal_id
-#}
-
-# ------------------------------------------------------------------------------
-# Assignement of role "Key Vault Certificates Officer" to system-managed
-# identity of container app, to use key vault.
-# ------------------------------------------------------------------------------
-#resource "azurerm_role_assignment" "auth_kv_to_read_certificates" {
-#  scope                = azurerm_key_vault.auth.id
-#  role_definition_name = "Key Vault Certificates Officer"
-#  principal_id         = azurerm_container_app.auth.identity[0].principal_id
-#}
-
-# ------------------------------------------------------------------------------
-# Assignement of role "Key Vault Secrets Officer" to system-managed identity of
-# container app, to use key vault.
-# ------------------------------------------------------------------------------
-#resource "azurerm_role_assignment" "auth_kv_to_read_secrets" {
-#  scope                = azurerm_key_vault.auth.id
-#  role_definition_name = "Key Vault Secrets Officer"
-#  principal_id         = azurerm_container_app.auth.identity[0].principal_id
-#}
-
-#resource "azurerm_role_assignment" "general_kv_to_read_secrets" {
-#  scope                = azurerm_key_vault.general.id
-#  role_definition_name = "Key Vault Secrets User"
-#  principal_id         = azurerm_container_app.auth.identity[0].principal_id
-#}
-
-# ------------------------------------------------------------------------------
-# Assignement of role "Storage Blob Data Reader" to system-managed identity of
-# container app, to use storage account.
-# ------------------------------------------------------------------------------
-#resource "azurerm_role_assignment" "auth_storage" {
-#  scope                = azurerm_storage_account.auth.id
-#  role_definition_name = "Storage Blob Data Reader"
-#  principal_id         = azurerm_container_app.auth.identity[0].principal_id
-#}
-
 # ------------------------------------------------------------------------------
 # Query for stdout/stdin of container app.
 # ------------------------------------------------------------------------------
@@ -575,15 +239,16 @@ resource "azurerm_log_analytics_query_pack_query" "auth_ca_json_logs" {
 # API definition.
 # ------------------------------------------------------------------------------
 resource "azurerm_api_management_api" "auth" {
-  name                  = "${local.project}-auth"
-  resource_group_name   = azurerm_api_management.mil.resource_group_name
-  api_management_name   = azurerm_api_management.mil.name
-  revision              = "1"
-  display_name          = "auth"
-  description           = "Authorization Microservice for Multi-channel Integration Layer of SW Client Project"
-  path                  = var.mil_auth_path
-  protocols             = ["https"]
-  service_url           = "https://${azurerm_container_app.auth.ingress[0].fqdn}"
+  name                = "${local.project}-auth"
+  resource_group_name = azurerm_api_management.mil.resource_group_name
+  api_management_name = azurerm_api_management.mil.name
+  revision            = "1"
+  display_name        = "auth"
+  description         = "Authorization Microservice for Multi-channel Integration Layer of SW Client Project"
+  path                = var.mil_auth_path
+  protocols           = ["https"]
+  service_url         = "https://${local.project}-auth-ca.${azurerm_private_dns_zone.mil_cae.name}"
+
   subscription_required = false
 
   import {

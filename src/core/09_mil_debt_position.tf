@@ -67,7 +67,7 @@ variable "mil_debt_position_backoff_num_of_attempts" {
 # ------------------------------------------------------------------------------
 # Container app.
 # ------------------------------------------------------------------------------
-resource "azurerm_container_app" "debt-position" {
+resource "azurerm_container_app" "debt_position" {
   name                         = "${local.project}-debt-position-ca"
   container_app_environment_id = azurerm_container_app_environment.mil.id
   resource_group_name          = azurerm_resource_group.app.name
@@ -76,9 +76,9 @@ resource "azurerm_container_app" "debt-position" {
   template {
     container {
       name   = "mil-debt-position"
-      image  = var.mil_auth_image
-      cpu    = var.mil_auth_cpu
-      memory = var.mil_auth_memory
+      image  = var.mil_debt_position_image
+      cpu    = var.mil_debt_position_cpu
+      memory = var.mil_debt_position_memory
 
       env {
         name  = "TZ"
@@ -112,7 +112,7 @@ resource "azurerm_container_app" "debt-position" {
 
       env {
         name  = "debt_position.json-log"
-        value = var.mil_auth_json_log
+        value = var.mil_debt_position_json_log
       }
 
       env {
@@ -176,7 +176,7 @@ resource "azurerm_api_management_api" "debt_position" {
   description           = "Debt Position Microservice for Multi-channel Integration Layer of SW Client Project"
   path                  = var.mil_debt_position_path
   protocols             = ["https"]
-  service_url           = "https://${azurerm_container_app.auth.ingress[0].fqdn}"
+  service_url           = "https://${azurerm_container_app.debt_position.ingress[0].fqdn}"
   subscription_required = false
 
   import {

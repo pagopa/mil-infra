@@ -44,6 +44,14 @@ variable "location_short" {
 variable "tags" {
   type = map(any)
   default = {
-    CreatedBy = "Terraform"
+    CreatedBy  = "Terraform"
+    Owner      = "mil"
+    Source     = "https://github.com/pagopa/mil-infra"
+    CostCenter = "TS310 - PAGAMENTI & SERVIZI"
   }
 }
+
+#variable "jwt-publickey-location" {
+#  type        = string
+#  description = "URL to reach JWKS endpoint to validate tokens."
+#}

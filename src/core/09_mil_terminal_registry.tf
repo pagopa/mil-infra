@@ -123,7 +123,8 @@ resource "azurerm_container_app" "terminal_registry" {
       env {
         name = "jwt-publickey-location"
         #value = "${azurerm_api_management.mil.gateway_url}/${var.mil_auth_path}/.well-known/jwks.json"
-        value = "https://${azurerm_container_app.auth.ingress[0].fqdn}/.well-known/jwks.json"
+        #value = "https://${azurerm_container_app.auth.ingress[0].fqdn}/.well-known/jwks.json"
+        value = "https://${local.project}-auth-ca.${azurerm_private_dns_zone.mil_cae.name}/.well-known/jwks.json"
       }
 
       env {
