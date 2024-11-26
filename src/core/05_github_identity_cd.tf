@@ -5,10 +5,6 @@
 locals {
   repositories = [
     {
-      repository : "mil-terminal-registry"
-      subject : var.env
-    },
-    {
       repository : "mil-papos"
       subject : var.env
     },
