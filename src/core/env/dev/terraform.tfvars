@@ -93,7 +93,7 @@ mil_payment_notice_openapi_descriptor                  = "https://raw.githubuser
 mil_payment_notice_cpu                                 = 1
 mil_payment_notice_memory                              = "2Gi"
 mil_payment_notice_max_replicas                        = 5
-mil_payment_notice_min_replicas                        = 1
+mil_payment_notice_min_replicas                        = 0
 
 #
 # mil-fee-calculator
@@ -107,7 +107,7 @@ mil_fee_calculator_gec_read_timeout    = 2000
 mil_fee_calculator_cpu                 = 1
 mil_fee_calculator_memory              = "2Gi"
 mil_fee_calculator_max_replicas        = 5
-mil_fee_calculator_min_replicas        = 1
+mil_fee_calculator_min_replicas        = 0
 
 #
 # mil-auth
@@ -127,7 +127,7 @@ mil_preset_openapi_descriptor             = "https://raw.githubusercontent.com/p
 mil_preset_cpu                            = 1
 mil_preset_memory                         = "2Gi"
 mil_preset_max_replicas                   = 5
-mil_preset_min_replicas                   = 1
+mil_preset_min_replicas                   = 0
 
 #
 # mil-papos
@@ -142,22 +142,7 @@ mil_papos_openapi_descriptor             = "https://raw.githubusercontent.com/pa
 mil_papos_cpu                            = 1
 mil_papos_memory                         = "2Gi"
 mil_papos_max_replicas                   = 5
-mil_papos_min_replicas                   = 1
-
-#
-# mil-terminal-registry
-#
-mil_terminal_registry_quarkus_log_level              = "ERROR"
-mil_terminal_registry_app_log_level                  = "DEBUG"
-mil_terminal_registry_image                          = "ghcr.io/pagopa/mil-terminal-registry:latest"
-mil_terminal_registry_cpu                            = 1
-mil_terminal_registry_memory                         = "2Gi"
-mil_terminal_registry_max_replicas                   = 5
-mil_terminal_registry_min_replicas                   = 1
-mil_terminal_registry_mongo_connect_timeout          = "5s"
-mil_terminal_registry_mongo_read_timeout             = "10s"
-mil_terminal_registry_mongo_server_selection_timeout = "5s"
-mil_terminal_registry_openapi_descriptor             = "https://raw.githubusercontent.com/pagopa/mil-terminal-registry/main/src/main/resources/META-INF/openapi.yaml"
+mil_papos_min_replicas                   = 0
 
 #
 # mil-idpay
@@ -172,7 +157,7 @@ mil_idpay_openapi_descriptor             = "https://raw.githubusercontent.com/pa
 mil_idpay_cpu                            = 1
 mil_idpay_memory                         = "2Gi"
 mil_idpay_max_replicas                   = 5
-mil_idpay_min_replicas                   = 1
+mil_idpay_min_replicas                   = 0
 mil_idpay_idpay_rest_api_url             = "https://api.uat.cstar.pagopa.it"
 mil_idpay_ipzs_rest_api_url              = "https://mil-d-apim.azure-api.net/idpay-ipzs-mock"
 mil_idpay_cryptoperiod                   = 86400
@@ -193,7 +178,7 @@ mock_idpay_ipzs_openapi_descriptor             = "https://raw.githubusercontent.
 mock_idpay_ipzs_cpu                            = 1
 mock_idpay_ipzs_memory                         = "2Gi"
 mock_idpay_ipzs_max_replicas                   = 5
-mock_idpay_ipzs_min_replicas                   = 1
+mock_idpay_ipzs_min_replicas                   = 0
 mock_idpay_rest_api_url                        = "https://api-io.uat.cstar.pagopa.it"
 mock_ipzs_call_idpay_to_link_user_to_trx       = "no"
 
@@ -209,7 +194,7 @@ mil_debt_position_image                             = "ghcr.io/pagopa/mil-auth:l
 mil_debt_position_cpu                               = 1
 mil_debt_position_memory                            = "2Gi"
 mil_debt_position_max_replicas                      = 5
-mil_debt_position_min_replicas                      = 1
+mil_debt_position_min_replicas                      = 0
 mil_debt_position_backoff_num_of_attempts           = 5
 
 #
