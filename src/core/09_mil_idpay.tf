@@ -104,6 +104,10 @@ resource "azurerm_cosmosdb_mongo_collection" "idpayTransactions" {
   database_name       = azurerm_cosmosdb_mongo_database.mil.name
   name                = "idpayTransactions"
   resource_group_name = azurerm_cosmosdb_mongo_database.mil.resource_group_name
+  
+  autoscale_settings {
+    max_throughput = 1000
+  }
 
   index {
     keys   = ["_id"]
