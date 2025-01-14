@@ -105,7 +105,7 @@ resource "azurerm_cosmosdb_mongo_collection" "initiatives" {
   database_name       = azurerm_cosmosdb_mongo_database.mock_idpay[0].name
   name                = "initiatives"
   resource_group_name = azurerm_cosmosdb_mongo_database.mock_idpay[0].resource_group_name
-  
+
   autoscale_settings {
     max_throughput = 1000
   }
@@ -136,7 +136,7 @@ resource "azurerm_cosmosdb_mongo_collection" "idpayLocalTransactions" {
   database_name       = azurerm_cosmosdb_mongo_database.mock_idpay[0].name
   name                = "idpayLocalTransactions"
   resource_group_name = azurerm_cosmosdb_mongo_database.mock_idpay[0].resource_group_name
-  
+
   autoscale_settings {
     max_throughput = 1000
   }
