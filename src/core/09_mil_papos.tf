@@ -71,7 +71,7 @@ resource "azurerm_cosmosdb_mongo_collection" "terminals" {
   database_name       = azurerm_cosmosdb_mongo_database.mil.name
   name                = "terminals"
   resource_group_name = azurerm_cosmosdb_mongo_database.mil.resource_group_name
-  
+
   autoscale_settings {
     max_throughput = 1000
   }
@@ -97,7 +97,7 @@ resource "azurerm_cosmosdb_mongo_collection" "transactions" {
   database_name       = azurerm_cosmosdb_mongo_database.mil.name
   name                = "transactions"
   resource_group_name = azurerm_cosmosdb_mongo_database.mil.resource_group_name
-  
+
   autoscale_settings {
     max_throughput = 1000
   }
@@ -113,7 +113,7 @@ resource "azurerm_cosmosdb_mongo_collection" "bulkLoadStatuses" {
   database_name       = azurerm_cosmosdb_mongo_database.mil.name
   name                = "bulkLoadStatuses"
   resource_group_name = azurerm_cosmosdb_mongo_database.mil.resource_group_name
-  
+
   autoscale_settings {
     max_throughput = 1000
   }

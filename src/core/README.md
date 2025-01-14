@@ -13,10 +13,10 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 2.48.0 |
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.99.0 |
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | = 2.48.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | = 3.99.0 |
 | <a name="provider_github"></a> [github](#provider\_github) | 5.12.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.6.3 |
+| <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
 
@@ -36,7 +36,6 @@ No modules.
 | [azurerm_api_management_api.papos](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/api_management_api) | resource |
 | [azurerm_api_management_api.payment_notice](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/api_management_api) | resource |
 | [azurerm_api_management_api.preset](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/api_management_api) | resource |
-| [azurerm_api_management_api.terminal_registry](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/api_management_api) | resource |
 | [azurerm_api_management_api_diagnostic.auth](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.debt_position](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_api_diagnostic.fee_calculator](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/api_management_api_diagnostic) | resource |
@@ -60,7 +59,6 @@ No modules.
 | [azurerm_api_management_product_api.papos](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/api_management_product_api) | resource |
 | [azurerm_api_management_product_api.payment_notice](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/api_management_product_api) | resource |
 | [azurerm_api_management_product_api.preset](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/api_management_product_api) | resource |
-| [azurerm_api_management_product_api.terminal_registry](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/api_management_product_api) | resource |
 | [azurerm_api_management_product_policy.cors](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/api_management_product_policy) | resource |
 | [azurerm_api_management_subscription.tracing](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/api_management_subscription) | resource |
 | [azurerm_application_insights.mil](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/application_insights) | resource |
@@ -72,7 +70,6 @@ No modules.
 | [azurerm_container_app.payment_notice](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/container_app) | resource |
 | [azurerm_container_app.perf](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/container_app) | resource |
 | [azurerm_container_app.preset](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/container_app) | resource |
-| [azurerm_container_app.terminal_registry](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/container_app) | resource |
 | [azurerm_container_app_environment.mil](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/container_app_environment) | resource |
 | [azurerm_container_group.vpn_dns_forwarder](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/container_group) | resource |
 | [azurerm_cosmosdb_account.mil](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/cosmosdb_account) | resource |
@@ -85,7 +82,6 @@ No modules.
 | [azurerm_cosmosdb_mongo_collection.presets](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/cosmosdb_mongo_collection) | resource |
 | [azurerm_cosmosdb_mongo_collection.roles](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/cosmosdb_mongo_collection) | resource |
 | [azurerm_cosmosdb_mongo_collection.subscribers](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/cosmosdb_mongo_collection) | resource |
-| [azurerm_cosmosdb_mongo_collection.terminal_registry](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/cosmosdb_mongo_collection) | resource |
 | [azurerm_cosmosdb_mongo_collection.terminals](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/cosmosdb_mongo_collection) | resource |
 | [azurerm_cosmosdb_mongo_collection.transactions](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/cosmosdb_mongo_collection) | resource |
 | [azurerm_cosmosdb_mongo_database.mil](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/cosmosdb_mongo_database) | resource |
@@ -120,8 +116,6 @@ No modules.
 | [azurerm_log_analytics_query_pack_query.mil_papos_ca_json_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/log_analytics_query_pack_query) | resource |
 | [azurerm_log_analytics_query_pack_query.mil_preset_ca_console_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/log_analytics_query_pack_query) | resource |
 | [azurerm_log_analytics_query_pack_query.mil_preset_ca_json_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/log_analytics_query_pack_query) | resource |
-| [azurerm_log_analytics_query_pack_query.mil_terminal_registry_ca_console_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/log_analytics_query_pack_query) | resource |
-| [azurerm_log_analytics_query_pack_query.mil_terminal_registry_ca_json_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/log_analytics_query_pack_query) | resource |
 | [azurerm_log_analytics_query_pack_query.payment_notice_ca_console_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/log_analytics_query_pack_query) | resource |
 | [azurerm_log_analytics_query_pack_query.payment_notice_ca_json_logs](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/log_analytics_query_pack_query) | resource |
 | [azurerm_log_analytics_workspace.log_analytics_workspace](https://registry.terraform.io/providers/hashicorp/azurerm/3.99.0/docs/resources/log_analytics_workspace) | resource |
@@ -324,18 +318,6 @@ No modules.
 | <a name="input_mil_preset_openapi_descriptor"></a> [mil\_preset\_openapi\_descriptor](#input\_mil\_preset\_openapi\_descriptor) | n/a | `string` | n/a | yes |
 | <a name="input_mil_preset_path"></a> [mil\_preset\_path](#input\_mil\_preset\_path) | n/a | `string` | `"mil-preset"` | no |
 | <a name="input_mil_preset_quarkus_log_level"></a> [mil\_preset\_quarkus\_log\_level](#input\_mil\_preset\_quarkus\_log\_level) | ------------------------------------------------------------------------------ Variables definition. ------------------------------------------------------------------------------ | `string` | `"ERROR"` | no |
-| <a name="input_mil_terminal_registry_app_log_level"></a> [mil\_terminal\_registry\_app\_log\_level](#input\_mil\_terminal\_registry\_app\_log\_level) | n/a | `string` | `"DEBUG"` | no |
-| <a name="input_mil_terminal_registry_cpu"></a> [mil\_terminal\_registry\_cpu](#input\_mil\_terminal\_registry\_cpu) | n/a | `number` | `1` | no |
-| <a name="input_mil_terminal_registry_image"></a> [mil\_terminal\_registry\_image](#input\_mil\_terminal\_registry\_image) | ------------------------------------------------------------------------------ Variables definition. ------------------------------------------------------------------------------ | `string` | n/a | yes |
-| <a name="input_mil_terminal_registry_max_replicas"></a> [mil\_terminal\_registry\_max\_replicas](#input\_mil\_terminal\_registry\_max\_replicas) | n/a | `number` | `10` | no |
-| <a name="input_mil_terminal_registry_memory"></a> [mil\_terminal\_registry\_memory](#input\_mil\_terminal\_registry\_memory) | n/a | `string` | `"2Gi"` | no |
-| <a name="input_mil_terminal_registry_min_replicas"></a> [mil\_terminal\_registry\_min\_replicas](#input\_mil\_terminal\_registry\_min\_replicas) | n/a | `number` | `1` | no |
-| <a name="input_mil_terminal_registry_mongo_connect_timeout"></a> [mil\_terminal\_registry\_mongo\_connect\_timeout](#input\_mil\_terminal\_registry\_mongo\_connect\_timeout) | n/a | `string` | `"5s"` | no |
-| <a name="input_mil_terminal_registry_mongo_read_timeout"></a> [mil\_terminal\_registry\_mongo\_read\_timeout](#input\_mil\_terminal\_registry\_mongo\_read\_timeout) | n/a | `string` | `"10s"` | no |
-| <a name="input_mil_terminal_registry_mongo_server_selection_timeout"></a> [mil\_terminal\_registry\_mongo\_server\_selection\_timeout](#input\_mil\_terminal\_registry\_mongo\_server\_selection\_timeout) | n/a | `string` | `"5s"` | no |
-| <a name="input_mil_terminal_registry_openapi_descriptor"></a> [mil\_terminal\_registry\_openapi\_descriptor](#input\_mil\_terminal\_registry\_openapi\_descriptor) | n/a | `string` | n/a | yes |
-| <a name="input_mil_terminal_registry_path"></a> [mil\_terminal\_registry\_path](#input\_mil\_terminal\_registry\_path) | n/a | `string` | `"mil-terminal-registry"` | no |
-| <a name="input_mil_terminal_registry_quarkus_log_level"></a> [mil\_terminal\_registry\_quarkus\_log\_level](#input\_mil\_terminal\_registry\_quarkus\_log\_level) | n/a | `string` | `"ERROR"` | no |
 | <a name="input_mock_idpay_ipzs_app_log_level"></a> [mock\_idpay\_ipzs\_app\_log\_level](#input\_mock\_idpay\_ipzs\_app\_log\_level) | n/a | `string` | `"DEBUG"` | no |
 | <a name="input_mock_idpay_ipzs_cpu"></a> [mock\_idpay\_ipzs\_cpu](#input\_mock\_idpay\_ipzs\_cpu) | n/a | `number` | `1` | no |
 | <a name="input_mock_idpay_ipzs_image"></a> [mock\_idpay\_ipzs\_image](#input\_mock\_idpay\_ipzs\_image) | n/a | `string` | `"ghcr.io/pagopa/idpay-ipzs-mock:latest"` | no |
